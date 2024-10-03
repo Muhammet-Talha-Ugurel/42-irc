@@ -1,7 +1,7 @@
 NAME		= irc
 SRC			= ./src/Server.cpp ./src/password/PasswordManager.cpp
 OBJ			= $(SRC:.cpp=.o)
-CXX			= c++
+CXX			= clang++
 RM			= rm -rf
 CXXFLAGS	= -Wall -Werror -Wextra -std=c++98
 

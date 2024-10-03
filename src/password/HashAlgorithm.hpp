@@ -7,7 +7,7 @@
 class HashAlgorithm
 {
   public:
-    virtual uint64_t hash(const std::string &);
+    virtual uint64_t hash(const std::string &) const;
 };
 
 #endif // !HASH_ALGORITHM_HPP

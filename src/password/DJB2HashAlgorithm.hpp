@@ -8,7 +8,7 @@
 class DJB2Hash : public HashAlgorithm
 {
   public:
-    uint64_t hash(const std::string &str)
+    uint64_t hash(const std::string &str) const
     {
       uint64_t hash = 5381L;
       int      c;
