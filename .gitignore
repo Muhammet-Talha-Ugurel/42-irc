@@ -1,0 +1,6 @@
+!.gitignore
+!Makefile
+!*/Makefile
+!src/*.hpp
+!src/*.cpp
+*.o
