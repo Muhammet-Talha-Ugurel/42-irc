@@ -3,7 +3,7 @@
 
 #include "APassword.hpp"
 
-#include <cstdint>
+#include <stdint.h>
 #include <string>
 
 class Password : public APassword

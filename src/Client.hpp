@@ -4,7 +4,7 @@
 
 #include "User.hpp"
 
-#include <cstdint>
+#include <stdint.h>
 
 class Client
 {
@@ -14,11 +14,11 @@ class Client
     Client(uint64_t ipv4, uint64_t ipv6, uint64_t port);
 
     void     setUserData(User *);
-    User    *getUserData() noexcept;
+    User    *getUserData();
 
-    uint64_t getIpv4() noexcept;
-    uint64_t getIpv6() noexcept;
-    uint64_t getPort() noexcept;
+    uint64_t getIpv4();
+    uint64_t getIpv6();
+    uint64_t getPort();
 
   private:
     Client();

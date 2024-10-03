@@ -1,14 +1,14 @@
 #ifndef DJB2_HASH_HPP
 #define DJB2_HASH_HPP
 
+#include <stdint.h>
 #include "HashAlgorithm.hpp"
-#include <cstdint>
 #include <string>
 
 class DJB2Hash : public HashAlgorithm
 {
   public:
-    uint64_t hash(std::string str)
+    uint64_t hash(const std::string &str)
     {
       uint64_t hash = 5381L;
       int      c;

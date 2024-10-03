@@ -24,8 +24,8 @@ class Server
     void                validateClient(Client *client);
     void                removeClient(Client *client);
 
-    std::set<Channel *> getChannels() noexcept;
-    std::set<Client *>  getClients() noexcept;
+    std::set<Channel *> getChannels();
+    std::set<Client *>  getClients();
 
   private:
     std::set<Channel *> _channels;

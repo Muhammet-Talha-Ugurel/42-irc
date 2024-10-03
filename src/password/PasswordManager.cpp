@@ -28,8 +28,8 @@ std::string PasswordManager::generateSalt() const
 const APassword PasswordManager::createPassword(const std::string input) const
 {
   std::string salt = generateSalt();
-
-  uint64_t    hash = algorithm.hash(input + salt);
+  std::string pass = input + salt;
+  uint64_t    hash = algorithm.hash(pass);
 
   return Password(hash, salt);
 }
