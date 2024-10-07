@@ -2,7 +2,7 @@
 
 #define ACOMMAND_HPP
 
-#include "../User.hpp"
+#include "../user/User.hpp"
 
 enum CommandType
 {

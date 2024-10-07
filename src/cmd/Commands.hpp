@@ -27,6 +27,8 @@ class CommandNick : public ACommand
 
 class CommandUser : public ACommand
 {
+  private:
+    
   public:
     CommandUser(User *user) : ACommand(USER, user) {};
     ~CommandUser();

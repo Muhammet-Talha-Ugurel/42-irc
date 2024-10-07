@@ -2,8 +2,8 @@
 
 #define CHANNEL_HPP
 
-#include "User.hpp"
-#include "password/APassword.hpp"
+#include "../user/User.hpp"
+#include "../password/APassword.hpp"
 
 #include <set>
 #include <string>

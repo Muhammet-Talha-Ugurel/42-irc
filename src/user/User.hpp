@@ -21,12 +21,8 @@ class User
     const APassword   &getPassword() const;
     void               setPassword(APassword);
 
-    const std::string &getNickname() const;
-    void               setNickname(const std::string &);
-
   private:
     std::string username;
-    std::string nickname;
     std::string real_name;
     APassword   password;
 };

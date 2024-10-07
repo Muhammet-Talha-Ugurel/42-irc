@@ -13,7 +13,7 @@ class Password : public APassword
     ~Password();
     Password(const Password &other);
 
-    uint64_t    getHash() const;
+    uint64_t          getHash() const;
     const std::string getSalt() const;
 
     bool              exists() { return true; };
