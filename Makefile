@@ -1,5 +1,5 @@
 NAME		= irc
-SRC			= ./src/Server.cpp ./src/password/PasswordManager.cpp
+SRC			=  src/password/PasswordManager.cpp src/password/Password.cpp src/Server.cpp src/cmd/CommandHandler.cpp src/main.cpp src/user/User.cpp src/user/UserManager.cpp src/client/ClientManager.cpp src/client/Client.cpp
 OBJ			= $(SRC:.cpp=.o)
 CXX			= clang++
 RM			= rm -rf

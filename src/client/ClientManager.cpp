@@ -1,31 +1,115 @@
 #include "ClientManager.hpp"
+
 #include "Client.hpp"
 
-ClientManager::ClientManager() : userManager(UserManager::INSTANCE)
+#include <stdexcept>
+
+ClientManager::ClientManager() : userManager(UserManager::getInstance()) {}
+
+ClientManager::~ClientManager() {}
+
+ClientManager &ClientManager::getInstance()
 {
-	_clients = std::set<Client *>();
+  static ClientManager instance;
+  return instance;
 }
 
-ClientManager::ClientManager(const ClientManager &)
+const Client *ClientManager::createClient(const Client &toCreate)
 {
+  Client toInsert = Client(toCreate);
+  this->_clients.insert(toInsert);
+  return &(*this->_clients.find(toInsert));
 }
 
-ClientManager::~ClientManager()
+const Client *
+ClientManager::updateClientByNickname(const std::string &nickname, const Client &client)
 {
+  const Client *find = this->findClientByNickname(nickname);
+  if (find) {
+      Client *toUpdate = const_cast<Client *>(find);
+      toUpdate->setNickname(client.getNickname());
+      toUpdate->setUser(client.getUser());
+      return toUpdate;
+    }
+  return 0x00;
 }
 
-const ClientManager ClientManager::INSTANCE = ClientManager();
-
-const Client *ClientManager::createClient(const Client &toCreate) const
+void ClientManager::deleteClientByIpv4(const unsigned long ipv4)
 {
-	const Client *cl = new Client(toCreate);
-	_clients.insert(cl);
-	return cl;
+  const Client *find = this->findClientByIpv4(ipv4);
+  if (find) {
+      this->_clients.erase(*find);
+      return;
+    }
+  throw std::invalid_argument("Client not found");
 }
 
-const Client *ClientManager::updateClient(const Client &client)
+void ClientManager::deleteClientByIpv6(const unsigned long ipv6)
 {
-
-	return &client;
+  const Client *find = this->findClientByIpv6(ipv6);
+  if (find) {
+      this->_clients.erase(*find);
+      return;
+    }
+  throw std::invalid_argument("Client not found");
 }
 
+void ClientManager::deleteClientByPort(const unsigned long port)
+{
+  const Client *find = this->findClientByPort(port);
+  if (find) {
+      this->_clients.erase(*find);
+      return;
+    }
+  throw std::invalid_argument("Client not found");
+}
+
+void ClientManager::deleteClientByNickname(const std::string &nickname)
+{
+  const Client *find = this->findClientByNickname(nickname);
+  if (find) {
+      this->_clients.erase(*find);
+      return;
+    }
+  throw std::invalid_argument("Client not found");
+}
+
+const Client *ClientManager::findClientByNickname(const std::string &nickname)
+{
+  for (std::set<Client>::iterator it = this->_clients.begin(); it != this->_clients.end(); ++it) {
+      if (it->getNickname() == nickname) {
+          return &(*it);
+        }
+    }
+  return 0x00;
+}
+
+const Client *ClientManager::findClientByIpv4(const unsigned long ipv4)
+{
+  for (std::set<Client>::iterator it = this->_clients.begin(); it != this->_clients.end(); ++it) {
+      if (it->getIpv4() == ipv4) {
+          return &(*it);
+        }
+    }
+  return 0x00;
+}
+
+const Client *ClientManager::findClientByIpv6(const unsigned long ipv6)
+{
+  for (std::set<Client>::iterator it = this->_clients.begin(); it != this->_clients.end(); ++it) {
+      if (it->getIpv6() == ipv6) {
+          return &(*it);
+        }
+    }
+  return 0x00;
+}
+
+const Client *ClientManager::findClientByPort(const unsigned long port)
+{
+  for (std::set<Client>::iterator it = this->_clients.begin(); it != this->_clients.end(); ++it) {
+      if (it->getPort() == port) {
+          return &(*it);
+        }
+    }
+  return 0x00;
+}

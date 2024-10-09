@@ -18,12 +18,22 @@ class User
     const std::string &getRealName() const;
     void               setRealName(const std::string &);
 
+    const std::string &getLastNickname() const;
+    void               setLastNickname(const std::string &);
+
     const APassword   &getPassword() const;
     void               setPassword(APassword);
+
+    const User        &operator=(const User &);
+    bool               operator==(const User &) const;
+    bool               operator!=(const User &) const;
+    bool               operator<(const User &) const;
+    bool               operator>(const User &) const;
 
   private:
     std::string username;
     std::string real_name;
+    std::string last_nickname;
     APassword   password;
 };
 

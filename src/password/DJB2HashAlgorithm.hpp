@@ -8,6 +8,12 @@
 class DJB2Hash : public HashAlgorithm
 {
   public:
+    static const DJB2Hash *getInstance()
+    {
+      static DJB2Hash instance;
+      return &instance;
+    }
+
     uint64_t hash(const std::string &str) const
     {
       uint64_t hash = 5381L;

@@ -4,3 +4,5 @@
 !src/*.hpp
 !src/*.cpp
 *.o
+*.out
+irc

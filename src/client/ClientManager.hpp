@@ -1,36 +1,37 @@
 #ifndef CLIENT_MANAGER_HPP
-
 #define CLIENT_MANAGER_HPP
 
 #include "Client.hpp"
 #include "../user/UserManager.hpp"
-
 #include <set>
 
 class ClientManager
 {
   private:
-    std::set<Client *> _clients;
-    UserManager userManager;
+    std::set<Client> _clients;
+    const UserManager &userManager;
+
+    ClientManager();
 
   public:
-    ClientManager();
     ClientManager(const ClientManager &);
+    ClientManager &operator=(const ClientManager &);
     ~ClientManager();
 
-    static const ClientManager INSTANCE;
+    static ClientManager &getInstance();
 
-    const Client            *createClient(const Client &) const;
-    const Client            *updateClient(const Client &);
+    const Client *createClient(const Client &);
+    const Client *updateClientByNickname(const std::string &, const Client &);
 
-    void                     deleteClientByIpv4(const unsigned long);
-    void                     deleteClientByIpv6(const unsigned long);
-    void                     deleteClientByPort(const unsigned long);
-    void                     deleteClientByNickname(const std::string &);
+    void deleteClientByIpv4(const unsigned long);
+    void deleteClientByIpv6(const unsigned long);
+    void deleteClientByPort(const unsigned long);
+    void deleteClientByNickname(const std::string &);
 
-    std::set<const Client *> findAllClientByNickname(const std::string &);
-    std::set<const Client *> findAllClientByClientname(const std::string &);
+    const Client * findClientByNickname(const std::string &);
+    const Client * findClientByIpv4(const unsigned long);
+    const Client * findClientByIpv6(const unsigned long);
+    const Client * findClientByPort(const unsigned long);
 };
 
-
-#endif // !CLIENT_MANAGER_HPP
+#endif // CLIENT_MANAGER_HPP

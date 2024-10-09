@@ -15,15 +15,17 @@ class Server
     Server(unsigned short port, std::string passwordString);
     ~Server();
 
-    void addChannel(Channel *channel);
-    void validateChannel(Channel *channel);
-    void removeChannel(Channel *channel);
+    // void addChannel(Channel *channel);
+    // void validateChannel(Channel *channel);
+    // void removeChannel(Channel *channel);
 
-    void addClient(Client *client);
-    void validateClient(Client *client);
-    void removeClient(Client *client);
+    // void addClient(Client *client);
+    // void validateClient(Client *client);
+    // void removeClient(Client *client);
 
-    void start();
+    unsigned short getPort() const { return port; }
+
+    void           start();
 
   private:
     int             socket_fd;

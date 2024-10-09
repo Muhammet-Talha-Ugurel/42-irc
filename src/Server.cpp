@@ -2,11 +2,13 @@
 
 #include "client/Client.hpp"
 #include "client/ClientManager.hpp"
+#include "cmd/CommandHandler.hpp"
 #include "password/DJB2HashAlgorithm.hpp"
 #include "password/PasswordManager.hpp"
-#include "cmd/CommandHandler.hpp"
 
 #include <arpa/inet.h>
+#include <cstdio>
+#include <cstdlib>
 #include <fcntl.h>
 #include <netinet/in.h>
 #include <poll.h>
@@ -14,13 +16,13 @@
 #include <sys/socket.h>
 
 Server::Server(unsigned short port, std::string passwordString)
-    : port(port), passwordManager(PasswordManager(DJB2Hash()))
+    : port(port), passwordManager(PasswordManager(DJB2Hash::getInstance()))
 {
   password  = passwordManager.createPassword(passwordString);
   socket_fd = socket(AF_INET, SOCK_STREAM, 0);
-  sockaddr_in serverAddress;
+  
 
-  int         opt = 1;
+  int opt   = 1;
   if (setsockopt(socket_fd, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT, &opt, sizeof(opt))) {
       perror("setsockopt");
       exit(EXIT_FAILURE);
@@ -46,16 +48,21 @@ Server::Server(unsigned short port, std::string passwordString)
     }
 }
 
+Server::~Server()
+{
+  
+}
+
 void Server::start()
 {
-  struct pollfd poll_fds[100];
-  ClientManager cmg  = ClientManager::INSTANCE;
-  CommandHandler cmdHandler = CommandHandler();
-  
-  int           nfds = 1;
+  struct pollfd   poll_fds[100];
+  ClientManager  &cmg        = ClientManager::getInstance();
+  CommandHandler &cmdHandler = CommandHandler::getInstance();
 
-  poll_fds[0].fd     = socket_fd;
-  poll_fds[0].events = POLLIN;
+  int             nfds       = 1;
+
+  poll_fds[0].fd             = socket_fd;
+  poll_fds[0].events         = POLLIN;
 
   while (true) {
       int poll_count = poll(poll_fds, nfds, -1);
@@ -86,7 +93,7 @@ void Server::start()
                   // clients[new_socket] = new Client(new_socket);
                 }
               else {
-                  
+                  cmdHandler.parseCommand("test");
                 }
             }
         }

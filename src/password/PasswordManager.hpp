@@ -11,7 +11,7 @@
 class PasswordManager
 {
   public:
-    PasswordManager(HashAlgorithm alg);
+    PasswordManager(const HashAlgorithm *alg);
     ~PasswordManager();
     PasswordManager(const PasswordManager &other);
 
@@ -22,7 +22,7 @@ class PasswordManager
   private:
     std::string   generateSalt() const;
 
-    HashAlgorithm algorithm;
+    const HashAlgorithm *algorithm;
 };
 
 #endif // !PASSWORD_MANAGER_HPP

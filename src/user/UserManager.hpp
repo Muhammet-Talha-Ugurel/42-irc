@@ -9,23 +9,22 @@ class UserManager
 {
   private:
     std::set<User> _users;
+    UserManager();
 
   public:
-    UserManager();
     UserManager(const UserManager &);
+    UserManager &operator=(const UserManager &);
     ~UserManager();
 
-    static const UserManager INSTANCE;
+    static UserManager &getInstance();
 
-    const User *createUser(const User &);
-    const User *updateUser(const User &);
+    const User         *createUser(const User &);
+    const User         *updateUserByUsername(const std::string &, const User &);
 
-    void        deleteUserByUsername(std::string username);
+    void                deleteUserByUsername(const std::string &);
 
-    std::set<const User *> findAllUserByNickname(const std::string &) const;
-    std::set<const User *> findAllUserByUsername(const std::string &) const;
+    const User         *findUserByNickname(const std::string &) const;
+    const User         *findUserByUsername(const std::string &) const;
 };
 
-static UserManager INSTANCE;
-
-#endif // !USER_MANAGER_HPP
+#endif // USER_MANAGER_HPP

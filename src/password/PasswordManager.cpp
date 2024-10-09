@@ -8,7 +8,11 @@
 #include <cstring>
 #include <ctime>
 
-PasswordManager::PasswordManager(HashAlgorithm algorithm) : algorithm(algorithm) { srand(time(0)); }
+PasswordManager::PasswordManager(const HashAlgorithm *algorithm) : algorithm(algorithm) { srand(time(0)); }
+
+PasswordManager::~PasswordManager() {}
+
+PasswordManager::PasswordManager(const PasswordManager &other) : algorithm(other.algorithm) {}
 
 std::string PasswordManager::generateSalt() const
 {
@@ -29,7 +33,7 @@ const APassword PasswordManager::createPassword(const std::string input) const
 {
   std::string salt = generateSalt();
   std::string pass = input + salt;
-  uint64_t    hash = algorithm.hash(pass);
+  uint64_t    hash = algorithm->hash(pass);
 
   return Password(hash, salt);
 }
@@ -38,7 +42,7 @@ bool PasswordManager::validate(const std::string &input, const APassword &passwd
 {
   const Password &ref  = dynamic_cast<const Password &>(passwd);
 
-  uint64_t        eval = algorithm.hash(input + ref.getSalt());
+  uint64_t        eval = algorithm->hash(input + ref.getSalt());
 
   return eval == ref.getHash();
 }

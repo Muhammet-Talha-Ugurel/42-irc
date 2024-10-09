@@ -9,12 +9,16 @@
 
 class CommandHandler
 {
-  public:
+  private:
     CommandHandler();
-    ~CommandHandler();
     CommandHandler(CommandHandler &commandHandler);
 
-    ACommand *parseCommand(std::string command);
+  public:
+    ~CommandHandler();
+
+    static CommandHandler &getInstance();
+
+    ACommand              *parseCommand(std::string command);
 };
 
 #endif // !COMMAND_HANDLER_HPP
