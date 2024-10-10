@@ -11,6 +11,6 @@ int main(int argc, char *argv[])
       return 1;
     }
 
-  Server server = Server(atoi(argv[0]), argv[1]);
+  Server server = Server(atoi(argv[1]), argv[2]);
   server.start();
 }
