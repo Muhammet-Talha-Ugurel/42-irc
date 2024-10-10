@@ -20,7 +20,7 @@ class PasswordManager
     const APassword createPassword(std::string password) const;
 
   private:
-    std::string   generateSalt() const;
+    std::string          generateSalt() const;
 
     const HashAlgorithm *algorithm;
 };

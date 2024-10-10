@@ -20,14 +20,16 @@ class Client
     const std::string &getNickname() const;
     void               setNickname(const std::string &);
 
-    const User        &getUser() const;
-    void               setUser(const User &);
+    const User        *getUser() const;
+    void               setUser(const User *);
 
     const Client      &operator=(const Client &);
     bool               operator==(const Client &) const;
     bool               operator!=(const Client &) const;
     bool               operator<(const Client &) const;
     bool               operator>(const Client &) const;
+
+    int                receiveMessage(const std::string &) const;
 
   private:
     Client();
@@ -36,7 +38,7 @@ class Client
     unsigned short port;
 
     std::string    nickname;
-    User           user;
+    const User    *user;
 };
 
 #endif // !CLIENT_HPP

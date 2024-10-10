@@ -8,7 +8,10 @@
 #include <cstring>
 #include <ctime>
 
-PasswordManager::PasswordManager(const HashAlgorithm *algorithm) : algorithm(algorithm) { srand(time(0)); }
+PasswordManager::PasswordManager(const HashAlgorithm *algorithm) : algorithm(algorithm)
+{
+  srand(time(0));
+}
 
 PasswordManager::~PasswordManager() {}
 

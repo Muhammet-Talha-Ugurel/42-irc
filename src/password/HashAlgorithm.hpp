@@ -1,8 +1,8 @@
 #ifndef HASH_ALGORITHM_HPP
 #define HASH_ALGORITHM_HPP
 
-#include <string>
 #include <stdint.h>
+#include <string>
 
 class HashAlgorithm
 {
