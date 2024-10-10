@@ -2,8 +2,8 @@
 
 #define CHANNEL_HPP
 
-#include "../user/User.hpp"
 #include "../password/APassword.hpp"
+#include "../user/User.hpp"
 
 #include <set>
 #include <string>
@@ -18,6 +18,7 @@ class Channel
 
     void             addUser(User *);
     void             removeUser(User *);
+
     std::set<User *> getUsers();
 
     void             publishMessage(std::string, User *);
@@ -40,6 +41,7 @@ class Channel
     bool             _isPrivate;
 
     std::set<User *> _users;
+    std::set<User *> _mods;
 };
 
 #endif // !CHANNEL_HPP
