@@ -181,12 +181,12 @@ ClientManager::findClientsByUsers(const std::set<const User *> &users) const
   return result;
 }
 
-
 const Client *ClientManager::findClientByPollfd(const pollfd pollfd) const
 {
-  std::map<const struct pollfd, const Client *>::const_iterator it = this->_clientsByPollfd.find(pollfd);
-  if (it != this->_clientsByPollfd.end()) {
-	  return it->second;
+  for (std::map<const struct pollfd, const Client *>::const_iterator it = this->_clientsByPollfd.begin(); it != this->_clientsByPollfd.end(); ++it) {
+	  if (it->first.fd == pollfd.fd) {
+		  return it->second;
+		}
 	}
   return 0x00;
 }

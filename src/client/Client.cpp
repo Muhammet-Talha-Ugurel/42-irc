@@ -7,9 +7,12 @@ Client::Client(
 )
     : ipv4(ipv4), ipv6(ipv6), port(port), nickname(nickname)
 {
+		buffer = new unsigned char[1024];
 }
 
-Client::~Client() {}
+Client::~Client() {
+ delete buffer;
+}
 
 Client::Client(const Client &other)
 {
@@ -31,6 +34,8 @@ const std::string &Client::getNickname() const { return nickname; }
 void               Client::setNickname(const std::string &nickname) { this->nickname = nickname; }
 
 const User        *Client::getUser() const { return user; }
+
+unsigned char *Client::getBuffer() const { return buffer; }
 
 void               Client::setUser(const User *user) { this->user = user; }
 
