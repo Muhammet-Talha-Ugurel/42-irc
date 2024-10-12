@@ -1,5 +1,6 @@
 #include "Server.hpp"
 
+#include "cmd/ACommand.hpp"
 #include "cmd/CommandHandler.hpp"
 #include "password/DJB2HashAlgorithm.hpp"
 #include "password/PasswordManager.hpp"
@@ -17,7 +18,7 @@
 
 Server::Server(unsigned short port, std::string passwordString)
     : port(port), passwordManager(PasswordManager(DJB2Hash::getInstance())),
-      commandHandler(&CommandHandler::getInstance())
+      commandHandler(&CommandHandler::getInstance()), clientManager(&ClientManager::getInstance())
 {
   password  = passwordManager.createPassword(passwordString);
   socket_fd = socket(AF_INET, SOCK_STREAM, 0);
@@ -81,25 +82,28 @@ void Server::start()
                     poll_fds[nfds].fd = new_socket;
                     poll_fds[nfds].events = POLLIN;
                     nfds++;
+										clientManager->addClient(new_socket);
 
                 } else {
-										
-								    = recv(poll_fds[i].fd, buffer, sizeof(buffer), 0);
+										const Client *client = clientManager->findClientByPollfd(poll_fds[i]);
+										unsigned char *buffer = client->getBuffer();
+										int bytes_received = recv(poll_fds[i].fd, buffer, sizeof(buffer), 0);
+										std::string buffer_str(reinterpret_cast<char*>(buffer));
 
-                    if (bytes_received > 0) {
-                        std::cout << "Data received: " << buffer;
-                    } else if (bytes_received == 0) {
-                        std::cout << "Client disconnected.";
-                        poll_fds[i] = poll_fds[nfds - 1];
-                        nfds--;
-                    } else if (bytes_received == -1) {
-                        continue;
-                    } else {
-                        perror("recv");
-
-                    }
-                }
-            }
-        }
-    }
+										if (bytes_received > 0) {
+												std::cout << "Data received: " << buffer;
+												commandHandler->parseCommand(buffer_str);
+										} else if (bytes_received == 0) {
+												std::cout << "Client disconnected.";
+												poll_fds[i] = poll_fds[nfds - 1];
+												nfds--;
+										} else if (bytes_received == -1) {
+												continue;
+										} else {
+												perror("recv");
+										}
+								}
+						}
+				}
+		}
 }

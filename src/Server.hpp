@@ -5,6 +5,7 @@
 #include "cmd/CommandHandler.hpp"
 #include "password/APassword.hpp"
 #include "password/PasswordManager.hpp"
+#include "client/ClientManager.hpp"
 
 #include <string>
 
@@ -33,6 +34,7 @@ class Server
 
     PasswordManager passwordManager;
     CommandHandler  *commandHandler;
+		ClientManager  *clientManager;
 };
 
 #endif // !SERVER_HPP

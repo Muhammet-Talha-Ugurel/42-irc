@@ -27,19 +27,15 @@ enum CommandType
 
 class ACommand
 {
-  private:
-    ACommand();
+  protected:
     CommandType _type;
     Client     *_client;
 
   public:
-    ACommand(CommandType type, Client *client);
-    ~ACommand();
     CommandType  getType() { return _type; };
 
     virtual void execute()                  = 0;
     virtual bool canExecute()               = 0;
-    virtual void parse(const std::string &) = 0;
 };
 
 #endif // !ACOMMAND_HPP

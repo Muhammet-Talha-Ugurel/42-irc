@@ -23,6 +23,8 @@ class Client
     const User        *getUser() const;
     void               setUser(const User *);
 
+		unsigned char *getBuffer() const;
+
     const Client      &operator=(const Client &);
     bool               operator==(const Client &) const;
     bool               operator!=(const Client &) const;
@@ -36,7 +38,7 @@ class Client
     unsigned long  ipv4;
     unsigned long  ipv6;
     unsigned short port;
-		unsigned char buffer[1024];
+		unsigned char *buffer;
 
     std::string    nickname;
     const User    *user;
