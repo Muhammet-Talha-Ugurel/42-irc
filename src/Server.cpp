@@ -7,12 +7,14 @@
 #include "password/PasswordManager.hpp"
 
 #include <arpa/inet.h>
+#include <iostream>
 #include <cstdio>
 #include <cstdlib>
 #include <fcntl.h>
 #include <netinet/in.h>
 #include <poll.h>
 #include <string>
+#include <string.h> 
 #include <sys/socket.h>
 
 Server::Server(unsigned short port, std::string passwordString)
@@ -56,11 +58,10 @@ Server::~Server()
 void Server::start()
 {
   struct pollfd   poll_fds[100];
-  ClientManager  &cmg        = ClientManager::getInstance();
-  CommandHandler &cmdHandler = CommandHandler::getInstance();
 
   int             nfds       = 1;
 
+  char buffer[1024] = {0};
   poll_fds[0].fd             = socket_fd;
   poll_fds[0].events         = POLLIN;
 
@@ -75,25 +76,34 @@ void Server::start()
       for (int i = 0; i < nfds; ++i) {
           if (poll_fds[i].revents & POLLIN) {
               if (poll_fds[i].fd == socket_fd) {
-                  int                new_socket;
-                  struct sockaddr_in address;
-                  socklen_t          addrlen = sizeof(address);
-                  new_socket = accept(socket_fd, (struct sockaddr *)&address, &addrlen);
-                  if (new_socket < 0) {
-                      perror("accept");
-                      exit(EXIT_FAILURE);
+                    int new_socket;
+                    struct sockaddr_in address;
+                    socklen_t addrlen = sizeof(address);
+                    new_socket = accept(socket_fd, (struct sockaddr *)&address, &addrlen);
+                    if (new_socket < 0) {
+                        perror("accept");
+                        exit(EXIT_FAILURE);
                     }
+                    fcntl(new_socket, F_SETFL, O_NONBLOCK);
+										
+                    poll_fds[nfds].fd = new_socket;
+                    poll_fds[nfds].events = POLLIN;
+                    nfds++;
 
-                  fcntl(new_socket, F_SETFL, O_NONBLOCK);
-                  poll_fds[nfds].fd     = new_socket;
-                  poll_fds[nfds].events = POLLIN;
-                  nfds++;
-
-                  cmg.createClient(Client(address.sin_addr.s_addr, 0, address.sin_port, ""));
-                  // clients[new_socket] = new Client(new_socket);
-                }
-              else {
-                  cmdHandler.parseCommand("test");
+                } else {
+                    memset(buffer, 0, sizeof(buffer));
+                    ssize_t bytes_received = recv(poll_fds[i].fd, buffer, sizeof(buffer), 0);
+                    if (bytes_received > 0) {
+                        std::cout << "Data received: " << buffer;
+                    } else if (bytes_received == 0) {
+                        std::cout << "Client disconnected.";
+                        poll_fds[i] = poll_fds[nfds - 1];
+                        nfds--;
+                    } else if (bytes_received == -1) {
+                        continue;
+                    } else {
+                        perror("recv");
+                    }
                 }
             }
         }
