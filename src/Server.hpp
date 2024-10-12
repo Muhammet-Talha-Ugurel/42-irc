@@ -2,8 +2,7 @@
 
 #define SERVER_HPP
 
-#include "channel/Channel.hpp"
-#include "client/Client.hpp"
+#include "cmd/CommandHandler.hpp"
 #include "password/APassword.hpp"
 #include "password/PasswordManager.hpp"
 
@@ -33,6 +32,7 @@ class Server
     APassword       password;
 
     PasswordManager passwordManager;
+    CommandHandler  *commandHandler;
 };
 
 #endif // !SERVER_HPP
