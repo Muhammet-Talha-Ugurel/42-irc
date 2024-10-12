@@ -5,7 +5,7 @@
 
 #include <stdexcept>
 
-ClientManager::ClientManager() : userManager(&UserManager::getInstance()), _clientsByUser() {}
+ClientManager::ClientManager() : _clientsByUser(), userManager(&UserManager::getInstance()) {}
 
 ClientManager::~ClientManager() {}
 
