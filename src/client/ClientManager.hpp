@@ -2,10 +2,11 @@
 #define CLIENT_MANAGER_HPP
 
 #include "Client.hpp"
-
+#include <poll.h>
 #include <map>
 #include <set>
 #include <vector>
+
 
 class ClientManager
 {
@@ -14,6 +15,7 @@ class ClientManager
 
     std::set<Client>                       _clients;
     std::map<const User *, const Client *> _clientsByUser;
+		std::map<const pollfd, const Client *> _clientsByPollfd;
     const class UserManager               *userManager;
 
     void                                   deleteClient(const Client &);
@@ -39,6 +41,7 @@ class ClientManager
     const Client                     *findClientByPort(const unsigned long) const;
     const Client                     *findClientByUser(const User *) const;
     const std::vector<const Client *> findClientsByUsers(const std::set<const User *> &) const;
+		const Client                     *findClientByPollfd(const pollfd) const;
 };
 
 #endif // CLIENT_MANAGER_HPP

@@ -36,6 +36,7 @@ class Client
     unsigned long  ipv4;
     unsigned long  ipv6;
     unsigned short port;
+		unsigned char buffer[1024];
 
     std::string    nickname;
     const User    *user;
