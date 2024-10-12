@@ -9,6 +9,7 @@ class UserManager
 {
   private:
     std::set<User> _users;
+
     UserManager();
 
   public:

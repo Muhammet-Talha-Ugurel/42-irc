@@ -37,8 +37,8 @@ class ACommand
     ~ACommand();
     CommandType  getType() { return _type; };
 
-    virtual void execute()    = 0;
-    virtual bool canExecute() = 0;
+    virtual void execute()                  = 0;
+    virtual bool canExecute()               = 0;
     virtual void parse(const std::string &) = 0;
 };
 

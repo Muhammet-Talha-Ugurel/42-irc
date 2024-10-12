@@ -1,8 +1,9 @@
 #ifndef DJB2_HASH_HPP
 #define DJB2_HASH_HPP
 
-#include <stdint.h>
 #include "HashAlgorithm.hpp"
+
+#include <stdint.h>
 #include <string>
 
 class DJB2Hash : public HashAlgorithm

@@ -2,6 +2,7 @@
 
 #define CHANNEL_HPP
 
+#include "../client/ClientManager.hpp"
 #include "../password/APassword.hpp"
 #include "../user/User.hpp"
 
@@ -12,36 +13,37 @@ class Channel
 {
   public:
     Channel(std::string name);
-    Channel(std::string name, std::string password);
+    Channel(std::string name, APassword password);
     Channel(const Channel &channel);
     ~Channel();
 
-    void             addUser(User *);
-    void             removeUser(User *);
+    void                         addUser(User *);
+    void                         removeUser(User *);
 
-    std::set<User *> getUsers();
+    const std::set<const User *> getUsers() const;
 
-    void             publishMessage(std::string, User *);
+    std::string                  getTopic();
+    void                         setTopic(std::string);
 
-    std::string      getTopic();
-    void             setTopic(std::string);
+    std::string                  getName();
+    void                         setName(std::string);
 
-    std::string      getName();
-    void             setName(std::string);
+    bool                         isPrivate();
+    void                         setPrivate(bool);
 
-    bool             isPrivate();
-    void             setPrivate(bool);
+    const APassword             &getPassword() const;
+    void                         setPassword(APassword);
 
-    const APassword *getPassword();
+    void                         publishMessage(const std::string &, const ClientManager &);
 
   private:
-    std::string      _name;
-    std::string      _topic;
-    APassword       *_password;
-    bool             _isPrivate;
+    std::string            _name;
+    std::string            _topic;
+    APassword              _password;
+    bool                   _isPrivate;
 
-    std::set<User *> _users;
-    std::set<User *> _mods;
+    std::set<const User *> _users;
+    std::set<const User *> _mods;
 };
 
 #endif // !CHANNEL_HPP
