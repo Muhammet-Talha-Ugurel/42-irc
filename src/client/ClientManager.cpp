@@ -1,5 +1,4 @@
 #include "ClientManager.hpp"
-
 #include "../user/UserManager.hpp"
 #include "Client.hpp"
 
@@ -180,4 +179,14 @@ ClientManager::findClientsByUsers(const std::set<const User *> &users) const
         }
     }
   return result;
+}
+
+
+const Client *ClientManager::findClientByPollfd(const pollfd pollfd) const
+{
+  std::map<const struct pollfd, const Client *>::const_iterator it = this->_clientsByPollfd.find(pollfd);
+  if (it != this->_clientsByPollfd.end()) {
+	  return it->second;
+	}
+  return 0x00;
 }
