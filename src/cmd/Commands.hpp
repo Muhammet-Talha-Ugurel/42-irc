@@ -1,3 +1,5 @@
+#include <list>
+#include <string>
 #include <utility>
 #include <vector>
 
@@ -23,217 +25,218 @@ class CommandPass : public ACommand
 
 class CommandNick : public ACommand
 {
-   private:
-     std::string nickname;
+  private:
+    std::string nickname;
 
-   public:
-     CommandNick(std::string);
-     ~CommandNick();
-     CommandNick(const CommandNick &commandNick);
+  public:
+    CommandNick(std::string);
+    ~CommandNick();
+    CommandNick(const CommandNick &commandNick);
 
-		void execute(const Client *);
-		bool canExecute(const Client *);
- };
-// class CommandUser : public ACommand
-// {
-//   private:
-//     std::string username;
-//     std::string realname;
+    void execute(const Client *, const Server &);
+    bool canExecute(const Client *, const Server &);
+};
 
-//   public:
-//     CommandUser(std::string);
-//     ~CommandUser();
-//     CommandUser(const CommandUser &commandUser);
+class CommandUser : public ACommand
+{
+  private:
+    std::string username;
+    std::string realname;
 
-//     void execute(const Client *, const Server &);
-//     bool canExecute(const Client *, const Server &);
-// };
+  public:
+    CommandUser(std::string);
+    ~CommandUser();
+    CommandUser(const CommandUser &commandUser);
 
-// class CommandQuit : public ACommand
-// {
-//   private:
-//     std::string message;
+    void execute(const Client *, const Server &);
+    bool canExecute(const Client *, const Server &);
+};
 
-//   public:
-//     CommandQuit(std::string);
-//     ~CommandQuit();
-//     CommandQuit(const CommandQuit &commandQuit);
+class CommandQuit : public ACommand
+{
+  private:
+    std::string message;
 
-//     void execute(const Client *, const Server &);
-//     bool canExecute(const Client *, const Server &);
-// };
+  public:
+    CommandQuit(std::string);
+    ~CommandQuit();
+    CommandQuit(const CommandQuit &commandQuit);
 
-// class CommandJoin : public ACommand
-// {
-//   private:
-//     std::vector<std::string> channels;
-//     std::vector<std::string> keys;
+    void execute(const Client *, const Server &);
+    bool canExecute(const Client *, const Server &);
+};
 
-//   public:
-//     CommandJoin(std::string);
-//     ~CommandJoin();
-//     CommandJoin(const CommandJoin &commandJoin);
+class CommandJoin : public ACommand
+{
+  private:
+    std::vector<std::string> channels;
+    std::vector<std::string> keys;
 
-//     void execute(const Client *, const Server &);
-//     bool canExecute(const Client *, const Server &);
-// };
+  public:
+    CommandJoin(std::vector<std::string>, std::vector<std::string>);
+    ~CommandJoin();
+    CommandJoin(const CommandJoin &commandJoin);
 
-// class CommandCap : public ACommand
-// {
-//   private:
-//     std::string subcommand;
-//     std::string capability;
+    void execute(const Client *, const Server &);
+    bool canExecute(const Client *, const Server &);
+};
 
-//   public:
-//     CommandCap(std::string);
-//     ~CommandCap();
-//     CommandCap(const CommandCap &commandCap);
+class CommandCap : public ACommand
+{
+  private:
+    std::string subcommand;
+    std::string capability;
 
-//     void execute(const Client *, const Server &);
-//     bool canExecute(const Client *, const Server &);
-// };
+  public:
+    CommandCap(std::string, std::string);
+    ~CommandCap();
+    CommandCap(const CommandCap &commandCap);
 
-// class CommandPing : public ACommand
-// {
-//   private:
-//     std::string server;
+    void execute(const Client *, const Server &);
+    bool canExecute(const Client *, const Server &);
+};
 
-//   public:
-//     CommandPing(std::string);
-//     ~CommandPing();
-//     CommandPing(const CommandPing &commandPing);
+class CommandPing : public ACommand
+{
+  private:
+    std::string server;
 
-//     void execute(const Client *, const Server &);
-//     bool canExecute(const Client *, const Server &);
-// };
+  public:
+    CommandPing(std::string);
+    ~CommandPing();
+    CommandPing(const CommandPing &commandPing);
 
-// class CommandMode : public ACommand
-// {
-//   private:
-//     std::string                                      target;
-//     std::vector<std::pair<std::string, std::string>> modes;
+    void execute(const Client *, const Server &);
+    bool canExecute(const Client *, const Server &);
+};
 
-//   public:
-//     CommandMode(std::string);
-//     ~CommandMode();
-//     CommandMode(const CommandMode &commandMode);
+class CommandMode : public ACommand
+{
+  private:
+    std::string                                      target;
+    std::vector<std::pair<std::string, std::string>> modes;
 
-//     void execute(const Client *, const Server &);
-//     bool canExecute(const Client *, const Server &);
-// };
+  public:
+    CommandMode(std::string, std::vector<std::pair<std::string, std::string>>);
+    ~CommandMode();
+    CommandMode(const CommandMode &commandMode);
 
-// class CommandWho : public ACommand
-// {
-//   private:
-//     std::string mask;
-//     bool        o;
+    void execute(const Client *, const Server &);
+    bool canExecute(const Client *, const Server &);
+};
 
-//   public:
-//     CommandWho(std::string);
-//     ~CommandWho();
-//     CommandWho(const CommandWho &commandWho);
+class CommandWho : public ACommand
+{
+  private:
+    std::string mask;
+    bool        o;
 
-//     void execute(const Client *, const Server &);
-//     bool canExecute(const Client *, const Server &);
-// };
+  public:
+    CommandWho(std::string, bool);
+    ~CommandWho();
+    CommandWho(const CommandWho &commandWho);
 
-// class CommandPrivmsg : public ACommand
-// {
-//   private:
-//     std::string target;
-//     std::string message;
+    void execute(const Client *, const Server &);
+    bool canExecute(const Client *, const Server &);
+};
 
-//   public:
-//     CommandPrivmsg(std::string);
-//     ~CommandPrivmsg();
-//     CommandPrivmsg(const CommandPrivmsg &commandPrivmsg);
+class CommandPrivmsg : public ACommand
+{
+  private:
+    std::string target;
+    std::string message;
 
-//     void execute(const Client *, const Server &);
-//     bool canExecute(const Client *, const Server &);
-// };
+  public:
+    CommandPrivmsg(std::string, std::string);
+    ~CommandPrivmsg();
+    CommandPrivmsg(const CommandPrivmsg &commandPrivmsg);
 
-// class CommandNotice : public ACommand
-// {
-//   private:
-//     std::string target;
-//     std::string message;
+    void execute(const Client *, const Server &);
+    bool canExecute(const Client *, const Server &);
+};
 
-//   public:
-//     CommandNotice(std::string);
-//     ~CommandNotice();
-//     CommandNotice(const CommandNotice &commandNotice);
+class CommandNotice : public ACommand
+{
+  private:
+    std::string target;
+    std::string message;
 
-//     void execute(const Client *, const Server &);
-//     bool canExecute(const Client *, const Server &);
-// };
+  public:
+    CommandNotice(std::string, std::string);
+    ~CommandNotice();
+    CommandNotice(const CommandNotice &commandNotice);
 
-// class CommandKick : public ACommand
-// {
-//   private:
-//     std::string channel;
-//     std::string user;
-//     std::string reason;
+    void execute(const Client *, const Server &);
+    bool canExecute(const Client *, const Server &);
+};
 
-//   public:
-//     CommandKick(std::string);
-//     ~CommandKick();
-//     CommandKick(const CommandKick &commandKick);
+class CommandKick : public ACommand
+{
+  private:
+    std::string channel;
+    std::string user;
+    std::string reason;
 
-//     void execute(const Client *, const Server &);
-//     bool canExecute(const Client *, const Server &);
-// };
+  public:
+    CommandKick(std::string, std::string, std::string);
+    ~CommandKick();
+    CommandKick(const CommandKick &commandKick);
 
-// class CommandPart : public ACommand
-// {
-//   private:
-//     std::vector<std::string> channels;
-//     std::string              message;
+    void execute(const Client *, const Server &);
+    bool canExecute(const Client *, const Server &);
+};
 
-//   public:
-//     CommandPart(std::string);
-//     ~CommandPart();
-//     CommandPart(const CommandPart &commandPart);
+class CommandPart : public ACommand
+{
+  private:
+    std::vector<std::string> channels;
+    std::string              message;
 
-//     void execute(const Client *, const Server &);
-//     bool canExecute(const Client *, const Server &);
-// };
+  public:
+    CommandPart(std::vector<std::string>, std::string);
+    ~CommandPart();
+    CommandPart(const CommandPart &commandPart);
 
-// class CommandTopic : public ACommand
-// {
-//   private:
-//     std::string channel;
-//     std::string message;
+    void execute(const Client *, const Server &);
+    bool canExecute(const Client *, const Server &);
+};
 
-//   public:
-//     CommandTopic(std::string);
-//     ~CommandTopic();
-//     CommandTopic(const CommandTopic &commandTopic);
+class CommandTopic : public ACommand
+{
+  private:
+    std::string channel;
+    std::string message;
 
-//     void execute(const Client *, const Server &);
-//     bool canExecute(const Client *, const Server &);
-// };
+  public:
+    CommandTopic(std::string, std::string);
+    ~CommandTopic();
+    CommandTopic(const CommandTopic &commandTopic);
 
-// class CommandNames : public ACommand
-// {
-//   private:
-//     std::vector<std::string> channels;
+    void execute(const Client *, const Server &);
+    bool canExecute(const Client *, const Server &);
+};
 
-//   public:
-//     CommandNames(std::string);
-//     ~CommandNames();
-//     CommandNames(const CommandNames &commandNames);
-
-//     void execute(const Client *, const Server &);
-//     bool canExecute(const Client *, const Server &);
-// };
-
-class CommandList : public ACommand
+class CommandNames : public ACommand
 {
   private:
     std::vector<std::string> channels;
 
   public:
-    CommandList(std::string);
+    CommandNames(std::vector<std::string>);
+    ~CommandNames();
+    CommandNames(const CommandNames &commandNames);
+
+    void execute(const Client *, const Server &);
+    bool canExecute(const Client *, const Server &);
+};
+
+class CommandList : public ACommand
+{
+  private:
+    std::set<std::string> channels;
+
+  public:
+    CommandList(std::set<std::string>);
     ~CommandList();
     CommandList(const CommandList &commandList);
 
