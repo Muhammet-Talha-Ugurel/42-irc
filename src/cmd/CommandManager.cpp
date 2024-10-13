@@ -1,5 +1,4 @@
 #include "CommandManager.hpp"
-
 #include "Commands.hpp"
 
 #include <iostream>
@@ -20,14 +19,14 @@ CommandManager &CommandManager::getInstance()
 		return instance;
 }
 
-ACommand *CommandManager::parseCommand(std::string command)
+std::vector<ACommand *> CommandManager::parseCommand(std::string command)
 {
+		std::vector<ACommand *> commands;
 		std::istringstream stream(command);
 		std::string        line;
 		while (std::getline(stream, line)) {
 				std::istringstream iss(line);
-				std::string        cmd, arg;
-				std::cout << "LINE: " << line << std::endl;
+				std::string        cmd, arg, arg2;
 				while (iss >> cmd) {
 						if (cmd == "PASS") {
 								announce("PASS MESSAGE RECEIVED");
@@ -35,27 +34,37 @@ ACommand *CommandManager::parseCommand(std::string command)
 								if (arg[0] == ':')
 										arg.erase(0, 1);
 								ACommand *pass = new CommandPass(arg);
-								return pass;
+								if (pass != 0x00)
+										commands.push_back(pass);
 						}
 						else if (cmd == "NICK") {
 								announce("NICK MESSAGE RECEIVED");
 								iss >> arg;
-								ACommand *nick = new CommandPass(arg);
-								return nick;
+								ACommand *nick = new CommandNick(arg);
+								if (nick != 0x00)
+										commands.push_back(nick);
 						}
 						else if (cmd == "USER") {
 								announce("USER MESSAGE RECEIVED");
+								std::cout << line << std::endl;
 								iss >> arg;
-								ACommand *nick = new CommandPass(arg);
-								return nick;
+								ACommand *nick = new CommandUser(arg, arg2);
+								if (nick != 0x00)
+										commands.push_back(nick);
 						}
 						else if (cmd == "QUIT") {
 								announce("QUIT MESSAGE RECEIVED");
 								iss >> arg;
+								ACommand *quit = new CommandQuit(arg);
+								if (quit != 0x00)
+										commands.push_back(quit);
 						}
 						else if (cmd == "JOIN") {
 								announce("JOIN MESSAGE RECEIVED");
 								iss >> arg;
+								ACommand *join = new CommandJoin();
+								if (join != 0x00)
+										commands.push_back(join);
 						}
 						else if (cmd == "CAP") {
 								announce("CAP MESSAGE RECEIVED");
@@ -107,5 +116,5 @@ ACommand *CommandManager::parseCommand(std::string command)
 						}
 				}
 		}
-		return 0x00;
+		return commands;
 }

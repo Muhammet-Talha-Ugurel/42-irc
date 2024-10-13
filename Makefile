@@ -5,6 +5,10 @@ SRC			=  src/main.cpp \
 			   src/client/ClientManager.cpp \
 			   src/cmd/CommandManager.cpp \
 			   src/cmd/CommandPass.cpp \
+			   src/cmd/CommandNick.cpp \
+			   src/cmd/CommandUser.cpp \
+			   src/cmd/CommandQuit.cpp \
+			   src/cmd/CommandJoin.cpp \
 			   src/password/Password.cpp \
 			   src/password/PasswordManager.cpp \
 			   src/user/User.cpp \
