@@ -44,7 +44,7 @@ class CommandUser : public ACommand
     std::string realname;
 
   public:
-    CommandUser(std::string);
+    CommandUser(std::string, std::string);
     ~CommandUser();
     CommandUser(const CommandUser &commandUser);
 
@@ -114,10 +114,10 @@ class CommandMode : public ACommand
 {
   private:
     std::string                                      target;
-    std::vector<std::pair<std::string, std::string>> modes;
+    std::vector<std::pair<std::string, std::string> > modes;
 
   public:
-    CommandMode(std::string, std::vector<std::pair<std::string, std::string>>);
+    CommandMode(std::string, std::vector<std::pair<std::string, std::string> >);
     ~CommandMode();
     CommandMode(const CommandMode &commandMode);
 

@@ -38,7 +38,7 @@ class Client
 
     int                receiveMessage(const std::string &) const;
 
-    bool               isAuthenticated() const;
+    bool               isAuthenticated() const { return _nickname != "" && _user != 0x00; }
 
   private:
     Client();
