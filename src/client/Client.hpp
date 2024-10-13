@@ -30,8 +30,6 @@ class Client
     int                getPollFd() const { return _poll_fd; }
     void               setPollFd(int p_fd) { _poll_fd = p_fd; }
 
-    void               allow() { _allowed = true; };
-
     const Client      &operator=(const Client &);
     bool               operator==(const Client &) const;
     bool               operator!=(const Client &) const;
@@ -40,7 +38,10 @@ class Client
 
     int                receiveMessage(const std::string &) const;
 
-    bool               isAuthenticated() const { return _nickname != "" && _user != 0x00; }
+    void               allow() { _allowed = true; };
+    bool               isAllowed() const { return _allowed; }
+
+    bool               isAuthenticated() const { return isAllowed() && _nickname != "" && _user != 0x00; }
 
   private:
     Client();

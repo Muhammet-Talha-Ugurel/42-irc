@@ -1,6 +1,7 @@
 #include "Client.hpp"
 
 #include <cstdlib>
+#include <cstdio>
 #include <sys/poll.h>
 #include <sys/socket.h>
 
