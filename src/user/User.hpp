@@ -24,6 +24,9 @@ class User
     const APassword   &getPassword() const;
     void               setPassword(APassword);
 
+    bool               isVisible() const;
+    void               setVisible(bool);
+
     const User        &operator=(const User &);
     bool               operator==(const User &) const;
     bool               operator!=(const User &) const;
@@ -35,6 +38,7 @@ class User
     std::string real_name;
     std::string last_nickname;
     APassword   password;
+    bool        is_visible;
 };
 
 #endif // !USER_HPP
