@@ -42,7 +42,6 @@ class Client
   private:
     Client();
     unsigned long  _ipv4;
-    // unsigned long  ipv6;
     unsigned short _port;
     int            _poll_fd;
     char           _buffer[1024];

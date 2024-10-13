@@ -11,8 +11,8 @@ Client::Client(unsigned long _ipv4, unsigned long _port, int p_fd)
 Client::~Client() {}
 
 Client::Client(const Client &other)
-    : _ipv4(other._ipv4), _port(other._port), _nickname(other._nickname), _user(other._user),
-      _poll_fd(other._poll_fd)
+    : _ipv4(other._ipv4), _port(other._port), _poll_fd(other._poll_fd), _nickname(other._nickname),
+      _user(other._user)
 {
 }
 
