@@ -51,4 +51,18 @@ class Client
     const User    *_user;
 };
 
+
+namespace std
+{
+  template <>
+  struct less<class Client>
+  {
+    bool operator()(const Client &lhs, const Client &rhs) const
+    {
+      return lhs < rhs;
+    }
+  };
+}
+
+
 #endif // !CLIENT_HPP
