@@ -2,6 +2,7 @@
 
 #include <cstdlib>
 #include <sys/poll.h>
+#include <sys/socket.h>
 
 Client::Client(unsigned long _ipv4, unsigned long _port, int p_fd)
     : _ipv4(_ipv4), _port(_port), _poll_fd(p_fd), _nickname(""), _user(0x00)
@@ -49,8 +50,12 @@ bool Client::operator>(const Client &other) const
 // TODO: Implement this method correctly
 int Client::receiveMessage(const std::string &message) const
 {
-  (void)message;
-  return 0;
+  int res = send(_poll_fd, message.c_str(), message.length(), 0);
+  if (res == -1) {
+    perror("send");
+    return res;
+  }
+  return res;
 }
 
 void Client::flushBuffer() const { memset((void *)_buffer, 0, sizeof(_buffer)); }
