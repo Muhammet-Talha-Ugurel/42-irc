@@ -19,9 +19,9 @@ const std::string &User::getRealName() const { return real_name; }
 
 void               User::setRealName(const std::string &real_name) { this->real_name = real_name; }
 
-const APassword   &User::getPassword() const { return password; }
+const Password    *User::getPassword() const { return password; }
 
-void               User::setPassword(APassword password) { this->password = password; }
+void               User::setPassword(Password *password) { this->password = password; }
 
 const std::string &User::getLastNickname() const { return last_nickname; }
 

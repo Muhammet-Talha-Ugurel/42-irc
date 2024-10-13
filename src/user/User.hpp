@@ -1,7 +1,7 @@
 #ifndef USER_HPP
 #define USER_HPP
 
-#include "../password/APassword.hpp"
+#include "../password/Password.hpp"
 
 #include <string>
 
@@ -21,8 +21,8 @@ class User
     const std::string &getLastNickname() const;
     void               setLastNickname(const std::string &);
 
-    const APassword   &getPassword() const;
-    void               setPassword(APassword);
+    const Password    *getPassword() const;
+    void               setPassword(Password *);
 
     bool               isVisible() const;
     void               setVisible(bool);
@@ -37,7 +37,7 @@ class User
     std::string username;
     std::string real_name;
     std::string last_nickname;
-    APassword   password;
+    Password   *password;
     bool        is_visible;
 };
 

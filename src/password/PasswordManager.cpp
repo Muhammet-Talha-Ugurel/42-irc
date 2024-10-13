@@ -1,6 +1,5 @@
 #include "PasswordManager.hpp"
 
-#include "APassword.hpp"
 #include "HashAlgorithm.hpp"
 #include "Password.hpp"
 
@@ -13,7 +12,14 @@ PasswordManager::PasswordManager(const HashAlgorithm *algorithm) : algorithm(alg
   srand(time(0));
 }
 
-PasswordManager::~PasswordManager() {}
+PasswordManager::~PasswordManager()
+{
+  for (std::vector<Password *>::iterator it = this->_passwords.begin();
+       it != this->_passwords.end(); ++it)
+    {
+      delete *it;
+    }
+}
 
 PasswordManager::PasswordManager(const PasswordManager &other) : algorithm(other.algorithm) {}
 
@@ -32,20 +38,35 @@ std::string PasswordManager::generateSalt() const
   return salt;
 }
 
-const APassword PasswordManager::createPassword(const std::string input) const
+const Password *PasswordManager::createPassword(const std::string input)
 {
   std::string salt = generateSalt();
   std::string pass = input + salt;
   uint64_t    hash = algorithm->hash(pass);
 
-  return Password(hash, salt);
+  Password   *p    = new Password(hash, salt);
+  this->_passwords.push_back(p);
+
+  return p;
 }
 
-bool PasswordManager::validate(const std::string &input, const APassword &passwd)
+void PasswordManager::deletePassword(Password *password)
 {
-  const Password &ref  = dynamic_cast<const Password &>(passwd);
+  for (std::vector<Password *>::iterator it = this->_passwords.begin();
+       it != this->_passwords.end(); ++it)
+    {
+      if (*it == password) {
+          this->_passwords.erase(it);
+          delete password;
+          break;
+        }
+    }
+}
 
-  uint64_t        eval = algorithm->hash(input + ref.getSalt());
-
-  return eval == ref.getHash();
+bool PasswordManager::validate(const std::string &input, const Password *passwd)
+{
+  if (passwd == 0x00 || *passwd == Password::nan()) {
+      return true;
+    }
+  return algorithm->hash(input + passwd->getSalt()) == passwd->getHash();
 }

@@ -2,9 +2,12 @@
 
 #include <vector>
 
-Channel::Channel(std::string name) : _name(name), _topic(""), _isPrivate(false) {}
+Channel::Channel(std::string name)
+    : _name(name), _topic(""), _password(Password::nan()), _isPrivate(false)
+{
+}
 
-Channel::Channel(std::string name, APassword password)
+Channel::Channel(std::string name, Password password)
     : _name(name), _topic(""), _password(password), _isPrivate(true)
 {
 }

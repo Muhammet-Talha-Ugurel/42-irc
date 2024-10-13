@@ -3,7 +3,7 @@
 #define CHANNEL_HPP
 
 #include "../client/ClientManager.hpp"
-#include "../password/APassword.hpp"
+#include "../password/Password.hpp"
 #include "../user/User.hpp"
 
 #include <set>
@@ -13,7 +13,7 @@ class Channel
 {
   public:
     Channel(std::string name);
-    Channel(std::string name, APassword password);
+    Channel(std::string name, Password password);
     Channel(const Channel &channel);
     ~Channel();
 
@@ -26,8 +26,8 @@ class Channel
     bool                         isPrivate() const { return this->_isPrivate; }
     void                         setPrivate(bool) { this->_isPrivate = true; }
 
-    const APassword             &getPassword() const { return this->_password; }
-    void                         setPassword(APassword &password) { this->_password = password; }
+    const Password              &getPassword() const { return this->_password; }
+    void                         setPassword(Password &password) { this->_password = password; }
 
     void                         addUser(User *);
     void                         removeUser(User *);
@@ -42,7 +42,7 @@ class Channel
   private:
     std::string            _name;
     std::string            _topic;
-    APassword              _password;
+    Password               _password;
     bool                   _isPrivate;
 
     std::set<const User *> _users;

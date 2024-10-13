@@ -28,7 +28,7 @@ const User *UserManager::updateUserByUsername(const std::string &username, const
       toUpdate->setUsername(updatedUser.getUsername());
       toUpdate->setRealName(updatedUser.getRealName());
       toUpdate->setLastNickname(updatedUser.getLastNickname());
-      toUpdate->setPassword(updatedUser.getPassword());
+      toUpdate->setPassword(const_cast<Password *>(updatedUser.getPassword()));
       return toUpdate;
     }
   return 0x00;

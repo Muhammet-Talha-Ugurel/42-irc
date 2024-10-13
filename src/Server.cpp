@@ -1,6 +1,7 @@
 #include "Server.hpp"
 
 #include "channel/ChannelManager.hpp"
+#include "cmd/ACommand.hpp"
 #include "password/DJB2HashAlgorithm.hpp"
 #include "password/PasswordManager.hpp"
 
@@ -97,9 +98,15 @@ void Server::start()
 
                   if (bytes_received > 0 && buffer_str.length() > 0) {
                       std::vector<ACommand *> commands = commandHandler->parseCommand(buffer_str);
+
+                      for (std::vector<ACommand *>::iterator it = commands.begin();
+                           it != commands.end(); ++it)
+                        {
+                          (*it)->execute((Client *)client, *this);
+                        }
                     }
                   else if (bytes_received == 0) {
-                      std::cout << "Client disconnected.";
+                      std::cout << "Client disconnected." << std::endl;
                       poll_fds[i] = poll_fds[nfds - 1];
                       nfds--;
                     }
@@ -115,4 +122,14 @@ void Server::start()
     }
 }
 
-// std::string Server::respond()
+std::string Server::respond(std::string code, const Client *client, std::string message)
+{
+  std::string response = code + " " + client->getNickname() + " " + message + "\r\n";
+  return response;
+}
+
+std::string Server::respond(std::string code, const Client *client, std::string message) const
+{
+  std::string response = code + " " + client->getNickname() + " " + message + "\r\n";
+  return response;
+}

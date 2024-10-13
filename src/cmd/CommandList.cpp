@@ -20,12 +20,12 @@ void CommandList::execute(Client *client, const Server &server)
 
   (void)client;
 
-  // client->receiveMessage(server.respond(IRC_RPL_LISTSTART, client));
+  client->receiveMessage(server.respond(IRC_RPL_LISTSTART, client));
 
-  // for (std::vector<std::string>::iterator it = names.begin(); it != names.end(); ++it)
-    // client->receiveMessage(server.respond(IRC_RPL_LIST, client, *it));
+  for (std::vector<std::string>::iterator it = names.begin(); it != names.end(); ++it)
+    client->receiveMessage(server.respond(IRC_RPL_LIST, client, *it));
 
-  // client->receiveMessage(server.respond(IRC_RPL_LISTEND, client));
+  client->receiveMessage(server.respond(IRC_RPL_LISTEND, client));
 }
 
 bool CommandList::canExecute(Client *client, const Server &server)

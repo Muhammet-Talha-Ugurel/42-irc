@@ -9,7 +9,6 @@ SRC			=  src/main.cpp \
 			   src/cmd/CommandPass.cpp \
 			   src/cmd/CommandNick.cpp \
 			   src/cmd/CommandList.cpp \
-			   src/password/Password.cpp \
 			   src/password/PasswordManager.cpp \
 			   src/user/User.cpp \
 			   src/user/UserManager.cpp
