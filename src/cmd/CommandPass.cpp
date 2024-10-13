@@ -15,3 +15,4 @@ bool CommandPass::canExecute(const Client *client)
   (void)client;
   return 0;
 }
+

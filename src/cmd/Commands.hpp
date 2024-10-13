@@ -21,20 +21,19 @@ class CommandPass : public ACommand
     bool canExecute(const Client *, const Server &);
 };
 
-// class CommandNick : public ACommand
-// {
-//   private:
-//     std::string nickname;
+class CommandNick : public ACommand
+{
+   private:
+     std::string nickname;
 
-//   public:
-//     CommandNick(std::string);
-//     ~CommandNick();
-//     CommandNick(const CommandNick &commandNick);
+   public:
+     CommandNick(std::string);
+     ~CommandNick();
+     CommandNick(const CommandNick &commandNick);
 
-//     void execute(const Client *, const Server &);
-//     bool canExecute(const Client *, const Server &);
-// };
-
+		void execute(const Client *);
+		bool canExecute(const Client *);
+ };
 // class CommandUser : public ACommand
 // {
 //   private:
