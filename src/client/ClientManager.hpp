@@ -19,6 +19,7 @@ class ClientManager
     const class UserManager               *userManager;
 
     void                                   deleteClient(const Client &);
+    const Client                          *updateClient(const Client *src, const Client &dst);
 
   public:
     ClientManager(const ClientManager &);
@@ -28,16 +29,20 @@ class ClientManager
     static ClientManager             &getInstance();
 
     const Client                     *createClient(const Client &);
-    const Client                     *updateClientByNickname(const std::string &, const Client &);
 
-    // const std::vector<
+    const Client                     *updateClientByNickname(const std::string &, const Client &);
+    const Client                     *updateClientByIpv4(const unsigned long, const Client &);
+    const Client                     *updateClientByPort(const unsigned long, const Client &);
+    const Client                     *updateClientByUser(const User *, const Client &);
+    const Client                     *updateClientByPollfd(const pollfd, const Client &);
 
     const Client                     *findClientByNickname(const std::string &) const;
     const Client                     *findClientByIpv4(const unsigned long) const;
     const Client                     *findClientByPort(const unsigned long) const;
     const Client                     *findClientByUser(const User *) const;
-    const std::vector<const Client *> findClientsByUsers(const std::set<const User *> &) const;
     const Client                     *findClientByPollfd(const pollfd) const;
+
+    const std::vector<const Client *> findClientsByUsers(const std::set<const User *> &) const;
 
     void                              deleteClientByIpv4(const unsigned long);
     void                              deleteClientByPort(const unsigned long);

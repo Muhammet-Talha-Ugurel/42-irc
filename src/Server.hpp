@@ -24,7 +24,10 @@ class Server
     CommandManager  *getCommandManager() const { return commandHandler; }
     ChannelManager  *getChannelManager() const { return channelManager; }
 
-    void             start();
+    // std::string respond(std::string code, const Client *client, std::string message = "") const;
+    // std::string respond(std::string code, const Client *client, std::string message = "");
+
+    void        start();
 
   private:
     int              socket_fd;

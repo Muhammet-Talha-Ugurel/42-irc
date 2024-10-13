@@ -60,34 +60,6 @@ const Client *ClientManager::createClient(const Client &toCreate)
   return 0x00;
 }
 
-const Client *
-ClientManager::updateClientByNickname(const std::string &nickname, const Client &client)
-{
-  const Client *find = this->findClientByNickname(nickname);
-  if (find) {
-      Client     *toUpdate = const_cast<Client *>(find);
-      const User *oldUser  = toUpdate->getUser();
-      const User *newUser  = client.getUser();
-
-      // Update client properties
-      toUpdate->setNickname(client.getNickname());
-      toUpdate->setUser(newUser);
-
-      // Update the _clientsByUser map if the user has changed
-      if (oldUser != newUser) {
-          if (oldUser != 0x00) {
-              this->_clientsByUser.erase(oldUser);
-            }
-          if (newUser != 0x00) {
-              this->_clientsByUser[newUser] = toUpdate;
-            }
-        }
-
-      return toUpdate;
-    }
-  return 0x00;
-}
-
 const Client *ClientManager::findClientByNickname(const std::string &nickname) const
 {
   for (std::set<Client>::iterator it = this->_clients.begin(); it != this->_clients.end(); ++it) {
@@ -127,6 +99,18 @@ const Client *ClientManager::findClientByUser(const User *user) const
   return 0x00;
 }
 
+const Client *ClientManager::findClientByPollfd(const pollfd pollfd) const
+{
+  for (std::map<const int, const Client *>::const_iterator it = this->_clientsByFd.begin();
+       it != this->_clientsByFd.end(); ++it)
+    {
+      if (it->first == pollfd.fd) {
+          return it->second;
+        }
+    }
+  return 0x00;
+}
+
 const std::vector<const Client *>
 ClientManager::findClientsByUsers(const std::set<const User *> &users) const
 {
@@ -140,16 +124,55 @@ ClientManager::findClientsByUsers(const std::set<const User *> &users) const
   return result;
 }
 
-const Client *ClientManager::findClientByPollfd(const pollfd pollfd) const
+const Client *ClientManager::updateClient(const Client *find, const Client &src)
 {
-  for (std::map<const int, const Client *>::const_iterator it = this->_clientsByFd.begin();
-       it != this->_clientsByFd.end(); ++it)
-    {
-      if (it->first == pollfd.fd) {
-          return it->second;
+  if (find) {
+      Client     *toUpdate = const_cast<Client *>(find);
+      const User *oldUser  = toUpdate->getUser();
+      const User *newUser  = src.getUser();
+
+      // Update client properties
+      toUpdate->setNickname(src.getNickname());
+      toUpdate->setUser(newUser);
+
+      // Update the _clientsByUser map if the user has changed
+      if (oldUser != newUser) {
+          if (oldUser != 0x00) {
+              this->_clientsByUser.erase(oldUser);
+            }
+          if (newUser != 0x00) {
+              this->_clientsByUser[newUser] = toUpdate;
+            }
         }
+
+      return toUpdate;
     }
   return 0x00;
+}
+
+const Client *ClientManager::updateClientByNickname(const std::string &nickname, const Client &src)
+{
+  return updateClient(this->findClientByNickname(nickname), src);
+}
+
+const Client *ClientManager::updateClientByIpv4(const unsigned long ipv4, const Client &src)
+{
+  return updateClient(this->findClientByIpv4(ipv4), src);
+}
+
+const Client *ClientManager::updateClientByPort(const unsigned long port, const Client &src)
+{
+  return updateClient(this->findClientByPort(port), src);
+}
+
+const Client *ClientManager::updateClientByUser(const User *user, const Client &src)
+{
+  return updateClient(this->findClientByUser(user), src);
+}
+
+const Client *ClientManager::updateClientByPollfd(const pollfd pollfd, const Client &src)
+{
+  return updateClient(this->findClientByPollfd(pollfd), src);
 }
 
 void ClientManager::deleteClientByIpv4(const unsigned long ipv4)

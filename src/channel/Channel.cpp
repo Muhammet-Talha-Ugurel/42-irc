@@ -1,5 +1,7 @@
 #include "Channel.hpp"
 
+#include <vector>
+
 Channel::Channel(std::string name) : _name(name), _topic(""), _isPrivate(false) {}
 
 Channel::Channel(std::string name, APassword password)
