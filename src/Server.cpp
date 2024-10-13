@@ -102,6 +102,7 @@ void Server::start()
                       for (std::vector<ACommand *>::iterator it = commands.begin();
                            it != commands.end(); ++it)
                         {
+                          if ( (*it)->canExecute(client, *this) ) {}
                           (*it)->execute((Client *)client, *this);
                         }
                     }

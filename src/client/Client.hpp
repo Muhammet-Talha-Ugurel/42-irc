@@ -38,10 +38,11 @@ class Client
 
     int                receiveMessage(const std::string &) const;
 
-    void               allow() { _allowed = true; };
+    void               setAllowed(bool allowed) { _allowed = allowed; };
     bool               isAllowed() const { return _allowed; }
 
-    bool               isAuthenticated() const { return isAllowed() && _nickname != "" && _user != 0x00; }
+    void               setAuthenticated(bool authenticated) { _allowed = authenticated; }
+    bool isAuthenticated() const { return isAllowed() && _nickname != "" && _user != 0x00; }
 
   private:
     Client();

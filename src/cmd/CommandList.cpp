@@ -35,3 +35,13 @@ bool CommandList::canExecute(Client *client, const Server &server)
     return true;
   return false;
 }
+
+void CommandList::execute(const Client *client, const Server &server)
+{
+  execute(const_cast<Client *>(client), server);
+}
+
+bool CommandList::canExecute(const Client *client, const Server &server)
+{
+  return canExecute(const_cast<Client *>(client), server);
+}

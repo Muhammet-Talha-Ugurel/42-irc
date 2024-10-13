@@ -1,4 +1,4 @@
-#include <list>
+#include <set>
 #include <string>
 #include <utility>
 #include <vector>
@@ -20,7 +20,9 @@ class CommandPass : public ACommand
     CommandPass(const CommandPass &);
 
     void execute(Client *, const Server &);
+    void execute(const Client *, const Server &);
     bool canExecute(Client *, const Server &);
+    bool canExecute(const Client *, const Server &);
 };
 
 class CommandNick : public ACommand
@@ -34,7 +36,9 @@ class CommandNick : public ACommand
     CommandNick(const CommandNick &commandNick);
 
     void execute(Client *, const Server &);
+    void execute(const Client *, const Server &);
     bool canExecute(Client *, const Server &);
+    bool canExecute(const Client *, const Server &);
 };
 
 class CommandUser : public ACommand
@@ -49,7 +53,9 @@ class CommandUser : public ACommand
     CommandUser(const CommandUser &commandUser);
 
     void execute(Client *, const Server &);
+    void execute(const Client *, const Server &);
     bool canExecute(Client *, const Server &);
+    bool canExecute(const Client *, const Server &);
 };
 
 class CommandQuit : public ACommand
@@ -63,7 +69,9 @@ class CommandQuit : public ACommand
     CommandQuit(const CommandQuit &commandQuit);
 
     void execute(Client *, const Server &);
+    void execute(const Client *, const Server &);
     bool canExecute(Client *, const Server &);
+    bool canExecute(const Client *, const Server &);
 };
 
 class CommandJoin : public ACommand
@@ -78,7 +86,9 @@ class CommandJoin : public ACommand
     CommandJoin(const CommandJoin &commandJoin);
 
     void execute(Client *, const Server &);
+    void execute(const Client *, const Server &);
     bool canExecute(Client *, const Server &);
+    bool canExecute(const Client *, const Server &);
 };
 
 class CommandCap : public ACommand
@@ -93,7 +103,9 @@ class CommandCap : public ACommand
     CommandCap(const CommandCap &commandCap);
 
     void execute(Client *, const Server &);
+    void execute(const Client *, const Server &);
     bool canExecute(Client *, const Server &);
+    bool canExecute(const Client *, const Server &);
 };
 
 class CommandPing : public ACommand
@@ -107,13 +119,15 @@ class CommandPing : public ACommand
     CommandPing(const CommandPing &commandPing);
 
     void execute(Client *, const Server &);
+    void execute(const Client *, const Server &);
     bool canExecute(Client *, const Server &);
+    bool canExecute(const Client *, const Server &);
 };
 
 class CommandMode : public ACommand
 {
   private:
-    std::string                                      target;
+    std::string                                       target;
     std::vector<std::pair<std::string, std::string> > modes;
 
   public:
@@ -122,7 +136,9 @@ class CommandMode : public ACommand
     CommandMode(const CommandMode &commandMode);
 
     void execute(Client *, const Server &);
+    void execute(const Client *, const Server &);
     bool canExecute(Client *, const Server &);
+    bool canExecute(const Client *, const Server &);
 };
 
 class CommandWho : public ACommand
@@ -137,7 +153,9 @@ class CommandWho : public ACommand
     CommandWho(const CommandWho &commandWho);
 
     void execute(Client *, const Server &);
+    void execute(const Client *, const Server &);
     bool canExecute(Client *, const Server &);
+    bool canExecute(const Client *, const Server &);
 };
 
 class CommandPrivmsg : public ACommand
@@ -152,7 +170,9 @@ class CommandPrivmsg : public ACommand
     CommandPrivmsg(const CommandPrivmsg &commandPrivmsg);
 
     void execute(Client *, const Server &);
+    void execute(const Client *, const Server &);
     bool canExecute(Client *, const Server &);
+    bool canExecute(const Client *, const Server &);
 };
 
 class CommandNotice : public ACommand
@@ -167,7 +187,9 @@ class CommandNotice : public ACommand
     CommandNotice(const CommandNotice &commandNotice);
 
     void execute(Client *, const Server &);
+    void execute(const Client *, const Server &);
     bool canExecute(Client *, const Server &);
+    bool canExecute(const Client *, const Server &);
 };
 
 class CommandKick : public ACommand
@@ -183,7 +205,9 @@ class CommandKick : public ACommand
     CommandKick(const CommandKick &commandKick);
 
     void execute(Client *, const Server &);
+    void execute(const Client *, const Server &);
     bool canExecute(Client *, const Server &);
+    bool canExecute(const Client *, const Server &);
 };
 
 class CommandPart : public ACommand
@@ -198,7 +222,9 @@ class CommandPart : public ACommand
     CommandPart(const CommandPart &commandPart);
 
     void execute(Client *, const Server &);
+    void execute(const Client *, const Server &);
     bool canExecute(Client *, const Server &);
+    bool canExecute(const Client *, const Server &);
 };
 
 class CommandTopic : public ACommand
@@ -213,7 +239,9 @@ class CommandTopic : public ACommand
     CommandTopic(const CommandTopic &commandTopic);
 
     void execute(Client *, const Server &);
+    void execute(const Client *, const Server &);
     bool canExecute(Client *, const Server &);
+    bool canExecute(const Client *, const Server &);
 };
 
 class CommandNames : public ACommand
@@ -227,7 +255,9 @@ class CommandNames : public ACommand
     CommandNames(const CommandNames &commandNames);
 
     void execute(Client *, const Server &);
+    void execute(const Client *, const Server &);
     bool canExecute(Client *, const Server &);
+    bool canExecute(const Client *, const Server &);
 };
 
 class CommandList : public ACommand
@@ -241,7 +271,9 @@ class CommandList : public ACommand
     CommandList(const CommandList &commandList);
 
     void execute(Client *, const Server &);
+    void execute(const Client *, const Server &);
     bool canExecute(Client *, const Server &);
+    bool canExecute(const Client *, const Server &);
 };
 
 // class CommandDcc : public ACommand
@@ -252,7 +284,9 @@ class CommandList : public ACommand
 //     CommandDcc(const CommandDcc &commandDcc);
 
 //     void execute(Client *, const Server &);
+//     void execute(const Client *, const Server &);
 //     bool canExecute(Client *, const Server &);
+//     bool canExecute(const Client *, const Server &);
 // };
 
 #endif // COMMANDS_HPP

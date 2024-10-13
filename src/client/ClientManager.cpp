@@ -219,3 +219,10 @@ void ClientManager::deleteClientByPollfd(const pollfd pollfd)
     }
   throw std::invalid_argument("Client not found");
 }
+
+void ClientManager::allowClient(const Client *client)
+{
+  if (client) {
+      const_cast<Client *>(client)->setAllowed(true);
+    }
+}

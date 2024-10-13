@@ -2,17 +2,22 @@
 
 CommandJoin::CommandJoin(std::vector<std::string> channels, std::vector<std::string> keys)
 {
-		_type = USER;
-		this->keys = keys;
-		this->channels = channels;
+  _type          = USER;
+  this->keys     = keys;
+  this->channels = channels;
 }
 
 CommandJoin::~CommandJoin() {}
 
-void CommandJoin::execute(const Client *client) { (void)client; }
+void CommandJoin::execute(const Client *client, const Server &server)
+{
+  (void)server;
+  (void)client;
+}
 
-bool CommandJoin::canExecute(const Client *client)
+bool CommandJoin::canExecute(const Client *client, const Server &server)
 {
   (void)client;
-  return 0;
+  (void)server;
+  return true;
 }
