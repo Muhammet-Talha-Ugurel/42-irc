@@ -46,25 +46,21 @@ std::vector<ACommand *> CommandManager::parseCommand(std::string command)
 						}
 						else if (cmd == "USER") {
 								announce("USER MESSAGE RECEIVED");
-								std::cout << line << std::endl;
 								iss >> arg;
-								ACommand *nick = new CommandUser(arg, arg2);
-								if (nick != 0x00)
-										commands.push_back(nick);
+								// ACommand *nick = new CommandUser(arg, arg2);
+								// if (nick != 0x00)
+										// commands.push_back(nick);
 						}
 						else if (cmd == "QUIT") {
 								announce("QUIT MESSAGE RECEIVED");
 								iss >> arg;
-								ACommand *quit = new CommandQuit(arg);
-								if (quit != 0x00)
-										commands.push_back(quit);
+								// ACommand *quit = new CommandQuit(arg);
+								// if (quit != 0x00)
+										// commands.push_back(quit);
 						}
 						else if (cmd == "JOIN") {
 								announce("JOIN MESSAGE RECEIVED");
 								iss >> arg;
-								ACommand *join = new CommandJoin();
-								if (join != 0x00)
-										commands.push_back(join);
 						}
 						else if (cmd == "CAP") {
 								announce("CAP MESSAGE RECEIVED");

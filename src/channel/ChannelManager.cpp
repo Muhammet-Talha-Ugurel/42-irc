@@ -1,5 +1,6 @@
 #include "ChannelManager.hpp"
 
+#include <stdexcept>
 
 ChannelManager::ChannelManager() {}
 
@@ -14,10 +15,10 @@ ChannelManager &ChannelManager::getInstance()
 void ChannelManager::addChannel(const Channel &channel)
 {
   (void)channel;
-  // if (this->_channels.find(channel.getName()) == this->_channels.end())
-  // this->_channels[channel.getName()] = channel;
-  // else
-  // throw std::runtime_error("Channel already exists");
+  if (this->_channels.find(channel.getName()) == this->_channels.end())
+    this->_channels.at(channel.getName()) = channel;
+  else
+    throw std::runtime_error("Channel already exists");
 }
 
 void ChannelManager::removeChannel(const Channel *channel)
@@ -27,9 +28,7 @@ void ChannelManager::removeChannel(const Channel *channel)
 
 const Channel *ChannelManager::getChannelByName(const std::string &name)
 {
-  (void)name;
-  return 0x00;
-  // return &this->_channels[name];
+  return &_channels.at(name);
 }
 
 std::set<const Channel *> ChannelManager::getChannelsByIsPublic(bool isPublic)

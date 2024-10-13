@@ -30,6 +30,8 @@ class Client
     int                getPollFd() const { return _poll_fd; }
     void               setPollFd(int p_fd) { _poll_fd = p_fd; }
 
+    void               allow() { _allowed = true; };
+
     const Client      &operator=(const Client &);
     bool               operator==(const Client &) const;
     bool               operator!=(const Client &) const;
@@ -46,23 +48,18 @@ class Client
     unsigned short _port;
     int            _poll_fd;
     char           _buffer[1024];
+    bool           _allowed;
 
     std::string    _nickname;
     const User    *_user;
 };
 
-
 namespace std
 {
-  template <>
-  struct less<class Client>
-  {
-    bool operator()(const Client &lhs, const Client &rhs) const
-    {
-      return lhs < rhs;
-    }
-  };
-}
-
+template <> struct less<class Client>
+{
+    bool operator()(const Client &lhs, const Client &rhs) const { return lhs < rhs; }
+};
+} // namespace std
 
 #endif // !CLIENT_HPP

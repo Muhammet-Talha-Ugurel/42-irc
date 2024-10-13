@@ -8,13 +8,14 @@ CommandPass::CommandPass(std::string pass)
 
 CommandPass::~CommandPass() {}
 
-void CommandPass::execute(const Client *client, const Server &server)
+void CommandPass::execute(Client *client, const Server &server)
 {
-  (void)client;
-  (void)server;
+  if (server.getPasswordManager()->validate(password,server.getPassword())) {
+    client->allow();
+  }
 }
 
-bool CommandPass::canExecute(const Client *client, const Server &server)
+bool CommandPass::canExecute(Client *client, const Server &server)
 {
   (void)client;
   (void)server;

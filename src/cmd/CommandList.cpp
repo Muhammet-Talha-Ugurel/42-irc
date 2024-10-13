@@ -6,13 +6,17 @@ CommandList::~CommandList() {}
 
 CommandList::CommandList(const CommandList &commandList) { this->channels = commandList.channels; }
 
-void CommandList::execute(const Client *client, const Server &server)
+void CommandList::execute(Client *client, const Server &server)
 {
-  (void)client;
   std::set<const Channel *> channels = server.getChannelManager()->getChannelsByIsPublic(true);
+
+  (void)client;
+  std::vector<std::string> names;
+  for (std::set<const Channel *>::iterator it = channels.begin(); it != channels.end(); ++it)
+    names.push_back((*it)->getName());
 }
 
-bool CommandList::canExecute(const Client *client, const Server &server)
+bool CommandList::canExecute(Client *client, const Server &server)
 {
   (void)server;
   if (client->isAuthenticated())
