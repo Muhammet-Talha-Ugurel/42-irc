@@ -1,14 +1,14 @@
 NAME		= irc
 SRC			=  src/main.cpp \
 			   src/Server.cpp \
+			   src/channel/Channel.cpp \
+			   src/channel/ChannelManager.cpp \
 			   src/client/Client.cpp \
 			   src/client/ClientManager.cpp \
 			   src/cmd/CommandManager.cpp \
 			   src/cmd/CommandPass.cpp \
 			   src/cmd/CommandNick.cpp \
-			   src/cmd/CommandUser.cpp \
-			   src/cmd/CommandQuit.cpp \
-			   src/cmd/CommandJoin.cpp \
+			   src/cmd/CommandList.cpp \
 			   src/password/Password.cpp \
 			   src/password/PasswordManager.cpp \
 			   src/user/User.cpp \
