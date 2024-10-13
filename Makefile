@@ -1,14 +1,14 @@
 NAME		= irc
-SRC			=  src/password/PasswordManager.cpp \
-			   src/password/Password.cpp \
+SRC			=  src/main.cpp \
 			   src/Server.cpp \
+			   src/client/Client.cpp \
+			   src/client/ClientManager.cpp \
 			   src/cmd/CommandManager.cpp \
 			   src/cmd/CommandPass.cpp \
-			   src/main.cpp \
+			   src/password/Password.cpp \
+			   src/password/PasswordManager.cpp \
 			   src/user/User.cpp \
-			   src/user/UserManager.cpp \
-			   src/client/ClientManager.cpp \
-			   src/client/Client.cpp
+			   src/user/UserManager.cpp
 OBJ			= $(SRC:.cpp=.o)
 CXX			= clang++
 RM			= rm -rf

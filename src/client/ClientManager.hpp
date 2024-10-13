@@ -32,16 +32,18 @@ class ClientManager
 
     // const std::vector<
 
-    void                              deleteClientByIpv4(const unsigned long);
-    void                              deleteClientByPort(const unsigned long);
-    void                              deleteClientByNickname(const std::string &);
-
     const Client                     *findClientByNickname(const std::string &) const;
     const Client                     *findClientByIpv4(const unsigned long) const;
     const Client                     *findClientByPort(const unsigned long) const;
     const Client                     *findClientByUser(const User *) const;
     const std::vector<const Client *> findClientsByUsers(const std::set<const User *> &) const;
     const Client                     *findClientByPollfd(const pollfd) const;
+
+    void                              deleteClientByIpv4(const unsigned long);
+    void                              deleteClientByPort(const unsigned long);
+    void                              deleteClientByNickname(const std::string &);
+    void                              deleteClientByUser(const User *);
+    void                              deleteClientByPollfd(const pollfd);
 };
 
 #endif // CLIENT_MANAGER_HPP

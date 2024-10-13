@@ -11,12 +11,9 @@ Client::Client(unsigned long _ipv4, unsigned long _port, int p_fd)
 Client::~Client() {}
 
 Client::Client(const Client &other)
+    : _ipv4(other._ipv4), _port(other._port), _nickname(other._nickname), _user(other._user),
+      _poll_fd(other._poll_fd)
 {
-  _ipv4     = other._ipv4;
-  _port     = other._port;
-  _nickname = other._nickname;
-  _user     = other._user;
-  _poll_fd  = other._poll_fd;
 }
 
 const Client &Client::operator=(const Client &other)
@@ -31,22 +28,22 @@ const Client &Client::operator=(const Client &other)
 
 bool Client::operator==(const Client &other) const
 {
-  return _ipv4 == other._ipv4 && /* ipv6 == other.ipv6 && */ _port == other._port;
+  return _ipv4 == other._ipv4 && _port == other._port;
 }
 
 bool Client::operator!=(const Client &other) const
 {
-  return _ipv4 != other._ipv4 || /* ipv6 != other.ipv6 || */ _port != other._port;
+  return _ipv4 != other._ipv4 || _port != other._port;
 }
 
 bool Client::operator<(const Client &other) const
 {
-  return _ipv4 < other._ipv4 || /* ipv6 < other.ipv6 || */ _port < other._port;
+  return _ipv4 < other._ipv4 || _port < other._port;
 }
 
 bool Client::operator>(const Client &other) const
 {
-  return _ipv4 > other._ipv4 || /* ipv6 > other.ipv6 || */ _port > other._port;
+  return _ipv4 > other._ipv4 || _port > other._port;
 }
 
 // TODO: Implement this method correctly

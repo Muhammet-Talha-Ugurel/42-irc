@@ -88,33 +88,6 @@ ClientManager::updateClientByNickname(const std::string &nickname, const Client 
   return 0x00;
 }
 
-void ClientManager::deleteClientByIpv4(const unsigned long ipv4)
-{
-  const Client *find = this->findClientByIpv4(ipv4);
-  if (find) {
-      return deleteClient(*find);
-    }
-  throw std::invalid_argument("Client not found");
-}
-
-void ClientManager::deleteClientByPort(const unsigned long port)
-{
-  const Client *find = this->findClientByPort(port);
-  if (find) {
-      return deleteClient(*find);
-    }
-  throw std::invalid_argument("Client not found");
-}
-
-void ClientManager::deleteClientByNickname(const std::string &nickname)
-{
-  const Client *find = this->findClientByNickname(nickname);
-  if (find) {
-      return deleteClient(*find);
-    }
-  throw std::invalid_argument("Client not found");
-}
-
 const Client *ClientManager::findClientByNickname(const std::string &nickname) const
 {
   for (std::set<Client>::iterator it = this->_clients.begin(); it != this->_clients.end(); ++it) {
@@ -177,4 +150,49 @@ const Client *ClientManager::findClientByPollfd(const pollfd pollfd) const
         }
     }
   return 0x00;
+}
+
+void ClientManager::deleteClientByIpv4(const unsigned long ipv4)
+{
+  const Client *find = this->findClientByIpv4(ipv4);
+  if (find) {
+      return deleteClient(*find);
+    }
+  throw std::invalid_argument("Client not found");
+}
+
+void ClientManager::deleteClientByPort(const unsigned long port)
+{
+  const Client *find = this->findClientByPort(port);
+  if (find) {
+      return deleteClient(*find);
+    }
+  throw std::invalid_argument("Client not found");
+}
+
+void ClientManager::deleteClientByNickname(const std::string &nickname)
+{
+  const Client *find = this->findClientByNickname(nickname);
+  if (find) {
+      return deleteClient(*find);
+    }
+  throw std::invalid_argument("Client not found");
+}
+
+void ClientManager::deleteClientByUser(const User *user)
+{
+  const Client *find = this->findClientByUser(user);
+  if (find) {
+      return deleteClient(*find);
+    }
+  throw std::invalid_argument("Client not found");
+}
+
+void ClientManager::deleteClientByPollfd(const pollfd pollfd)
+{
+  const Client *find = this->findClientByPollfd(pollfd);
+  if (find) {
+      return deleteClient(*find);
+    }
+  throw std::invalid_argument("Client not found");
 }
