@@ -1,7 +1,5 @@
 #include "Server.hpp"
 
-#include "cmd/ACommand.hpp"
-#include "cmd/CommandHandler.hpp"
 #include "password/DJB2HashAlgorithm.hpp"
 #include "password/PasswordManager.hpp"
 
@@ -12,13 +10,12 @@
 #include <iostream>
 #include <netinet/in.h>
 #include <poll.h>
-#include <string.h>
 #include <string>
 #include <sys/socket.h>
 
 Server::Server(unsigned short port, std::string passwordString)
     : port(port), passwordManager(PasswordManager(DJB2Hash::getInstance())),
-      commandHandler(&CommandHandler::getInstance()), clientManager(&ClientManager::getInstance())
+      commandHandler(&CommandManager::getInstance()), clientManager(&ClientManager::getInstance())
 {
   password  = passwordManager.createPassword(passwordString);
   socket_fd = socket(AF_INET, SOCK_STREAM, 0);
@@ -55,9 +52,9 @@ void Server::start()
 {
   struct pollfd poll_fds[100];
 
-  int           nfds         = 1;
-  poll_fds[0].fd             = socket_fd;
-  poll_fds[0].events         = POLLIN;
+  int           nfds = 1;
+  poll_fds[0].fd     = socket_fd;
+  poll_fds[0].events = POLLIN;
 
   while (true) {
       int poll_count = poll(poll_fds, nfds, -1);
@@ -71,39 +68,50 @@ void Server::start()
           if (poll_fds[i].revents & POLLIN) {
               if (poll_fds[i].fd == socket_fd) {
                   int                new_socket;
+
                   struct sockaddr_in address;
                   socklen_t          addrlen = sizeof(address);
+
                   new_socket = accept(socket_fd, (struct sockaddr *)&address, &addrlen);
                   if (new_socket < 0) {
                       perror("accept");
                       exit(EXIT_FAILURE);
                     }
-                    fcntl(new_socket, F_SETFL, O_NONBLOCK);
-                    poll_fds[nfds].fd = new_socket;
-                    poll_fds[nfds].events = POLLIN;
-                    nfds++;
-										clientManager->addClient(new_socket);
+                  fcntl(new_socket, F_SETFL, O_NONBLOCK);
+                  poll_fds[nfds].fd     = new_socket;
+                  poll_fds[nfds].events = POLLIN;
+                  clientManager->createClient(
+                      Client(address.sin_addr.s_addr, address.sin_port, poll_fds[nfds].fd)
+                  );
 
-                } else {
-										const Client *client = clientManager->findClientByPollfd(poll_fds[i]);
-										unsigned char *buffer = client->getBuffer();
-										int bytes_received = recv(poll_fds[i].fd, buffer, sizeof(buffer), 0);
-										std::string buffer_str(reinterpret_cast<char*>(buffer));
+                  nfds++;
+                }
+              else {
+                  const Client *client = clientManager->findClientByPollfd(poll_fds[i]);
+                  const char   *buffer = client->getBuffer();
+                  int bytes_received   = recv(poll_fds[i].fd, (void *)buffer, sizeof(buffer), 0);
+                  std::string buffer_str(buffer);
 
-										if (bytes_received > 0) {
-												std::cout << "Data received: " << buffer;
-												commandHandler->parseCommand(buffer_str);
-										} else if (bytes_received == 0) {
-												std::cout << "Client disconnected.";
-												poll_fds[i] = poll_fds[nfds - 1];
-												nfds--;
-										} else if (bytes_received == -1) {
-												continue;
-										} else {
-												perror("recv");
-										}
-								}
-						}
-				}
-		}
+                  client->flushBuffer();
+
+                  if (bytes_received > 0 && buffer_str.length() > 0) {
+                      // std::cout << "Data received: " << buffer << std::endl;
+                      ACommand *cmd = commandHandler->parseCommand(buffer_str);
+                      cmd->execute(client);
+                    }
+                  else if (bytes_received == 0) {
+                      std::cout << "Client disconnected.";
+                      poll_fds[i] = poll_fds[nfds - 1];
+                      nfds--;
+                    }
+                  else if (bytes_received == -1) {
+                      continue;
+                    }
+                  else {
+                      perror("recv");
+                    }
+                }
+            }
+        }
+    }
 }

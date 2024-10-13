@@ -29,13 +29,12 @@ class ACommand
 {
   protected:
     CommandType _type;
-    Client     *_client;
 
   public:
     CommandType  getType() { return _type; };
 
-    virtual void execute()                  = 0;
-    virtual bool canExecute()               = 0;
+    virtual void execute(const Client *)    = 0;
+    virtual bool canExecute(const Client *) = 0;
 };
 
 #endif // !ACOMMAND_HPP

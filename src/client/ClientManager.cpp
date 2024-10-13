@@ -1,8 +1,10 @@
 #include "ClientManager.hpp"
+
 #include "../user/UserManager.hpp"
 #include "Client.hpp"
 
 #include <stdexcept>
+#include <sys/poll.h>
 
 ClientManager::ClientManager() : _clientsByUser(), userManager(&UserManager::getInstance()) {}
 
@@ -45,6 +47,9 @@ const Client *ClientManager::createClient(const Client &toCreate)
   if (result.second) {
       const Client *insertedClient = &(*result.first);
       const User   *user           = insertedClient->getUser();
+
+      int           pfd            = insertedClient->getPollFd();
+      this->_clientsByFd[pfd]      = insertedClient;
 
       if (user != 0x00) {
           this->_clientsByUser[user] = insertedClient;
@@ -92,15 +97,6 @@ void ClientManager::deleteClientByIpv4(const unsigned long ipv4)
   throw std::invalid_argument("Client not found");
 }
 
-void ClientManager::deleteClientByIpv6(const unsigned long ipv6)
-{
-  const Client *find = this->findClientByIpv6(ipv6);
-  if (find) {
-      return deleteClient(*find);
-    }
-  throw std::invalid_argument("Client not found");
-}
-
 void ClientManager::deleteClientByPort(const unsigned long port)
 {
   const Client *find = this->findClientByPort(port);
@@ -133,16 +129,6 @@ const Client *ClientManager::findClientByIpv4(const unsigned long ipv4) const
 {
   for (std::set<Client>::iterator it = this->_clients.begin(); it != this->_clients.end(); ++it) {
       if (it->getIpv4() == ipv4) {
-          return &(*it);
-        }
-    }
-  return 0x00;
-}
-
-const Client *ClientManager::findClientByIpv6(const unsigned long ipv6) const
-{
-  for (std::set<Client>::iterator it = this->_clients.begin(); it != this->_clients.end(); ++it) {
-      if (it->getIpv6() == ipv6) {
           return &(*it);
         }
     }
@@ -183,10 +169,12 @@ ClientManager::findClientsByUsers(const std::set<const User *> &users) const
 
 const Client *ClientManager::findClientByPollfd(const pollfd pollfd) const
 {
-  for (std::map<const struct pollfd, const Client *>::const_iterator it = this->_clientsByPollfd.begin(); it != this->_clientsByPollfd.end(); ++it) {
-	  if (it->first.fd == pollfd.fd) {
-		  return it->second;
-		}
-	}
+  for (std::map<const int, const Client *>::const_iterator it = this->_clientsByFd.begin();
+       it != this->_clientsByFd.end(); ++it)
+    {
+      if (it->first == pollfd.fd) {
+          return it->second;
+        }
+    }
   return 0x00;
 }

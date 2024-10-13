@@ -1,77 +1,59 @@
 #include "Client.hpp"
 
-#include <iostream>
+#include <cstdlib>
+#include <sys/poll.h>
 
-Client::Client(
-    unsigned long ipv4, unsigned long ipv6, unsigned long port, const std::string &nickname
-)
-    : ipv4(ipv4), ipv6(ipv6), port(port), nickname(nickname)
+Client::Client(unsigned long _ipv4, unsigned long _port, int p_fd)
+    : _ipv4(_ipv4), _port(_port), _poll_fd(p_fd), _nickname(""), _user(0x00)
 {
-		buffer = new unsigned char[1024];
 }
 
-Client::~Client() {
- delete buffer;
-}
+Client::~Client() {}
 
 Client::Client(const Client &other)
 {
-  ipv4     = other.ipv4;
-  ipv6     = other.ipv6;
-  port     = other.port;
-  nickname = other.nickname;
-  user     = other.user;
+  _ipv4     = other._ipv4;
+  _port     = other._port;
+  _nickname = other._nickname;
+  _user     = other._user;
+  _poll_fd  = other._poll_fd;
 }
 
-unsigned long      Client::getIpv4() const { return ipv4; }
-
-unsigned long      Client::getIpv6() const { return ipv6; }
-
-unsigned long      Client::getPort() const { return port; }
-
-const std::string &Client::getNickname() const { return nickname; }
-
-void               Client::setNickname(const std::string &nickname) { this->nickname = nickname; }
-
-const User        *Client::getUser() const { return user; }
-
-unsigned char *Client::getBuffer() const { return buffer; }
-
-void               Client::setUser(const User *user) { this->user = user; }
-
-const Client      &Client::operator=(const Client &other)
+const Client &Client::operator=(const Client &other)
 {
-  ipv4     = other.ipv4;
-  ipv6     = other.ipv6;
-  port     = other.port;
-  nickname = other.nickname;
-  user     = other.user;
+  _ipv4     = other._ipv4;
+  _port     = other._port;
+  _nickname = other._nickname;
+  _poll_fd  = other._poll_fd;
+  _user     = other._user;
   return *this;
 }
 
 bool Client::operator==(const Client &other) const
 {
-  return ipv4 == other.ipv4 && ipv6 == other.ipv6 && port == other.port;
+  return _ipv4 == other._ipv4 && /* ipv6 == other.ipv6 && */ _port == other._port;
 }
 
 bool Client::operator!=(const Client &other) const
 {
-  return ipv4 != other.ipv4 || ipv6 != other.ipv6 || port != other.port;
+  return _ipv4 != other._ipv4 || /* ipv6 != other.ipv6 || */ _port != other._port;
 }
 
 bool Client::operator<(const Client &other) const
 {
-  return ipv4 < other.ipv4 || ipv6 < other.ipv6 || port < other.port;
+  return _ipv4 < other._ipv4 || /* ipv6 < other.ipv6 || */ _port < other._port;
 }
 
 bool Client::operator>(const Client &other) const
 {
-  return ipv4 > other.ipv4 || ipv6 > other.ipv6 || port > other.port;
+  return _ipv4 > other._ipv4 || /* ipv6 > other.ipv6 || */ _port > other._port;
 }
 
 // TODO: Implement this method correctly
 int Client::receiveMessage(const std::string &message) const
 {
-  std::cout << "Received message: " << message << std::endl;
+  (void)message;
   return 0;
 }
+
+void Client::flushBuffer() const { memset((void *)_buffer, 0, sizeof(_buffer)); }
