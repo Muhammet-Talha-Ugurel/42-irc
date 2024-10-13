@@ -11,12 +11,11 @@
 class Client
 {
   public:
-    Client(unsigned long ipv4, /* unsigned long ipv6, */ unsigned long port, int p_fd);
+    Client(unsigned long ipv4, unsigned long port, int p_fd);
     ~Client();
     Client(const Client &);
 
     unsigned long      getIpv4() const { return _ipv4; }
-    // unsigned long      getIpv6() const;
     unsigned long      getPort() const { return _port; }
 
     const std::string &getNickname() const { return _nickname; }
@@ -38,6 +37,8 @@ class Client
     bool               operator>(const Client &) const;
 
     int                receiveMessage(const std::string &) const;
+
+    bool               isAuthenticated() const;
 
   private:
     Client();

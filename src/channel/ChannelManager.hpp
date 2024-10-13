@@ -12,7 +12,7 @@ class ChannelManager
     ~ChannelManager();
     ChannelManager(ChannelManager &channelManager);
 
-    ChannelManager           &getInstance();
+    static ChannelManager    &getInstance();
 
     void                      addChannel(const Channel &);
     void                      removeChannel(const Channel *);
