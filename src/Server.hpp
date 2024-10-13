@@ -2,6 +2,7 @@
 
 #define SERVER_HPP
 
+#include "channel/ChannelManager.hpp"
 #include "client/ClientManager.hpp"
 #include "cmd/CommandManager.hpp"
 #include "password/APassword.hpp"
@@ -15,18 +16,25 @@ class Server
     Server(unsigned short port, std::string passwordString);
     ~Server();
 
-    unsigned short getPort() const { return port; }
+    unsigned short   getPort() const { return port; }
+    APassword        getPassword() const { return password; }
 
-    void           start();
+    PasswordManager *getPasswordManager() const { return passwordManager; }
+    ClientManager   *getClientManager() const { return clientManager; }
+    CommandManager  *getCommandManager() const { return commandHandler; }
+    ChannelManager  *getChannelManager() const { return channelManager; }
+
+    void             start();
 
   private:
-    int             socket_fd;
-    unsigned short  port;
-    APassword       password;
+    int              socket_fd;
+    unsigned short   port;
+    APassword        password;
 
-    PasswordManager passwordManager;
-    CommandManager *commandHandler;
-    ClientManager  *clientManager;
+    PasswordManager *passwordManager;
+    CommandManager  *commandHandler;
+    ClientManager   *clientManager;
+    ChannelManager  *channelManager;
 };
 
 #endif // !SERVER_HPP

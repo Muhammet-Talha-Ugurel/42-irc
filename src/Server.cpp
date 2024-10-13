@@ -1,5 +1,6 @@
 #include "Server.hpp"
 
+#include "channel/ChannelManager.hpp"
 #include "password/DJB2HashAlgorithm.hpp"
 #include "password/PasswordManager.hpp"
 
@@ -14,13 +15,14 @@
 #include <sys/socket.h>
 
 Server::Server(unsigned short port, std::string passwordString)
-    : port(port), passwordManager(PasswordManager(DJB2Hash::getInstance())),
-      commandHandler(&CommandManager::getInstance()), clientManager(&ClientManager::getInstance())
+    : port(port), commandHandler(&CommandManager::getInstance()),
+      clientManager(&ClientManager::getInstance()), channelManager(&ChannelManager::getInstance())
 {
-  password  = passwordManager.createPassword(passwordString);
-  socket_fd = socket(AF_INET, SOCK_STREAM, 0);
+  passwordManager = new PasswordManager(DJB2Hash::getInstance()),
+  password        = passwordManager->createPassword(passwordString);
+  socket_fd       = socket(AF_INET, SOCK_STREAM, 0);
 
-  int opt   = 1;
+  int opt         = 1;
   if (setsockopt(socket_fd, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT, &opt, sizeof(opt))) {
       perror("setsockopt");
       exit(EXIT_FAILURE);
@@ -46,7 +48,7 @@ Server::Server(unsigned short port, std::string passwordString)
     }
 }
 
-Server::~Server() {}
+Server::~Server() { delete passwordManager; }
 
 void Server::start()
 {
@@ -97,7 +99,7 @@ void Server::start()
                   if (bytes_received > 0 && buffer_str.length() > 0) {
                       // std::cout << "Data received: " << buffer << std::endl;
                       ACommand *cmd = commandHandler->parseCommand(buffer_str);
-                      cmd->execute(client);
+                      cmd->execute(client, *this);
                     }
                   else if (bytes_received == 0) {
                       std::cout << "Client disconnected.";
