@@ -12,13 +12,12 @@ PasswordManager::PasswordManager(const HashAlgorithm *algorithm) : algorithm(alg
   srand(time(0));
 }
 
-PasswordManager::~PasswordManager()
+PasswordManager::~PasswordManager() {}
+
+PasswordManager *PasswordManager::getInstance()
 {
-  for (std::vector<Password *>::iterator it = this->_passwords.begin();
-       it != this->_passwords.end(); ++it)
-    {
-      delete *it;
-    }
+  static PasswordManager instance;
+  return &instance;
 }
 
 PasswordManager::PasswordManager(const PasswordManager &other) : algorithm(other.algorithm) {}
@@ -38,29 +37,13 @@ std::string PasswordManager::generateSalt() const
   return salt;
 }
 
-const Password *PasswordManager::createPassword(const std::string input)
+const Password PasswordManager::createPassword(const std::string input)
 {
   std::string salt = generateSalt();
   std::string pass = input + salt;
   uint64_t    hash = algorithm->hash(pass);
 
-  Password   *p    = new Password(hash, salt);
-  this->_passwords.push_back(p);
-
-  return p;
-}
-
-void PasswordManager::deletePassword(Password *password)
-{
-  for (std::vector<Password *>::iterator it = this->_passwords.begin();
-       it != this->_passwords.end(); ++it)
-    {
-      if (*it == password) {
-          this->_passwords.erase(it);
-          delete password;
-          break;
-        }
-    }
+  return Password(hash, salt);
 }
 
 bool PasswordManager::validate(const std::string &input, const Password *passwd)

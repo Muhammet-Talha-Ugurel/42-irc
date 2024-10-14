@@ -5,7 +5,6 @@
 #include "Password.hpp"
 
 #include <string>
-#include <vector>
 
 #define SALT_LENGTH 8
 
@@ -16,16 +15,20 @@ class PasswordManager
     ~PasswordManager();
     PasswordManager(const PasswordManager &other);
 
-    bool            validate(const std::string &input, const Password *target);
+    static PasswordManager *getInstance();
 
-    const Password *createPassword(std::string password);
-    void            deletePassword(Password *password);
+    void setAlgorithm(const HashAlgorithm *algorithm) { this->algorithm = algorithm; };
+    const HashAlgorithm *getAlgorithm() const { return algorithm; };
+
+    bool                 validate(const std::string &input, const Password *target);
+
+    const Password       createPassword(std::string password);
 
   private:
-    std::string             generateSalt() const;
-    std::vector<Password *> _passwords;
+    PasswordManager() {};
+    std::string          generateSalt() const;
 
-    const HashAlgorithm    *algorithm;
+    const HashAlgorithm *algorithm;
 };
 
 #endif // !PASSWORD_MANAGER_HPP

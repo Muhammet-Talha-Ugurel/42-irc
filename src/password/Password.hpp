@@ -7,6 +7,7 @@
 class Password
 {
   public:
+    Password() : _hash(0), _salt("") {};
     Password(uint64_t hash, const std::string &salt) : _hash(hash), _salt(salt) {};
     Password(const Password &other) : _hash(other._hash), _salt(other._salt) {};
     ~Password() {};

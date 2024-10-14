@@ -16,15 +16,17 @@
 #include <sys/socket.h>
 
 Server::Server(unsigned short port, std::string passwordString)
-    : port(port), commandHandler(&CommandManager::getInstance()),
-      clientManager(&ClientManager::getInstance()), channelManager(&ChannelManager::getInstance())
+    : _port(port), _command_handler(&CommandManager::getInstance()),
+      _client_manager(&ClientManager::getInstance()),
+      _channel_manager(&ChannelManager::getInstance())
 {
-  passwordManager = new PasswordManager(DJB2Hash::getInstance()),
-  password        = passwordManager->createPassword(passwordString);
-  socket_fd       = socket(AF_INET, SOCK_STREAM, 0);
+  _password_manager = PasswordManager::getInstance(),
+  _password_manager->setAlgorithm(DJB2HashAlgorithm::getInstance());
+  _password         = _password_manager->createPassword(passwordString);
+  _socket_fd        = socket(AF_INET, SOCK_STREAM, 0);
 
-  int opt         = 1;
-  if (setsockopt(socket_fd, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT, &opt, sizeof(opt))) {
+  int opt           = 1;
+  if (setsockopt(_socket_fd, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT, &opt, sizeof(opt))) {
       perror("setsockopt");
       exit(EXIT_FAILURE);
     }
@@ -33,30 +35,30 @@ Server::Server(unsigned short port, std::string passwordString)
   address.sin_addr.s_addr = INADDR_ANY;
   address.sin_port        = htons(port);
 
-  if (bind(socket_fd, (struct sockaddr *)&address, sizeof(address)) < 0) {
+  if (bind(_socket_fd, (struct sockaddr *)&address, sizeof(address)) < 0) {
       perror("bind failed");
       exit(EXIT_FAILURE);
     }
 
-  if (listen(socket_fd, 10) < 0) {
+  if (listen(_socket_fd, 10) < 0) {
       perror("listen");
       exit(EXIT_FAILURE);
     }
 
-  if (fcntl(socket_fd, F_SETFL, O_NONBLOCK) == -1) {
+  if (fcntl(_socket_fd, F_SETFL, O_NONBLOCK) == -1) {
       perror("fcntl");
       exit(EXIT_FAILURE);
     }
 }
 
-Server::~Server() { delete passwordManager; }
+Server::~Server() { delete _password_manager; }
 
 void Server::start()
 {
   struct pollfd poll_fds[100];
 
   int           nfds = 1;
-  poll_fds[0].fd     = socket_fd;
+  poll_fds[0].fd     = _socket_fd;
   poll_fds[0].events = POLLIN;
 
   while (true) {
@@ -69,13 +71,13 @@ void Server::start()
 
       for (int i = 0; i < nfds; ++i) {
           if (poll_fds[i].revents & POLLIN) {
-              if (poll_fds[i].fd == socket_fd) {
+              if (poll_fds[i].fd == _socket_fd) {
                   int                new_socket;
 
                   struct sockaddr_in address;
                   socklen_t          addrlen = sizeof(address);
 
-                  new_socket = accept(socket_fd, (struct sockaddr *)&address, &addrlen);
+                  new_socket = accept(_socket_fd, (struct sockaddr *)&address, &addrlen);
                   if (new_socket < 0) {
                       perror("accept");
                       exit(EXIT_FAILURE);
@@ -83,26 +85,27 @@ void Server::start()
                   fcntl(new_socket, F_SETFL, O_NONBLOCK);
                   poll_fds[nfds].fd     = new_socket;
                   poll_fds[nfds].events = POLLIN;
-                  clientManager->createClient(
+                  _client_manager->createClient(
                       Client(address.sin_addr.s_addr, address.sin_port, poll_fds[nfds].fd)
                   );
 
                   nfds++;
                 }
               else {
-                  const Client *client = clientManager->findClientByPollfd(poll_fds[i]);
+                  const Client *client = _client_manager->findClientByPollfd(poll_fds[i]);
                   const char   *buffer = client->getBuffer();
                   int bytes_received = recv(poll_fds[i].fd, (void *)buffer, 1024 * sizeof(char), 0);
                   std::string buffer_str(buffer);
                   client->flushBuffer();
 
                   if (bytes_received > 0 && buffer_str.length() > 0) {
-                      std::vector<ACommand *> commands = commandHandler->parseCommand(buffer_str);
+                      std::vector<ACommand *> commands = _command_handler->parseCommand(buffer_str);
 
                       for (std::vector<ACommand *>::iterator it = commands.begin();
                            it != commands.end(); ++it)
                         {
-                          if ( (*it)->canExecute(client, *this) ) {}
+                          if ((*it)->canExecute(client, *this)) {
+                            }
                           (*it)->execute((Client *)client, *this);
                         }
                     }

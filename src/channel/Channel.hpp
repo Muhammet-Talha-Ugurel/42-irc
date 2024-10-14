@@ -17,22 +17,22 @@ class Channel
     Channel(const Channel &channel);
     ~Channel();
 
-    std::string                  getTopic() const { return this->_topic; }
-    void                         setTopic(std::string topic) { this->_topic = topic; }
+    std::string                  getTopic() const { return _topic; }
+    void                         setTopic(std::string topic) { _topic = topic; }
 
-    std::string                  getName() const { return this->_name; }
-    void                         setName(std::string name) { this->_name = name; }
+    std::string                  getName() const { return _name; }
+    void                         setName(std::string name) { _name = name; }
 
-    bool                         isPrivate() const { return this->_isPrivate; }
-    void                         setPrivate(bool) { this->_isPrivate = true; }
+    bool                         isPrivate() const { return _isPrivate; }
+    void                         setPrivate(bool) { _isPrivate = true; }
 
-    const Password              &getPassword() const { return this->_password; }
-    void                         setPassword(Password &password) { this->_password = password; }
+    const Password              &getPassword() const { return _password; }
+    void                         setPassword(Password &password) { _password = password; }
 
     void                         addUser(User *);
     void                         removeUser(User *);
 
-    const std::set<const User *> getUsers() const { return this->_users; }
+    const std::set<const User *> getUsers() const { return _users; }
 
     void                         publishMessage(const std::string &, const ClientManager &);
 

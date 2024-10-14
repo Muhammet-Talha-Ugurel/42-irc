@@ -16,13 +16,14 @@ class Server
     Server(unsigned short port, std::string passwordString);
     ~Server();
 
-    unsigned short   getPort() const { return port; }
-    const Password  *getPassword() const { return password; }
+    unsigned short   getPort() const { return _port; }
+    const Password  &getPassword() const { return _password; }
+    void             setPassword(const Password &password) { _password = password; }
 
-    PasswordManager *getPasswordManager() const { return passwordManager; }
-    ClientManager   *getClientManager() const { return clientManager; }
-    CommandManager  *getCommandManager() const { return commandHandler; }
-    ChannelManager  *getChannelManager() const { return channelManager; }
+    PasswordManager *getPasswordManager() const { return _password_manager; }
+    ClientManager   *getClientManager() const { return _client_manager; }
+    CommandManager  *getCommandManager() const { return _command_handler; }
+    ChannelManager  *getChannelManager() const { return _channel_manager; }
 
     std::string respond(std::string code, const Client *client, std::string message = "") const;
     std::string respond(std::string code, const Client *client, std::string message = "");
@@ -30,14 +31,14 @@ class Server
     void        start();
 
   private:
-    int              socket_fd;
-    unsigned short   port;
-    const Password  *password;
+    int              _socket_fd;
+    unsigned short   _port;
+    Password         _password;
 
-    PasswordManager *passwordManager;
-    CommandManager  *commandHandler;
-    ClientManager   *clientManager;
-    ChannelManager  *channelManager;
+    PasswordManager *_password_manager;
+    CommandManager  *_command_handler;
+    ClientManager   *_client_manager;
+    ChannelManager  *_channel_manager;
 };
 
 #endif // !SERVER_HPP

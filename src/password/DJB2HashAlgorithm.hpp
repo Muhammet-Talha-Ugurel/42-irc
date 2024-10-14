@@ -6,12 +6,12 @@
 #include <stdint.h>
 #include <string>
 
-class DJB2Hash : public HashAlgorithm
+class DJB2HashAlgorithm : public HashAlgorithm
 {
   public:
-    static const DJB2Hash *getInstance()
+    static const DJB2HashAlgorithm *getInstance()
     {
-      static DJB2Hash instance;
+      static DJB2HashAlgorithm instance;
       return &instance;
     }
 
