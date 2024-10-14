@@ -51,9 +51,9 @@ std::vector<ACommand *> CommandManager::parseCommand(std::string command)
 						}
 						else if (cmd == "QUIT") {
 								iss >> arg;
-								// ACommand *quit = new CommandQuit(arg);
-								// if (quit != 0x00)
-										// commands.push_back(quit);
+								ACommand *quit = new CommandQuit(arg);
+								if (quit != 0x00)
+										commands.push_back(quit);
 						}
 						else if (cmd == "JOIN") {
 								std::vector<std::string> channels;
@@ -67,7 +67,9 @@ std::vector<ACommand *> CommandManager::parseCommand(std::string command)
 										commands.push_back(join);
 						}
 						else if (cmd == "CAP") {
-								iss >> arg;
+								ACommand *cap = new CommandCap();
+								if (cap != 0x00)
+										commands.push_back(cap);
 						}
 						else if (cmd == "PING") {
 								iss >> arg;
@@ -86,8 +88,8 @@ std::vector<ACommand *> CommandManager::parseCommand(std::string command)
 								if (arg[0] == '#')
 										arg.erase(0, 1);
 								iss >> arg2;
-								if (arg[0] == ':')
-										arg.erase(0, 1);
+								if (arg2[0] == ':')
+										arg2.erase(0, 1);
 								ACommand *msg = new CommandPrivmsg(arg, arg2);
 								if (msg != 0x00)
 										commands.push_back(msg);

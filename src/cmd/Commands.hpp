@@ -93,12 +93,8 @@ class CommandJoin : public ACommand
 
 class CommandCap : public ACommand
 {
-  private:
-    std::string subcommand;
-    std::string capability;
-
   public:
-    CommandCap(std::string, std::string);
+    CommandCap();
     ~CommandCap();
     CommandCap(const CommandCap &commandCap);
 

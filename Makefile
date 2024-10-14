@@ -13,6 +13,8 @@ SRC			=  src/main.cpp \
 			   src/cmd/CommandList.cpp \
 			   src/cmd/CommandPing.cpp \
 			   src/cmd/CommandJoin.cpp \
+			   src/cmd/CommandCap.cpp \
+			   src/cmd/CommandQuit.cpp \
 			   src/password/PasswordManager.cpp \
 			   src/user/User.cpp \
 			   src/user/UserManager.cpp
