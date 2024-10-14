@@ -17,6 +17,7 @@ class ClientManager
     std::map<const User *, const Client *> _clientsByUser;
     std::map<const int, const Client *>    _clientsByFd;
     class UserManager                     *userManager;
+    class ChannelManager                  *channelManager;
 
     void                                   deleteClient(const Client &);
     const Client                          *updateClient(const Client *src, const Client &dst);

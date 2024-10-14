@@ -22,7 +22,7 @@ Channel::~Channel() {}
 
 void Channel::addUser(User *user) { _users.insert(user); }
 
-void Channel::removeUser(User *user) { _users.erase(user); }
+void Channel::removeUser(const User *user) { _users.erase(user); }
 
 void Channel::publishMessage(const std::string &message, const Client &sender, const ClientManager &clientManager)
 {

@@ -1,4 +1,3 @@
-#include "../Debug.hpp"
 #include "Commands.hpp"
 
 #include <string>
@@ -19,8 +18,6 @@ void CommandJoin::execute(Client *client, const Server &server)
       Channel *ptr = const_cast<Channel *>(server.getChannelManager()->getChannelByName(*it));
       if (ptr != 0x00) {
           ptr->addUser((User *)client->getUser());
-          std::cout << "<" << client->getNickname() << ">" << std::endl;
-          std::cout << "<" << client->getUser()->getUsername() << ">" << std::endl;
           client->receiveMessage(
               ":" + client->getNickname() + "!" + client->getUser()->getUsername() + "@ JOIN :#" +
               *it + "\r\n"

@@ -23,6 +23,8 @@ class ChannelManager
 
     std::set<Channel *>       getChannelsByClient(Client *);
 
+    void                      removeUserFromChannels(const User *);
+
   private:
     ChannelManager();
     std::map<std::string, Channel> _channels;

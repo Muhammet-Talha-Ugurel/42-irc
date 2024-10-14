@@ -14,6 +14,7 @@
 #include <poll.h>
 #include <string>
 #include <sys/socket.h>
+#include <unistd.h>
 
 Server::Server(unsigned short port, std::string passwordString)
     : _port(port), _command_handler(&CommandManager::getInstance()),
@@ -51,7 +52,7 @@ Server::Server(unsigned short port, std::string passwordString)
     }
 }
 
-Server::~Server() { delete _password_manager; }
+Server::~Server() { close(_socket_fd); }
 
 void Server::start()
 {

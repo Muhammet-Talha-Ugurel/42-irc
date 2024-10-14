@@ -58,3 +58,14 @@ std::set<Channel *> ChannelManager::getChannelsByClient(Client *client)
 
   return channels;
 }
+
+void ChannelManager::removeUserFromChannels(const User *user)
+{
+  std::map<std::string, Channel>::iterator it;
+
+  for (it = this->_channels.begin(); it != this->_channels.end(); ++it) {
+      Channel *channel = &it->second;
+      if (channel->hasUser(user))
+        channel->removeUser(user);
+    }
+}

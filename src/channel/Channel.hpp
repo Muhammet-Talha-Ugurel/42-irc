@@ -30,7 +30,7 @@ class Channel
     void                         setPassword(Password &password) { _password = password; }
 
     void                         addUser(User *);
-    void                         removeUser(User *);
+    void                         removeUser(const User *);
 
     const std::set<const User *> getUsers() const { return _users; }
 

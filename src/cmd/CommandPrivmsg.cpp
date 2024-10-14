@@ -1,5 +1,4 @@
 #include "../Debug.hpp"
-#include "../user/UserManager.hpp"
 #include "Commands.hpp"
 
 CommandPrivmsg::CommandPrivmsg(std::string target, std::string message)

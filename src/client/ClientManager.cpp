@@ -1,12 +1,18 @@
 #include "ClientManager.hpp"
 
+#include "../channel/ChannelManager.hpp"
 #include "../user/UserManager.hpp"
 #include "Client.hpp"
 
 #include <stdexcept>
 #include <sys/poll.h>
+#include <unistd.h>
 
-ClientManager::ClientManager() : _clientsByUser(), userManager(&UserManager::getInstance()) {}
+ClientManager::ClientManager()
+    : _clientsByUser(), userManager(&UserManager::getInstance()),
+      channelManager(&ChannelManager::getInstance())
+{
+}
 
 ClientManager::~ClientManager() {}
 
@@ -30,10 +36,16 @@ void ClientManager::deleteClient(const Client &toDelete)
   const User *user = toDelete.getUser();
 
   if (user != 0x00) {
+      channelManager->removeUserFromChannels(user);
       userManager->deleteUser(*user);
       this->_clientsByUser.erase(user);
     }
   this->_clients.erase(toDelete);
+
+  int pfd = toDelete.getPollFd();
+  this->_clientsByFd.erase(pfd);
+
+  close(pfd);
 }
 
 ClientManager &ClientManager::getInstance()
