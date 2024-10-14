@@ -21,6 +21,8 @@ class ChannelManager
 
     std::set<const Channel *> getChannelsByIsPublic(bool);
 
+    std::set<Channel *>       getChannelsByClient(Client *);
+
   private:
     ChannelManager();
     std::map<std::string, Channel> _channels;

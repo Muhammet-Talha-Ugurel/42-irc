@@ -34,6 +34,8 @@ class Channel
 
     const std::set<const User *> getUsers() const { return _users; }
 
+    bool                         hasUser(const User *user) const { return _users.find(user) != _users.end(); }
+
     void                         publishMessage(const std::string &, const Client &sender, const ClientManager &);
 
     void                         addMod(const User *);

@@ -45,3 +45,16 @@ std::set<const Channel *> ChannelManager::getChannelsByIsPublic(bool isPublic)
 
   return channels;
 }
+
+std::set<Channel *> ChannelManager::getChannelsByClient(Client *client)
+{
+  std::set<Channel *>                      channels;
+  std::map<std::string, Channel>::iterator it;
+
+  for (it = this->_channels.begin(); it != this->_channels.end(); ++it) {
+      if (it->second.hasUser(client->getUser()))
+        channels.insert(&it->second);
+    }
+
+  return channels;
+}

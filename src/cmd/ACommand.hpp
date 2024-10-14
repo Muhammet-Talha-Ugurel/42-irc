@@ -6,13 +6,13 @@
 
 enum CommandType
 {
-  PASS,
-  NICK,
-  USER,
+  PASS, // done
+  NICK, // done
+  USER, //
   QUIT,
-  JOIN,
+  JOIN, //
   CAP,
-  PING,
+  PING, //
   MODE,
   WHO,
   PRIVMSG,
@@ -21,7 +21,7 @@ enum CommandType
   PART,
   TOPIC,
   NAMES,
-  LIST,
+  LIST, //
   DCC
 };
 
