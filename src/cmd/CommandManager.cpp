@@ -59,6 +59,8 @@ std::vector<ACommand *> CommandManager::parseCommand(std::string command)
 								std::vector<std::string> channels;
 								std::vector<std::string> keys;
 								iss >> arg;
+								if (arg[0] == '#')
+										arg.erase(0, 1);
 								channels.push_back(arg);
 								ACommand *join = new CommandJoin(channels, keys);
 								if (join != 0x00)
@@ -78,6 +80,14 @@ std::vector<ACommand *> CommandManager::parseCommand(std::string command)
 						}
 						else if (cmd == "PRIVMSG") {
 								iss >> arg;
+								if (arg[0] == '#')
+										arg.erase(0, 1);
+								iss >> arg2;
+								if (arg[0] == ':')
+										arg.erase(0, 1);
+								ACommand *msg = new CommandPrivmsg(arg, arg2);
+								if (msg != 0x00)
+										commands.push_back(msg);
 						}
 						else if (cmd == "NOTICE") {
 								iss >> arg;
