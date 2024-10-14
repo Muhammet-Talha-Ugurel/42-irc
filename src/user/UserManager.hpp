@@ -22,6 +22,7 @@ class UserManager
     const User         *createUser(const User &);
     const User         *updateUserByUsername(const std::string &, const User &);
 
+    int                 deleteUser(const User &);
     void                deleteUserByUsername(const std::string &);
 
     const User         *findUserByNickname(const std::string &) const;

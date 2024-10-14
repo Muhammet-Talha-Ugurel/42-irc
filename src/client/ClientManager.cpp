@@ -10,9 +10,7 @@ ClientManager::ClientManager() : _clientsByUser(), userManager(&UserManager::get
 
 ClientManager::~ClientManager() {}
 
-const UserManager *ClientManager::getUserManager() {
-		return userManager;
-}
+const UserManager *ClientManager::getUserManager() { return userManager; }
 
 ClientManager::ClientManager(const ClientManager &other)
 {
@@ -32,6 +30,7 @@ void ClientManager::deleteClient(const Client &toDelete)
   const User *user = toDelete.getUser();
 
   if (user != 0x00) {
+      userManager->deleteUser(*user);
       this->_clientsByUser.erase(user);
     }
   this->_clients.erase(toDelete);

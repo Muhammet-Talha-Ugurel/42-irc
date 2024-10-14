@@ -34,6 +34,8 @@ const User *UserManager::updateUserByUsername(const std::string &username, const
   return 0x00;
 }
 
+int UserManager::deleteUser(const User &toDelete) { return this->_users.erase(toDelete); }
+
 void UserManager::deleteUserByUsername(const std::string &username)
 {
   const User *find = this->findUserByUsername(username);

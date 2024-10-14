@@ -16,7 +16,7 @@ class ClientManager
     std::set<Client>                       _clients;
     std::map<const User *, const Client *> _clientsByUser;
     std::map<const int, const Client *>    _clientsByFd;
-    const class UserManager               *userManager;
+    class UserManager                     *userManager;
 
     void                                   deleteClient(const Client &);
     const Client                          *updateClient(const Client *src, const Client &dst);
@@ -28,7 +28,7 @@ class ClientManager
 
     static ClientManager             &getInstance();
 
-		const UserManager *getUserManager();
+    const UserManager                *getUserManager();
 
     const Client                     *createClient(const Client &);
     void                              allowClient(const Client *);
