@@ -71,6 +71,9 @@ std::vector<ACommand *> CommandManager::parseCommand(std::string command)
 						}
 						else if (cmd == "PING") {
 								iss >> arg;
+								ACommand *ping = new CommandPing(arg);
+								if (ping != 0x00)
+										commands.push_back(ping);
 						}
 						else if (cmd == "MODE") {
 								iss >> arg;

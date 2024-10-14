@@ -31,12 +31,13 @@ class ACommand
     CommandType _type;
 
   public:
+    virtual ~ACommand() {}
     CommandType  getType() { return _type; };
 
-    virtual void execute(Client *, const class Server &)    = 0;
+    virtual void execute(Client *, const class Server &)          = 0;
     virtual void execute(const Client *, const class Server &)    = 0;
 
-    virtual bool canExecute(Client *, const class Server &) = 0;
+    virtual bool canExecute(Client *, const class Server &)       = 0;
     virtual bool canExecute(const Client *, const class Server &) = 0;
 };
 

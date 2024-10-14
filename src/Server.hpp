@@ -7,6 +7,7 @@
 #include "cmd/CommandManager.hpp"
 #include "password/Password.hpp"
 #include "password/PasswordManager.hpp"
+#include "user/UserManager.hpp"
 
 #include <string>
 
@@ -24,6 +25,7 @@ class Server
     ClientManager   *getClientManager() const { return _client_manager; }
     CommandManager  *getCommandManager() const { return _command_handler; }
     ChannelManager  *getChannelManager() const { return _channel_manager; }
+    UserManager     *getUserManager() const { return _user_manager; }
 
     std::string respond(std::string code, const Client *client, std::string message = "") const;
     std::string respond(std::string code, const Client *client, std::string message = "");
@@ -39,6 +41,7 @@ class Server
     CommandManager  *_command_handler;
     ClientManager   *_client_manager;
     ChannelManager  *_channel_manager;
+    UserManager     *_user_manager;
 };
 
 #endif // !SERVER_HPP

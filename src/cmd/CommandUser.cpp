@@ -13,8 +13,8 @@ CommandUser::~CommandUser() {}
 
 void CommandUser::execute(Client *client, const Server &server)
 {
-  const UserManager *userManger = server.getClientManager()->getUserManager();
-  if (userManger->findUserByNickname(username)) {
+  const UserManager *userManger = server.getUserManager();
+  if (userManger->findUserByUsername(username)) {
       client->receiveMessage(":server 433* :Username is already in use\r\n");
       DEBUG_LOG("User name already taken");
     }
@@ -28,7 +28,7 @@ void CommandUser::execute(Client *client, const Server &server)
           User user = User();
           user.setUsername(username);
           user.setRealName(realname);
-          client->setUser(&user);
+          client->setUser(server.getUserManager()->createUser(user));
         }
       client->receiveMessage(
           ":mtuirc.com 001 " + client->getNickname() +

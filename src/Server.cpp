@@ -18,7 +18,8 @@
 Server::Server(unsigned short port, std::string passwordString)
     : _port(port), _command_handler(&CommandManager::getInstance()),
       _client_manager(&ClientManager::getInstance()),
-      _channel_manager(&ChannelManager::getInstance())
+      _channel_manager(&ChannelManager::getInstance()),
+      _user_manager(&UserManager::getInstance())
 {
   _password_manager = PasswordManager::getInstance(),
   _password_manager->setAlgorithm(DJB2HashAlgorithm::getInstance());
@@ -107,7 +108,9 @@ void Server::start()
                           if ((*it)->canExecute(client, *this)) {
                               (*it)->execute(client, *this);
                             }
+                          delete *it;
                         }
+                      ;
                     }
                   else if (bytes_received == 0) {
                       std::cout << "Client disconnected." << std::endl;
