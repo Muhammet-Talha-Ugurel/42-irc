@@ -10,6 +10,10 @@ ClientManager::ClientManager() : _clientsByUser(), userManager(&UserManager::get
 
 ClientManager::~ClientManager() {}
 
+const UserManager *ClientManager::getUserManager() {
+		return userManager;
+}
+
 ClientManager::ClientManager(const ClientManager &other)
 {
   this->_clients    = other._clients;

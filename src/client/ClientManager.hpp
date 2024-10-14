@@ -28,6 +28,8 @@ class ClientManager
 
     static ClientManager             &getInstance();
 
+		const UserManager *getUserManager();
+
     const Client                     *createClient(const Client &);
     void                              allowClient(const Client *);
 
