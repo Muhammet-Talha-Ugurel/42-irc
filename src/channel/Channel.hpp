@@ -34,7 +34,7 @@ class Channel
 
     const std::set<const User *> getUsers() const { return _users; }
 
-    void                         publishMessage(const std::string &, const ClientManager &);
+    void                         publishMessage(const std::string &, const Client &sender, const ClientManager &);
 
     void                         addMod(const User *);
     bool                         isUserBanned(const User *) const;

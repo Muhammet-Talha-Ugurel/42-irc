@@ -24,14 +24,14 @@ void Channel::addUser(User *user) { _users.insert(user); }
 
 void Channel::removeUser(User *user) { _users.erase(user); }
 
-void Channel::publishMessage(const std::string &message, const ClientManager &clientManager)
+void Channel::publishMessage(const std::string &message, const Client &sender, const ClientManager &clientManager)
 {
   std::vector<const Client *> clients = clientManager.findClientsByUsers(_users);
 
   for (std::vector<const Client *>::const_iterator it = clients.begin(); it != clients.end(); ++it)
   {
       const Client *client = *it;
-      if (client) {
+      if (client && client != &sender) {
           client->receiveMessage(message);
         }
     }
