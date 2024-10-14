@@ -87,7 +87,7 @@ std::vector<ACommand *> CommandManager::parseCommand(std::string command)
 								iss >> arg;
 								if (arg[0] == '#')
 										arg.erase(0, 1);
-								iss >> arg2;
+								arg2 = iss.str();
 								if (arg2[0] == ':')
 										arg2.erase(0, 1);
 								ACommand *msg = new CommandPrivmsg(arg, arg2);
