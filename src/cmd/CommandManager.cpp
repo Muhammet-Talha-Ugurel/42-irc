@@ -101,7 +101,18 @@ std::vector<ACommand *> CommandManager::parseCommand(std::string command)
 								iss >> arg;
 						}
 						else if (cmd == "PART") {
+								std::vector<std::string> channels;
+								std::string keys;
 								iss >> arg;
+								if (arg[0] == '#')
+										arg.erase(0, 1);
+								channels.push_back(arg);
+								arg2 = iss.str();
+								if (arg2[0] == ':')
+										arg2.erase(0, 1);
+								ACommand *part = new CommandPart(channels, arg2);
+								if (part != 0x00)
+										commands.push_back(part);
 						}
 						else if (cmd == "TOPIC") {
 								iss >> arg;
