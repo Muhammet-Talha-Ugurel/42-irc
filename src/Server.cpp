@@ -93,7 +93,10 @@ void Server::start()
                 }
               else {
                   const Client *client = _client_manager->findClientByPollfd(poll_fds[i]);
-                  const char   *buffer = client->getBuffer();
+                  if (client == 0x00) {
+                      continue;
+                    }
+                  const char *buffer = client->getBuffer();
                   int bytes_received = recv(poll_fds[i].fd, (void *)buffer, 1024 * sizeof(char), 0);
                   std::string buffer_str(buffer);
                   std::cout << "Received: " << buffer_str << std::endl;
@@ -116,6 +119,7 @@ void Server::start()
                       _client_manager->deleteClientByPollfd(poll_fds[i]);
                       poll_fds[i] = poll_fds[nfds - 1];
                       nfds--;
+                      i--;
                     }
                   else if (bytes_received == -1) {
                       continue;

@@ -36,15 +36,15 @@ void ClientManager::deleteClient(const Client &toDelete)
   const User *user = toDelete.getUser();
 
   if (user != 0x00) {
+      this->_clientsByUser.erase(user);
       channelManager->removeUserFromChannels(user);
       userManager->deleteUser(*user);
-      this->_clientsByUser.erase(user);
     }
-  this->_clients.erase(toDelete);
 
   int pfd = toDelete.getPollFd();
   this->_clientsByFd.erase(pfd);
 
+  this->_clients.erase(toDelete);
   close(pfd);
 }
 
