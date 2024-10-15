@@ -16,6 +16,7 @@ void CommandNick::execute(Client *client, const Server &server)
     }
   else {
       client->setNickname(nickname);
+      const_cast<User *>(client->getUser())->setLastNickname(nickname);
       DEBUG_LOG("Client nickname set to " << nickname);
     }
 }

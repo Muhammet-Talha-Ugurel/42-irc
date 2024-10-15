@@ -12,7 +12,7 @@ CommandPrivmsg::~CommandPrivmsg() {}
 
 void CommandPrivmsg::execute(Client *client, const Server &server)
 {
-		Channel *channel = const_cast<Channel *>(server.getChannelManager()->getChannelByName(target));
+		Channel *channel = const_cast<Channel *>(server.getChannelManager()->findChannelByName(target));
 		if (channel == 0x00) {
 				if (server.getClientManager()->findClientByNickname(target)) {
 						server.getClientManager()->findClientByNickname(target)->receiveMessage(

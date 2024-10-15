@@ -15,7 +15,7 @@ void CommandJoin::execute(Client *client, const Server &server)
 {
 		std::vector<std::string>::iterator it = channels.begin();
 		while (it != channels.end()) {
-				Channel *ptr = const_cast<Channel *>(server.getChannelManager()->getChannelByName(*it));
+				Channel *ptr = const_cast<Channel *>(server.getChannelManager()->findChannelByName(*it));
 				if (ptr != 0x00) {
 						ptr->addUser((User *)client->getUser());
 						client->receiveMessage(
@@ -29,7 +29,8 @@ void CommandJoin::execute(Client *client, const Server &server)
 				}
 				else {
 						Channel channel = Channel(*it);
-						channel.addUser((User *)client->getUser());
+						channel.addUser(client->getUser());
+						channel.addOperator(client->getUser());
 						server.getChannelManager()->addChannel(channel);
 						client->receiveMessage(
 								":" + client->getNickname() + "!" + client->getUser()->getUsername() + "@ JOIN :#" +

@@ -15,7 +15,7 @@ ChannelManager &ChannelManager::getInstance()
 void ChannelManager::addChannel(const Channel &channel)
 {
   if (this->_channels.find(channel.getName()) == this->_channels.end())
-    this->_channels.insert(std::pair<std::string, Channel>(channel.getName(), channel));
+    this->_channels.insert(std::pair<std::string, Channel>(channel.getName(), Channel(channel)));
   else
     throw std::runtime_error("Channel already exists");
 }
@@ -25,7 +25,7 @@ void ChannelManager::removeChannel(const Channel *channel)
   this->_channels.erase(channel->getName());
 }
 
-const Channel *ChannelManager::getChannelByName(const std::string &name)
+Channel *ChannelManager::findChannelByName(const std::string &name)
 {
   std::map<std::string, Channel>::iterator it = this->_channels.find(name);
   if (it != this->_channels.end())
@@ -33,20 +33,20 @@ const Channel *ChannelManager::getChannelByName(const std::string &name)
   return 0x00;
 }
 
-std::set<const Channel *> ChannelManager::getChannelsByIsPublic(bool isPublic)
+std::set<const Channel *> ChannelManager::findChannelsByIsPublic(bool isPublic)
 {
   std::set<const Channel *>                channels;
   std::map<std::string, Channel>::iterator it;
 
   for (it = this->_channels.begin(); it != this->_channels.end(); ++it) {
-      if (it->second.isPrivate() == isPublic)
+      if (it->second.isPrivate() != isPublic)
         channels.insert(&it->second);
     }
 
   return channels;
 }
 
-std::set<Channel *> ChannelManager::getChannelsByClient(Client *client)
+std::set<Channel *> ChannelManager::findChannelsByClient(Client *client)
 {
   std::set<Channel *>                      channels;
   std::map<std::string, Channel>::iterator it;

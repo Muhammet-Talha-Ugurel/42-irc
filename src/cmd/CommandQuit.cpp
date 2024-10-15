@@ -8,7 +8,7 @@ CommandQuit::CommandQuit(std::string msg)
 
 void CommandQuit::execute(Client *client, const Server &server)
 {
-		std::set<Channel *> channels = server.getChannelManager()->getChannelsByClient(client);
+		std::set<Channel *> channels = server.getChannelManager()->findChannelsByClient(client);
 		for (std::set<Channel *>::iterator it = channels.begin(); it != channels.end(); ++it)
 				(*it)->publishMessage(":" + client->getNickname() + "!" + client->getUser()->getUsername() + "@ QUIT :" + message + "\r\n", *client, *server.getClientManager());
 		server.getClientManager()->deleteClientByNickname(client->getNickname());    

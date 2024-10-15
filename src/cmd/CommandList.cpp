@@ -12,18 +12,15 @@ CommandList::CommandList(const CommandList &commandList) { this->channels = comm
 
 void CommandList::execute(Client *client, const Server &server)
 {
-  std::set<const Channel *> channels = server.getChannelManager()->getChannelsByIsPublic(true);
-
-  std::vector<std::string>  names;
-  for (std::set<const Channel *>::iterator it = channels.begin(); it != channels.end(); ++it)
-    names.push_back((*it)->getName());
-
-  (void)client;
+  std::set<const Channel *> channels = server.getChannelManager()->findChannelsByIsPublic(true);
 
   client->receiveMessage(server.respond(IRC_RPL_LISTSTART, client));
+  for (std::set<const Channel *>::iterator it = channels.begin(); it != channels.end(); ++it)
+    client->receiveMessage(server.respond(
+        IRC_RPL_LIST, client, "#" + (*it)->getName() + " " + (*it)->getUserCountString() + " :" + (*it)->getTopic()
+    ));
 
-  for (std::vector<std::string>::iterator it = names.begin(); it != names.end(); ++it)
-    client->receiveMessage(server.respond(IRC_RPL_LIST, client, *it));
+  (void)client;
 
   client->receiveMessage(server.respond(IRC_RPL_LISTEND, client));
 }

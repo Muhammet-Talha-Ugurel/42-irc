@@ -227,7 +227,7 @@ class CommandTopic : public ACommand
 {
   private:
     std::string channel;
-    std::string message;
+    std::string topic;
 
   public:
     CommandTopic(std::string, std::string);

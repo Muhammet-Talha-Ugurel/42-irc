@@ -9,19 +9,19 @@ enum CommandType
   PASS, // done
   NICK, // done
   USER, //
-  QUIT,
+  QUIT, //
   JOIN, //
-  CAP,
+  CAP,  //
   PING, //
   MODE,
   WHO,
-  PRIVMSG,
+  PRIVMSG, //
   NOTICE,
   KICK,
-  PART,
-  TOPIC,
+  PART,  //
+  TOPIC, //
   NAMES,
-  LIST, //
+  LIST,  //
   DCC
 };
 

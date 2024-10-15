@@ -17,11 +17,11 @@ class ChannelManager
     void                      addChannel(const Channel &);
     void                      removeChannel(const Channel *);
 
-    const Channel            *getChannelByName(const std::string &);
+    Channel                  *findChannelByName(const std::string &);
 
-    std::set<const Channel *> getChannelsByIsPublic(bool);
+    std::set<const Channel *> findChannelsByIsPublic(bool);
 
-    std::set<Channel *>       getChannelsByClient(Client *);
+    std::set<Channel *>       findChannelsByClient(Client *);
 
     void                      removeUserFromChannels(const User *);
 

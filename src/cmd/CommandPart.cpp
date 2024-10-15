@@ -8,7 +8,7 @@ CommandPart::CommandPart(std::vector<std::string> channels, std::string message)
 
 void CommandPart::execute(Client *client, const Server &server)
 {
-		std::set<Channel *> channels = server.getChannelManager()->getChannelsByClient(client);
+		std::set<Channel *> channels = server.getChannelManager()->findChannelsByClient(client);
 		for (std::set<Channel *>::iterator it = channels.begin(); it != channels.end(); ++it) {
 				for (std::vector<std::string>::iterator it2 = this->channels.begin(); it2 != this->channels.end(); ++it2) {
 						if ((*it)->getName() == *it2) {
