@@ -121,7 +121,15 @@ std::vector<ACommand *> CommandManager::parseCommand(std::string command)
 								iss >> arg;
 						}
 						else if (cmd == "LIST") {
+								std::set<std::string> channels;
+								std::string keys;
 								iss >> arg;
+								if (arg[0] == '#')
+										arg.erase(0, 1);
+								channels.insert(arg);
+								ACommand *list = new CommandList(channels);
+								if (list != 0x00)
+										commands.push_back(list);
 						}
 						else if (cmd == "DCC") {
 								iss >> arg;
