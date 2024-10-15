@@ -5,6 +5,13 @@ CommandTopic::CommandTopic(std::string channel, std::string topic) : channel(cha
   _type = TOPIC;
 }
 
+CommandTopic::~CommandTopic() {}
+
+CommandTopic::CommandTopic(const CommandTopic &commandTopic)
+    : channel(commandTopic.channel), topic(commandTopic.topic)
+{
+}
+
 void CommandTopic::execute(Client *client, const Server &server)
 {
   Channel *ch = server.getChannelManager()->findChannelByName(channel);
@@ -37,4 +44,9 @@ bool CommandTopic::canExecute(Client *client, const Server &server)
   else
     return true;
   return false;
+}
+
+bool CommandTopic::canExecute(const Client *client, const Server &server)
+{
+  return canExecute(const_cast<Client *>(client), server);
 }
