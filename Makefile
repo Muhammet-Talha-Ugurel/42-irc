@@ -8,6 +8,7 @@ SRC			=  src/main.cpp \
 			   src/cmd/CommandManager.cpp \
 			   src/cmd/CommandPass.cpp \
 			   src/cmd/CommandPrivmsg.cpp \
+			   src/cmd/CommandNotice.cpp \
 			   src/cmd/CommandNick.cpp \
 			   src/cmd/CommandUser.cpp \
 			   src/cmd/CommandList.cpp \
@@ -16,6 +17,7 @@ SRC			=  src/main.cpp \
 			   src/cmd/CommandCap.cpp \
 			   src/cmd/CommandQuit.cpp \
 			   src/cmd/CommandPart.cpp \
+			   src/cmd/CommandTopic.cpp \
 			   src/password/PasswordManager.cpp \
 			   src/user/User.cpp \
 			   src/user/UserManager.cpp

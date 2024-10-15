@@ -33,26 +33,30 @@ std::vector<ACommand *> CommandManager::parseCommand(std::string command)
 								if (arg[0] == ':')
 										arg.erase(0, 1);
 								ACommand *pass = new CommandPass(arg);
-								if (pass != 0x00)
+								if (pass != NULL)
 										commands.push_back(pass);
 						}
 						else if (cmd == "NICK") {
 								iss >> arg;
 								ACommand *nick = new CommandNick(arg);
-								if (nick != 0x00)
+								if (nick != NULL)
 										commands.push_back(nick);
 						}
 						else if (cmd == "USER") {
 								iss >> arg;
 								iss >> arg2;
+								iss >> arg2;
+								std::getline(iss, arg2);
+								arg2.erase(0, 4);
+								std::cout << arg2 << std::endl;
 								ACommand *user = new CommandUser(arg, arg2);
-								if (user != 0x00)
+								if (user != NULL)
 										commands.push_back(user);
 						}
 						else if (cmd == "QUIT") {
 								iss >> arg;
 								ACommand *quit = new CommandQuit(arg);
-								if (quit != 0x00)
+								if (quit != NULL)
 										commands.push_back(quit);
 						}
 						else if (cmd == "JOIN") {
@@ -63,18 +67,18 @@ std::vector<ACommand *> CommandManager::parseCommand(std::string command)
 										arg.erase(0, 1);
 								channels.push_back(arg);
 								ACommand *join = new CommandJoin(channels, keys);
-								if (join != 0x00)
+								if (join != NULL)
 										commands.push_back(join);
 						}
 						else if (cmd == "CAP") {
 								ACommand *cap = new CommandCap();
-								if (cap != 0x00)
+								if (cap != NULL)
 										commands.push_back(cap);
 						}
 						else if (cmd == "PING") {
 								iss >> arg;
 								ACommand *ping = new CommandPing(arg);
-								if (ping != 0x00)
+								if (ping != NULL)
 										commands.push_back(ping);
 						}
 						else if (cmd == "MODE") {
@@ -91,11 +95,19 @@ std::vector<ACommand *> CommandManager::parseCommand(std::string command)
 								if (arg2[0] == ':')
 										arg2.erase(0, 1);
 								ACommand *msg = new CommandPrivmsg(arg, arg2);
-								if (msg != 0x00)
+								if (msg != NULL)
 										commands.push_back(msg);
 						}
 						else if (cmd == "NOTICE") {
 								iss >> arg;
+								if (arg[0] == '#')
+										arg.erase(0, 1);
+								arg2 = iss.str();
+								if (arg2[0] == ':')
+										arg2.erase(0, 1);
+								ACommand *notice = new CommandNotice(arg, arg2);
+								if (notice != NULL)
+										commands.push_back(notice);
 						}
 						else if (cmd == "KICK") {
 								iss >> arg;
@@ -111,7 +123,7 @@ std::vector<ACommand *> CommandManager::parseCommand(std::string command)
 								if (arg2[0] == ':')
 										arg2.erase(0, 1);
 								ACommand *part = new CommandPart(channels, arg2);
-								if (part != 0x00)
+								if (part != NULL)
 										commands.push_back(part);
 						}
 						else if (cmd == "TOPIC") {
@@ -128,7 +140,7 @@ std::vector<ACommand *> CommandManager::parseCommand(std::string command)
 										arg.erase(0, 1);
 								channels.insert(arg);
 								ACommand *list = new CommandList(channels);
-								if (list != 0x00)
+								if (list != NULL)
 										commands.push_back(list);
 						}
 						else if (cmd == "DCC") {

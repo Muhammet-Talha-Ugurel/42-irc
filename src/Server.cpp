@@ -99,7 +99,7 @@ void Server::start()
                   const char *buffer = client->getBuffer();
                   int bytes_received = recv(poll_fds[i].fd, (void *)buffer, 1024 * sizeof(char), 0);
                   std::string buffer_str(buffer);
-                  std::cout << "Received: " << buffer_str << std::endl;
+                  std::cout << "Received: " << buffer_str;
                   client->flushBuffer();
 
                   if (bytes_received > 0 && buffer_str.length() > 0) {
