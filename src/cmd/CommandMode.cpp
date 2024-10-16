@@ -27,7 +27,7 @@ void CommandMode::execute(Client *client, const Server &server)
   if (target[0] != '#')
     execUserModes(client, server);
   else
-    execChannelModes(server);
+    execChannelModes(client, server);
 }
 
 bool CommandMode::canExecute(Client *c, const Server &server)
@@ -96,7 +96,7 @@ void CommandMode::execUserModes(Client *c, const Server &server)
   }
 }
 
-void CommandMode::execChannelModes(const Server &server)
+void CommandMode::execChannelModes(Client *client,const Server &server)
 {
   Channel *ch = server.getChannelManager()->findChannelByName(target.substr(1));
   for (vector<pair<ModeOperation, string> >::iterator it = modes.begin(); it != modes.end(); ++it)
@@ -110,8 +110,12 @@ void CommandMode::execChannelModes(const Server &server)
           ch->removeOperator(server.getClientManager()->findClientByNickname((*it).second)->getUser());
         break;
       case B:
-        if (add)
-          ch->banUser(server.getClientManager()->findClientByNickname((*it).second)->getUser());
+								if (add) {
+										const User *banedUser = server.getClientManager()->findClientByNickname((*it).second)->getUser();
+										ch->publishMessage(":" + client->getNickname() + " MODE " + ch->getName() + " +b " + banedUser->getLastNickname() + "!" + banedUser->getUsername() + "@" , client, *server.getClientManager());
+										client->receiveMessage(":" + client->getNickname() + " MODE " + ch->getName() + " +b " + banedUser->getLastNickname() + "!" + banedUser->getUsername() + "@" );
+										ch->banUser(banedUser);
+								}
         else
           ch->unbanUser(server.getClientManager()->findClientByNickname((*it).second)->getUser());
         break;
