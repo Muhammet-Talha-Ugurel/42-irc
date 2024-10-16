@@ -4,40 +4,43 @@ CommandNames::CommandNames(std::vector<std::string> channels) : channels(channel
 
 CommandNames::~CommandNames() {}
 
-void CommandNames::execute(Client *client, const Server &server)
+void CommandNames::execute(Client *c, const Server &server)
 {
   for (std::vector<std::string>::iterator it = channels.begin(); it != channels.end(); ++it)
   {
-    Channel    *ch = server.getChannelManager()->findChannelByName(*it);
-    std::string msg;
-    if (false == ch->hasUser(client->getUser()))
+    Channel *ch = server.getChannelManager()->findChannelByName(*it);
+    if (ch == 0x00)
+    {
+      c->receiveMessage(": 403 " + c->getNickname() + " " + *it + " :No such channel");
+      continue;
+    }
+    if (false == ch->hasUser(c->getUser()))
     {
       if ((ch->isSecret() || ch->isPrivate()))
       {
-        msg = ": 403 " + client->getNickname() + " " + *it + " :No such channel";
+        c->receiveMessage(": 403 " + c->getNickname() + " " + *it + " :No such channel");
       }
       else
       {
-        msg = ": 353 " + client->getNickname() + " = " + *it + " :" + ch->getUserListString();
+        c->receiveMessage(": 353 " + c->getNickname() + " = " + *it + " :" + ch->getUserListString());
       }
     }
     else
     {
       if (ch->isPrivate())
       {
-        msg = ": 353 " + client->getNickname() + " * #" + ch->getName() + " :" + ch->getUserListString();
+        c->receiveMessage(": 353 " + c->getNickname() + " * #" + ch->getName() + " :" + ch->getUserListString());
       }
       else if (ch->isSecret())
       {
-        msg = ": 353 " + client->getNickname() + " @ #" + ch->getName() + " :" + ch->getUserListString();
+        c->receiveMessage(": 353 " + c->getNickname() + " @ #" + ch->getName() + " :" + ch->getUserListString());
       }
       else
       {
-        msg = ": 353 " + client->getNickname() + " = #" + ch->getName() + " :" + ch->getUserListString();
+        c->receiveMessage(": 353 " + c->getNickname() + " = #" + ch->getName() + " :" + ch->getUserListString());
       }
     }
-    client->receiveMessage(msg);
-    client->receiveMessage(": 366 " + client->getNickname() + " #" + ch->getName() + " :End of /NAMES list.");
+    c->receiveMessage(": 366 " + c->getNickname() + " #" + ch->getName() + " :End of /NAMES list.");
   }
 }
 
