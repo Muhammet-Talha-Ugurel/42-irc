@@ -34,6 +34,8 @@ class ClientManager
     const Client                     *createClient(const Client &);
     void                              allowClient(const Client *);
 
+		std::set<Client>								 get_clients() const { return _clients; }
+
     const Client                     *updateClientByNickname(const std::string &, const Client &);
     const Client                     *updateClientByIpv4(const unsigned long, const Client &);
     const Client                     *updateClientByPort(const unsigned long, const Client &);

@@ -23,11 +23,13 @@ void CommandUser::execute(Client *client, const Server &server)
           User *user = (User *)client->getUser();
           user->setUsername(username);
           user->setRealName(realname);
+          user->setLastNickname(client->getNickname());
         }
       else {
           User user = User();
           user.setUsername(username);
           user.setRealName(realname);
+          user.setLastNickname(client->getNickname());
           client->setUser(server.getUserManager()->createUser(user));
         }
       client->receiveMessage(

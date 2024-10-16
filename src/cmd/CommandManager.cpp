@@ -1,4 +1,5 @@
 #include "CommandManager.hpp"
+#include "CommandUtils.hpp"
 #include "Commands.hpp"
 
 #include <iostream>
@@ -85,7 +86,32 @@ std::vector<ACommand *> CommandManager::parseCommand(std::string command)
 								iss >> arg;
 						}
 						else if (cmd == "WHO") {
+								bool o = false;
+								int i = countWords(iss);
+								iss.clear();
+								iss.seekg(0);
+								if (i == 0 || i > 2)
+								{
+										commands.push_back(NULL);
+										continue;
+								}
 								iss >> arg;
+								iss >> arg;
+								if (arg == "o")
+								{
+										commands.push_back(NULL);
+										continue;
+								}
+								if (i == 2)
+								{
+										iss >> arg2;
+										if (arg2 == "o")
+												o = true;
+								}
+								std::cout << arg << std::endl;
+								ACommand *who = new CommandWho(arg, o);
+								if (who != NULL)
+										commands.push_back(who);
 						}
 						else if (cmd == "PRIVMSG") {
 								iss >> arg;
@@ -142,9 +168,6 @@ std::vector<ACommand *> CommandManager::parseCommand(std::string command)
 								ACommand *list = new CommandList(channels);
 								if (list != NULL)
 										commands.push_back(list);
-						}
-						else if (cmd == "DCC") {
-								iss >> arg;
 						}
 				}
 		}

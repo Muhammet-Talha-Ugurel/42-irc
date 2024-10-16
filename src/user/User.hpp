@@ -16,7 +16,7 @@ class User
     const std::string &getRealName() const { return _real_name; };
     const std::string &getLastNickname() const { return _last_nickname; };
     const Password    &getPassword() const { return _password; };
-    bool               isVisible() const;
+    bool               isVisible() const { return _is_visible; }
 
     void setLastNickname(const std::string &last_nickname) { _last_nickname = last_nickname; };
     void setUsername(const std::string &username) { _username = username; };
