@@ -12,30 +12,38 @@ CommandPrivmsg::~CommandPrivmsg() {}
 
 void CommandPrivmsg::execute(Client *client, const Server &server)
 {
-  Channel *channel = const_cast<Channel *>(server.getChannelManager()->findChannelByName(target));
-  if (channel == 0x00)
+  if (target[0] == '#')
+  {
+    Channel *channel = const_cast<Channel *>(server.getChannelManager()->findChannelByName(target));
+    if (!channel)
+    {
+      client->receiveMessage(":server 403 " + client->getNickname() + " " + target + " :No such channel");
+    }
+    else
+    {
+      if ((channel->isPrivate() || channel->isSecret()) && channel->isNoExternalMessages())
+      {
+        client->receiveMessage(":server 403 " + client->getNickname() + " " + target + " :No such channel");
+      }
+      channel->publishMessage(
+          ":" + client->getNickname() + "!" + client->getUser()->getUsername() + "@ PRIVMSG " + channel->getName() +
+              " " + message,
+          client, *server.getClientManager()
+      );
+    }
+  }
+  else
   {
     if (server.getClientManager()->findClientByNickname(target))
     {
       server.getClientManager()->findClientByNickname(target)->receiveMessage(
           ":" + client->getNickname() + "!" + client->getUser()->getUsername() + "@ PRIVMSG " + target + " :" + message
       );
-      return;
     }
     else
     {
       client->receiveMessage(":server 401 " + client->getNickname() + " " + target + " :No such nick/channel");
-      return;
     }
-  }
-  else
-  {
-    channel->publishMessage(
-        ":" + client->getNickname() + "!" + client->getUser()->getUsername() + "@ PRIVMSG " + channel->getName() + " " +
-            message,
-        client, *server.getClientManager()
-    );
-    DEBUG_LOG("Message published to channel " << channel->getName());
   }
 }
 

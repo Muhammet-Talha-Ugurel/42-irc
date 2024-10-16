@@ -14,18 +14,18 @@ void CommandPart::execute(Client *client, const Server &server)
     Channel *ch = server.getChannelManager()->findChannelByName(*it);
     if (ch == 0x00)
     {
-      client->receiveMessage(": 403 " + client->getNickname() + " " + *it + " :No such channel");
+      client->receiveMessage(": 403 " + client->getNickname() + " " + ch->getName() + " :No such channel");
       continue;
     }
     if (false == ch->hasUser(client->getUser()))
     {
       if ((ch->isSecret() || ch->isPrivate()))
       {
-        client->receiveMessage(": 403 " + client->getNickname() + " " + *it + " :No such channel");
+        client->receiveMessage(": 403 " + client->getNickname() + " " + ch->getName() + " :No such channel");
       }
       else
       {
-        client->receiveMessage(": 442 " + client->getNickname() + " " + *it + " :You're not on that channel");
+        client->receiveMessage(": 442 " + client->getNickname() + " " + ch->getName() + " :You're not on that channel");
       }
     }
     else

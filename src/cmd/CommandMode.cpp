@@ -24,7 +24,7 @@ CommandMode::CommandMode(const CommandMode &other) : target(other.target), modes
 
 void CommandMode::execute(Client *client, const Server &server)
 {
-  if (modes.empty())
+  if (target[0] != '#')
     execUserModes(client, server);
   else
     execChannelModes(server);
