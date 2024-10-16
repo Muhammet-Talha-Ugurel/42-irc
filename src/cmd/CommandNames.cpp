@@ -35,3 +35,23 @@ void CommandNames::execute(Client *client, const Server &server)
 	  client->receiveMessage(": 366 " + client->getNickname() + " #" + ch->getName() + " :End of /NAMES list.");
     }
 }
+
+void CommandNames::execute(const Client *client, const Server &server)
+{
+  execute(const_cast<Client *>(client), server);
+}
+
+bool CommandNames::canExecute(Client *client, const Server &server)
+{
+  (void)server;
+  if (client->isAuthenticated() == false) {
+      client->receiveMessage("451 " + client->getNickname() + " :You have not registered");
+      return false;
+    }
+  return true;
+}
+
+bool CommandNames::canExecute(const Client *client, const Server &server)
+{
+  return canExecute(const_cast<Client *>(client), server);
+}

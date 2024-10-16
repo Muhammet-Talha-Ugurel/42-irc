@@ -29,11 +29,26 @@ class Channel
     bool                         isSecret() const { return _isSecret; }
     void                         setSecret(bool t) { _isSecret = t; }
 
+    bool                         isInviteOnly() const { return _isInviteOnly; }
+    void                         setInviteOnly(bool t) { _isInviteOnly = t; }
+
+    bool                         isModerated() const { return _isModerated; }
+    void                         setModerated(bool t) { _isModerated = t; }
+
+    bool                         isTopicProtected() const { return _isTopicProtected; }
+    void                         setTopicProtected(bool t) { _isTopicProtected = t; }
+
+    bool                         isNoExternalMessages() const { return _isNoExternalMessages; }
+    void                         setNoExternalMessages(bool t) { _isNoExternalMessages = t; }
+
+    int                          getUserLimit() const { return _userLimit; }
+    void                         setUserLimit(int limit) { _userLimit = limit; }
+
     const Password              &getPassword() const { return _password; }
-    void                         setPassword(Password &password) { _password = password; }
+    void                         setPassword(const Password &password) { _password = Password(password); }
 
     void                         addUser(const User *user) { _users.insert(user); }
-    void                         removeUser(const User *user) { _users.erase(user); }
+    void                         removeUser(const User *user);
     const std::set<const User *> getUsers() const { return _users; }
     std::string                  getUserCountString() const;
 
@@ -41,6 +56,9 @@ class Channel
     const std::set<const User *> getOperators() const { return _oprs; }
     void                         removeOperator(const User *user) { _oprs.erase(user); }
     std::string                  getOperatorCountString() const;
+
+    void                         banUser(const User *user);
+    void                         unbanUser(const User *user) { _banned.erase(user); }
 
     std::string                  getUserListString();
 
@@ -56,6 +74,11 @@ class Channel
     Password               _password;
     bool                   _isPrivate;
     bool                   _isSecret;
+    bool                   _isInviteOnly;
+    bool                   _isModerated;
+    bool                   _isTopicProtected;
+    bool                   _isNoExternalMessages;
+    int                    _userLimit;
 
     std::set<const User *> _users;
     std::set<const User *> _oprs;

@@ -16,7 +16,7 @@ void CommandTopic::execute(Client *client, const Server &server)
 {
   Channel *ch = server.getChannelManager()->findChannelByName(channel);
   if (ch == 0x00) {
-      return;
+      client->receiveMessage(":server 403 " + channel + " :No such channel");
     }
   ch->setTopic(topic);
   server.respond("332", client, ch->getName() + " :" + topic);

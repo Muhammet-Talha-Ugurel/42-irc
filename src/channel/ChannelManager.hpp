@@ -12,18 +12,18 @@ class ChannelManager
     ~ChannelManager();
     ChannelManager(ChannelManager &channelManager);
 
-    static ChannelManager    &getInstance();
+    static ChannelManager &getInstance();
 
-    void                      addChannel(const Channel &);
-    void                      removeChannel(const Channel *);
+    void                   addChannel(const Channel &);
+    void                   removeChannel(const Channel *);
 
-    Channel                  *findChannelByName(const std::string &);
+    Channel               *findChannelByName(const std::string &);
 
-    std::set<const Channel *> findChannelsByIsPublic(bool);
+    std::set<Channel *>    findChannelsByIsPublic(bool);
 
-    std::set<Channel *>       findChannelsByClient(Client *);
+    std::set<Channel *>    findChannelsByClient(Client *);
 
-    void                      removeUserFromChannels(const User *);
+    void                   removeUserFromChannels(const User *);
 
   private:
     ChannelManager();

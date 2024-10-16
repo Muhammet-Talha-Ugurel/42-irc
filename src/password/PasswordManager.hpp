@@ -22,7 +22,7 @@ class PasswordManager
 
     bool                 validate(const std::string &input, const Password *target);
 
-    const Password       createPassword(std::string password);
+    Password             createPassword(std::string password);
 
   private:
     PasswordManager() {};

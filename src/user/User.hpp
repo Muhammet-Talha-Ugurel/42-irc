@@ -22,7 +22,7 @@ class User
     void setUsername(const std::string &username) { _username = username; };
     void setRealName(const std::string &real_name) { _real_name = real_name; };
     void setPassword(Password &password) { _password = password; };
-    void setVisible(bool);
+    void setVisible(bool) { _is_visible = true; };
 
     const User &operator=(const User &);
     bool        operator==(const User &) const;
