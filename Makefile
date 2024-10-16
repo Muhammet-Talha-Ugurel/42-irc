@@ -23,6 +23,7 @@ SRC			=  src/main.cpp \
 			   src/cmd/CommandUser.cpp \
 			   src/cmd/CommandUtils.cpp \
 			   src/cmd/CommandWho.cpp \
+			   src/cmd/CommandInvite.cpp \
 			   src/cmd/Exception.cpp \
 			   src/password/PasswordManager.cpp \
 			   src/user/User.cpp \

@@ -316,6 +316,23 @@ class Exception : public ACommand
     bool canExecute(const Client *, const Server &);
 };
 
+class CommandInvite : public ACommand
+{
+  private:
+		std::string invitedNick;
+		std::string channelName;
+
+  public:
+    CommandInvite(std::string, std::string);
+    ~CommandInvite();
+    CommandInvite(const CommandInvite &commandInvite);
+
+    void execute(Client *, const Server &);
+    void execute(const Client *, const Server &);
+    bool canExecute(Client *, const Server &);
+    bool canExecute(const Client *, const Server &);
+};
+
 // class CommandDcc : public ACommand
 // {
 //   public:
