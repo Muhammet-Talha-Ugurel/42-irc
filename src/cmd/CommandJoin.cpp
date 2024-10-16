@@ -15,27 +15,28 @@ void CommandJoin::execute(Client *client, const Server &server)
 {
   std::vector<std::string>::iterator it = channels.begin();
   while (it != channels.end()) {
-      Channel *ptr = const_cast<Channel *>(server.getChannelManager()->findChannelByName(*it));
+      string   name = (*it).substr(1);
+      Channel *ptr  = const_cast<Channel *>(server.getChannelManager()->findChannelByName(name));
       if (ptr != 0x00) {
           ptr->addUser((User *)client->getUser());
           client->receiveMessage(
-              ":" + client->getNickname() + "!" + client->getUser()->getUsername() + "@ JOIN :#" +
-              *it + "\r\n"
+              ":" + client->getNickname() + "!" + client->getUser()->getUsername() +
+              "@ JOIN :" + *it
           );
           ptr->publishMessage(
-              ":" + client->getNickname() + "!" + client->getUser()->getUsername() + "@ JOIN :#" +
-                  *it + "\r\n",
+              ":" + client->getNickname() + "!" + client->getUser()->getUsername() +
+                  "@ JOIN :" + *it,
               *client, *server.getClientManager()
           );
         }
       else {
-          Channel channel = Channel(*it);
+          Channel channel = Channel(name);
           channel.addUser(client->getUser());
           channel.addOperator(client->getUser());
           server.getChannelManager()->addChannel(channel);
           client->receiveMessage(
-              ":" + client->getNickname() + "!" + client->getUser()->getUsername() + "@ JOIN :#" +
-              *it + "\r\n"
+              ":" + client->getNickname() + "!" + client->getUser()->getUsername() +
+              "@ JOIN :" + *it
           );
         }
       it++;

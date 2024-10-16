@@ -16,12 +16,12 @@ void CommandNotice::execute(Client *client, const Server &server)
 		if (channel == 0x00) {
 				if (server.getClientManager()->findClientByNickname(target)) {
 						server.getClientManager()->findClientByNickname(target)->receiveMessage(
-								":" + client->getNickname() + "!" + client->getUser()->getUsername() + "@ NOTICE #" + target + " :" + message + "\r\n"
+								":" + client->getNickname() + "!" + client->getUser()->getUsername() + "@ NOTICE #" + target + " :" + message
 						);
 				}
 		}
 		else {
-				channel->publishMessage(":" + client->getNickname() + "!" + client->getUser()->getUsername() + "@ NOTICE #" + target + " " + message + "\r\n"
+				channel->publishMessage(":" + client->getNickname() + "!" + client->getUser()->getUsername() + "@ NOTICE #" + target + " " + message
 , *client, *server.getClientManager());
 				DEBUG_LOG("NOTICE sended " << target);
 		}
@@ -34,7 +34,7 @@ bool CommandNotice::canExecute(Client *client, const Server &server)
 		if (client->isAllowed()) {
 				return true;
 		}
-		client->receiveMessage(":server 451* :You have not registered\r\n");
+		client->receiveMessage(":server 451* :You have not registered");
 		return false;
 }
 

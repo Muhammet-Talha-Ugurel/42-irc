@@ -10,16 +10,15 @@
 
 void announce(string message) { std::cout << message << std::endl; }
 
-static vector<string> parseChannels(string str) {
-
-    vector<string> channels;
+static vector<string> splitByDelim(string str, char c) {
+    vector<string> result;
     std::stringstream ss(str);
-    string channel;
+    string one;
     
-    while (std::getline(ss, channel, ','))
-        channels.push_back(channel);
+    while (std::getline(ss, one, c))
+        result.push_back(one);
 
-    return channels;
+    return result;
 }
 
 CommandManager::CommandManager() {}
@@ -77,7 +76,7 @@ vector<ACommand *> CommandManager::parseCommand(string command)
 						else if (cmd == "JOIN") {
 								iss >> arg;
 								iss >> arg2;
-								vector<string> channels = parseChannels(arg);
+								vector<string> channels = splitByDelim(arg, ',');
 								vector<string> keys;
 								ACommand *join = new CommandJoin(channels, keys);
 								if (join != NULL)
@@ -162,11 +161,10 @@ vector<ACommand *> CommandManager::parseCommand(string command)
 								commands.push_back(new CommandKick(arg, arg2, cmd));
 						}
 						else if (cmd == "PART") {
-								vector<string> channels;
-								string keys;
 								iss >> arg;
-								if (arg[0] == '#')
-										arg.erase(0, 1);
+								vector<string> channels = splitByDelim(arg, ',');
+								iss >> arg;
+								vector<string> keys = splitByDelim(arg, ',');
 								channels.push_back(arg);
 								arg2 = iss.str();
 								if (arg2[0] == ':')
@@ -180,6 +178,10 @@ vector<ACommand *> CommandManager::parseCommand(string command)
 						}
 						else if (cmd == "NAMES") {
 								iss >> arg;
+								vector<string> channels = splitByDelim(arg, ',');
+								ACommand *names = new CommandNames(channels);
+								if (names)
+										commands.push_back(names);
 						}
 						else if (cmd == "LIST") {
 								std::set<string> channels;

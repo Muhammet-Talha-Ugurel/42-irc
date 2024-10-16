@@ -14,7 +14,7 @@ void CommandNames::execute(Client *client, const Server &server)
       std::string msg;
       if (false == ch->hasUser(client->getUser())) {
           if ((ch->isSecret() || ch->isPrivate())) {
-              msg = ": 403 " + client->getNickname() + " #" + *it + " :No such channel\r\n";
+              msg = ": 403 " + client->getNickname() + " #" + *it + " :No such channel";
             }
           else {
               msg = ": 353 " + client->getNickname() + " = #" + *it + " :" + ch->getUserListString();

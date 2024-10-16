@@ -17,7 +17,7 @@ void CommandPass::execute(Client *client, const Server &server)
     }
   else {
       DEBUG_LOG("Client not allowed.");
-      client->receiveMessage(":server 464* : Incorrect Password\r\n");
+      client->receiveMessage(":server 464* : Incorrect Password");
     }
 }
 

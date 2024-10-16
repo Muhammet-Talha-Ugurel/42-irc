@@ -5,16 +5,24 @@ SRC			=  src/main.cpp \
 			   src/channel/ChannelManager.cpp \
 			   src/client/Client.cpp \
 			   src/client/ClientManager.cpp \
+			   src/cmd/CommandCap.cpp \
+			   src/cmd/CommandJoin.cpp \
+			   src/cmd/CommandKick.cpp \
+			   src/cmd/CommandList.cpp \
 			   src/cmd/CommandManager.cpp \
-			   src/cmd/CommandUtils.cpp \
+			   src/cmd/CommandMode.cpp \
+			   src/cmd/CommandNames.cpp \
+			   src/cmd/CommandNick.cpp \
+			   src/cmd/CommandNotice.cpp \
+			   src/cmd/CommandPart.cpp \
 			   src/cmd/CommandPass.cpp \
 			   src/cmd/CommandPing.cpp \
 			   src/cmd/CommandPrivmsg.cpp \
 			   src/cmd/CommandQuit.cpp \
 			   src/cmd/CommandTopic.cpp \
-			   src/cmd/CommandWho.cpp \
 			   src/cmd/CommandUser.cpp \
-			   src/cmd/CommandManager.cpp \
+			   src/cmd/CommandUtils.cpp \
+			   src/cmd/CommandWho.cpp \
 			   src/cmd/Exception.cpp \
 			   src/password/PasswordManager.cpp \
 			   src/user/User.cpp \

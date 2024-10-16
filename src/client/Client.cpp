@@ -51,7 +51,7 @@ bool Client::operator>(const Client &other) const
 // TODO: Implement this method correctly
 int Client::receiveMessage(const std::string &message) const
 {
-  int res = send(_poll_fd, message.c_str(), message.length(), 0);
+  int res = send(_poll_fd, (message + "\r\n").c_str(), message.length() + 2, 0);
   if (res == -1) {
     perror("send");
     return res;

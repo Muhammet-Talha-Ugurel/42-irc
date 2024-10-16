@@ -135,14 +135,14 @@ void Server::start()
 
 std::string Server::respond(std::string code, const Client *client, std::string message)
 {
-  std::string response = ": " + code + " " + client->getNickname() + " " + message + "\r\n";
+  std::string response = ": " + code + " " + client->getNickname() + " " + message;
   std::cout << response << std::endl;
   return response;
 }
 
 std::string Server::respond(std::string code, const Client *client, std::string message) const
 {
-  std::string response = ": " + code + " " + client->getNickname() + " " + message + "\r\n";
+  std::string response = ": " + code + " " + client->getNickname() + " " + message;
   std::cout << response << std::endl;
   return response;
 }

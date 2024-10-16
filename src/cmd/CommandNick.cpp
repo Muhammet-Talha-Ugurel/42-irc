@@ -12,7 +12,7 @@ CommandNick::~CommandNick() {}
 void CommandNick::execute(Client *client, const Server &server)
 {
   if (server.getClientManager()->findClientByNickname(nickname)) {
-      client->receiveMessage(":server 433* :Nickname is already in use\r\n");
+      client->receiveMessage(":server 433* :Nickname is already in use");
     }
   else {
       client->setNickname(nickname);

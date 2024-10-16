@@ -33,7 +33,8 @@ void ChannelManager::removeChannel(const Channel *channel)
 
 Channel *ChannelManager::findChannelByName(const string &name)
 {
-  map<string, Channel>::iterator it = this->_channels.find(name);
+  string search = name[0] == '#' ? name.substr(1) : name;
+  map<string, Channel>::iterator it = this->_channels.find(search);
   if (it != this->_channels.end())
     return &it->second;
   return 0x00;

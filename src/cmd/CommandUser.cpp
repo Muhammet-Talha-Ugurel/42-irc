@@ -15,7 +15,7 @@ void CommandUser::execute(Client *client, const Server &server)
 {
   const UserManager *userManger = server.getUserManager();
   if (userManger->findUserByUsername(username)) {
-      client->receiveMessage(":server 433* :Username is already in use\r\n");
+      client->receiveMessage(":server 433* :Username is already in use");
       DEBUG_LOG("User name already taken");
     }
   else {
@@ -34,7 +34,7 @@ void CommandUser::execute(Client *client, const Server &server)
         }
       client->receiveMessage(
           ":mtuirc.com 001 " + client->getNickname() +
-          " :Welcome to the Internet Relay Chat Network\r\n"
+          " :Welcome to the Internet Relay Chat Network"
       );
       DEBUG_LOG("Client username set to " << username);
     }

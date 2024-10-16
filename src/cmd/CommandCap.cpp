@@ -1,4 +1,3 @@
-#include "../Debug.hpp"
 #include "Commands.hpp"
 
 CommandCap::CommandCap()
@@ -11,7 +10,7 @@ CommandCap::~CommandCap() {}
 void CommandCap::execute(Client *client, const Server &server)
 {
 		(void)server;
-		client->receiveMessage(":server CAP * LS :\r\n");
+		client->receiveMessage(":server CAP * LS :");
 }
 
 bool CommandCap::canExecute(Client *client, const Server &server)

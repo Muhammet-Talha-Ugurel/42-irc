@@ -19,7 +19,7 @@ void CommandWho::execute(Client *client, const Server &server)
 						} else if (it->getUser()->isVisible() == true) {
 								continue;
 						}
-						client->receiveMessage(":mtu 352 " + client->getNickname() + " * " + it->getNickname() + " localhost localhost " + it->getUser()->getUsername() + " H :0 " + it->getUser()->getRealName() + "\r\n");
+						client->receiveMessage(":mtu 352 " + client->getNickname() + " * " + it->getNickname() + " localhost localhost " + it->getUser()->getUsername() + " H :0 " + it->getUser()->getRealName());
 						DEBUG_LOG("WHO " << it->getNickname());
 				}
 		}
@@ -27,7 +27,7 @@ void CommandWho::execute(Client *client, const Server &server)
 						DEBUG_LOG("WHO # ");
 				Channel *channel = server.getChannelManager()->findChannelByName(mask.substr(1));
 				if (channel == 0x00) {
-						client->receiveMessage(":mtu 403 " + client->getNickname() + " " + mask + " :No such channel\r\n");
+						client->receiveMessage(":mtu 403 " + client->getNickname() + " " + mask + " :No such channel");
 						return;
 				}
 				const std::set<const User *> users = channel->getUsers();
@@ -39,22 +39,22 @@ void CommandWho::execute(Client *client, const Server &server)
 								continue;
 						}
 						std::cout << client->getNickname() << " " << (*it)->getLastNickname() << std::endl;
-						client->receiveMessage(":mtu 352 " + client->getNickname() + " " + mask + " " + (*it)->getUsername() + " localhost localhost " + (*it)->getLastNickname() + " H :0 " + (*it)->getRealName() + "\r\n");
-						DEBUG_LOG(":mtu 352 " + client->getNickname() + " " + mask + " " + (*it)->getUsername() + " localhost localhost " + (*it)->getLastNickname() + " H :0 " + (*it)->getRealName() + "\r\n");
+						client->receiveMessage(":mtu 352 " + client->getNickname() + " " + mask + " " + (*it)->getUsername() + " localhost localhost " + (*it)->getLastNickname() + " H :0 " + (*it)->getRealName());
+						DEBUG_LOG(":mtu 352 " + client->getNickname() + " " + mask + " " + (*it)->getUsername() + " localhost localhost " + (*it)->getLastNickname() + " H :0 " + (*it)->getRealName());
 				}
 		}
 		else {
 				const Client *result = server.getClientManager()->findClientByNickname(mask);
 				if (result == 0x00) {
-						client->receiveMessage(":mtu 401 " + client->getNickname() + " " + mask + " :No such nick/channel\r\n");
+						client->receiveMessage(":mtu 401 " + client->getNickname() + " " + mask + " :No such nick/channel");
 						return;
 				}
 				if (result->getUser()->isVisible() == true) {
 						return;
 				}
-				client->receiveMessage(":mtu 352 " + client->getNickname() + mask + result->getNickname() + " localhost localhost " + result->getUser()->getUsername() + " H :0 " + result->getUser()->getRealName() + "\r\n");
+				client->receiveMessage(":mtu 352 " + client->getNickname() + mask + result->getNickname() + " localhost localhost " + result->getUser()->getUsername() + " H :0 " + result->getUser()->getRealName());
 		}
-		client->receiveMessage(":mtu 315 " + client->getNickname() + " " + mask + ":End of WHO list\r\n");
+		client->receiveMessage(":mtu 315 " + client->getNickname() + " " + mask + ":End of WHO list");
 }
 
 bool CommandWho::canExecute(Client *client, const Server &server)
@@ -63,7 +63,7 @@ bool CommandWho::canExecute(Client *client, const Server &server)
 		if (client->isAllowed()) {
 				return true;
 		}
-		client->receiveMessage(":server 451* :You have not registered\r\n");
+		client->receiveMessage(":server 451* :You have not registered");
 		return false;
 }
 
