@@ -33,13 +33,13 @@ Channel::Channel(const Channel &channel)
 {
 }
 
-void Channel::publishMessage(const std::string &message, const Client &sender, const ClientManager &clientManager)
+void Channel::publishMessage(const std::string &message, Client *sender, const ClientManager &clientManager)
 {
   std::vector<const Client *> clients = clientManager.findClientsByUsers(_users);
 
   for (std::vector<const Client *>::const_iterator it = clients.begin(); it != clients.end(); ++it)
   {
-    if ((*it) && (*it) != &sender)
+    if ((*it) && (*it) != sender)
     {
       (*it)->receiveMessage(message);
     }

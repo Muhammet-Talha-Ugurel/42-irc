@@ -39,7 +39,7 @@ void CommandJoin::execute(Client *c, const Server &server)
         ch->addUser(c->getUser());
         c->receiveMessage(":" + c->getNickname() + "!" + c->getUser()->getUsername() + "@ JOIN :" + *it);
         ch->publishMessage(
-            ":" + c->getNickname() + "!" + c->getUser()->getUsername() + "@ JOIN :" + *it, *c,
+            ":" + c->getNickname() + "!" + c->getUser()->getUsername() + "@ JOIN :" + *it, c,
             *server.getClientManager()
         );
       }

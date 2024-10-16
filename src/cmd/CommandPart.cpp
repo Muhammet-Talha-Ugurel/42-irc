@@ -33,7 +33,7 @@ void CommandPart::execute(Client *client, const Server &server)
       ch->publishMessage(
           ":" + client->getNickname() + "!" + client->getUser()->getUsername() + "@ PART " + ch->getName() + " :" +
               message,
-          *client, *server.getClientManager()
+          client, *server.getClientManager()
       );
       client->receiveMessage(
           ":" + client->getNickname() + "!" + client->getUser()->getUsername() + "@ PART " + ch->getName() + " :" +

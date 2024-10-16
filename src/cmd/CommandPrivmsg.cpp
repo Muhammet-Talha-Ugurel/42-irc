@@ -33,7 +33,7 @@ void CommandPrivmsg::execute(Client *client, const Server &server)
     channel->publishMessage(
         ":" + client->getNickname() + "!" + client->getUser()->getUsername() + "@ PRIVMSG " + channel->getName() + " " +
             message,
-        *client, *server.getClientManager()
+        client, *server.getClientManager()
     );
     DEBUG_LOG("Message published to channel " << channel->getName());
   }

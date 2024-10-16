@@ -72,7 +72,7 @@ class Channel
     bool                         isBanned(const User *user) const { return _banned.find(user) != _banned.end(); }
     bool                         isFull() const { return _userLimit && _users.size() >= _userLimit; }
 
-    void                         publishMessage(const std::string &, const Client &sender, const ClientManager &);
+    void                         publishMessage(const std::string &, Client *sender, const ClientManager &);
 
   private:
     std::string            _name;
