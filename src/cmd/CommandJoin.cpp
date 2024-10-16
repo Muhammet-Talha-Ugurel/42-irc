@@ -63,7 +63,7 @@ if (client->isAuthenticated() == false)
     client->receiveMessage("451 " + client->getNickname() + " :You have not registered");
     return false;
   }
-  return false;
+  return true;
 }
 
 void CommandJoin::execute(const Client *client, const Server &server) { execute(const_cast<Client *>(client), server); }
