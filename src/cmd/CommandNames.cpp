@@ -10,14 +10,14 @@ CommandNames::~CommandNames() {}
 void CommandNames::execute(Client *client, const Server &server)
 {
   for (std::vector<std::string>::iterator it = channels.begin(); it != channels.end(); ++it) {
-      Channel    *ch  = server.getChannelManager()->findChannelByName(*it);
+      Channel    *ch  = server.getChannelManager()->findChannelByName((*it).substr(1));
       std::string msg;
       if (false == ch->hasUser(client->getUser())) {
           if ((ch->isSecret() || ch->isPrivate())) {
-              msg = ": 403 " + client->getNickname() + " #" + *it + " :No such channel";
+              msg = ": 403 " + client->getNickname() + " " + *it + " :No such channel";
             }
           else {
-              msg = ": 353 " + client->getNickname() + " = #" + *it + " :" + ch->getUserListString();
+              msg = ": 353 " + client->getNickname() + " = " + *it + " :" + ch->getUserListString();
             }
         }
       else {
