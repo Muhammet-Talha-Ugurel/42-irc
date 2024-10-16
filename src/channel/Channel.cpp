@@ -33,6 +33,18 @@ void Channel::publishMessage(
     }
 }
 
+void Channel::removeUser(const User *user)
+{
+  _users.erase(user);
+  _oprs.erase(user);
+}
+
+void Channel::banUser(const User *user)
+{
+  _banned.insert(user);
+  removeUser(user);
+}
+
 std::string Channel::getUserCountString() const
 {
   std::stringstream ss;

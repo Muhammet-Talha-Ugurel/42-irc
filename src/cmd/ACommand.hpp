@@ -22,7 +22,8 @@ enum CommandType
   TOPIC, //
   NAMES,
   LIST,  //
-  DCC
+  DCC,
+  EXCEPTION
 };
 
 class ACommand

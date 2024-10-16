@@ -2,6 +2,12 @@
 
 #include <stdexcept>
 
+
+using std::pair;
+using std::string;
+using std::set;
+using std::map;
+
 ChannelManager::ChannelManager() {}
 
 ChannelManager::~ChannelManager() {}
@@ -15,7 +21,7 @@ ChannelManager &ChannelManager::getInstance()
 void ChannelManager::addChannel(const Channel &channel)
 {
   if (this->_channels.find(channel.getName()) == this->_channels.end())
-    this->_channels.insert(std::pair<std::string, Channel>(channel.getName(), Channel(channel)));
+    this->_channels.insert(pair<string, Channel>(channel.getName(), Channel(channel)));
   else
     throw std::runtime_error("Channel already exists");
 }
@@ -25,18 +31,18 @@ void ChannelManager::removeChannel(const Channel *channel)
   this->_channels.erase(channel->getName());
 }
 
-Channel *ChannelManager::findChannelByName(const std::string &name)
+Channel *ChannelManager::findChannelByName(const string &name)
 {
-  std::map<std::string, Channel>::iterator it = this->_channels.find(name);
+  map<string, Channel>::iterator it = this->_channels.find(name);
   if (it != this->_channels.end())
     return &it->second;
   return 0x00;
 }
 
-std::set<const Channel *> ChannelManager::findChannelsByIsPublic(bool isPublic)
+set<Channel *> ChannelManager::findChannelsByIsPublic(bool isPublic)
 {
-  std::set<const Channel *>                channels;
-  std::map<std::string, Channel>::iterator it;
+  set<Channel *>                      channels;
+  map<string, Channel>::iterator it;
 
   for (it = this->_channels.begin(); it != this->_channels.end(); ++it) {
       if (it->second.isPrivate() != isPublic)
@@ -46,10 +52,10 @@ std::set<const Channel *> ChannelManager::findChannelsByIsPublic(bool isPublic)
   return channels;
 }
 
-std::set<Channel *> ChannelManager::findChannelsByClient(Client *client)
+set<Channel *> ChannelManager::findChannelsByClient(Client *client)
 {
-  std::set<Channel *>                      channels;
-  std::map<std::string, Channel>::iterator it;
+  set<Channel *>                      channels;
+  map<string, Channel>::iterator it;
 
   for (it = this->_channels.begin(); it != this->_channels.end(); ++it) {
       if (it->second.hasUser(client->getUser()))
@@ -61,7 +67,7 @@ std::set<Channel *> ChannelManager::findChannelsByClient(Client *client)
 
 void ChannelManager::removeUserFromChannels(const User *user)
 {
-  std::map<std::string, Channel>::iterator it;
+  map<string, Channel>::iterator it;
 
   for (it = this->_channels.begin(); it != this->_channels.end(); ++it) {
       Channel *channel = &it->second;

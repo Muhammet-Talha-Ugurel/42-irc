@@ -1,11 +1,25 @@
 #include "CommandManager.hpp"
+#include "ACommand.hpp"
 #include "Commands.hpp"
 
 #include <iostream>
 #include <sstream>
 #include <string>
+#include <sstream>
 
-void announce(std::string message) { std::cout << message << std::endl; }
+void announce(string message) { std::cout << message << std::endl; }
+
+static vector<string> parseChannels(string str) {
+
+    vector<string> channels;
+    std::stringstream ss(str);
+    string channel;
+    
+    while (std::getline(ss, channel, ','))
+        channels.push_back(channel);
+
+    return channels;
+}
 
 CommandManager::CommandManager() {}
 
@@ -19,14 +33,14 @@ CommandManager &CommandManager::getInstance()
 		return instance;
 }
 
-std::vector<ACommand *> CommandManager::parseCommand(std::string command)
+vector<ACommand *> CommandManager::parseCommand(string command)
 {
-		std::vector<ACommand *> commands;
+		vector<ACommand *> commands;
 		std::istringstream stream(command);
-		std::string        line;
+		string        line;
 		while (std::getline(stream, line)) {
 				std::istringstream iss(line);
-				std::string        cmd, arg, arg2;
+				string        cmd, arg, arg2;
 				while (iss >> cmd) {
 						if (cmd == "PASS") {
 								iss >> arg;
@@ -60,12 +74,10 @@ std::vector<ACommand *> CommandManager::parseCommand(std::string command)
 										commands.push_back(quit);
 						}
 						else if (cmd == "JOIN") {
-								std::vector<std::string> channels;
-								std::vector<std::string> keys;
 								iss >> arg;
-								if (arg[0] == '#')
-										arg.erase(0, 1);
-								channels.push_back(arg);
+								iss >> arg2;
+								vector<string> channels = parseChannels(arg);
+								vector<string> keys;
 								ACommand *join = new CommandJoin(channels, keys);
 								if (join != NULL)
 										commands.push_back(join);
@@ -82,7 +94,13 @@ std::vector<ACommand *> CommandManager::parseCommand(std::string command)
 										commands.push_back(ping);
 						}
 						else if (cmd == "MODE") {
-								iss >> arg;
+							try {
+								ACommand *mode = CommandMode::parseCommand(command);
+								if (mode != NULL)
+										commands.push_back(mode);
+							} catch (std::exception &e) {
+								commands.push_back(new Exception(e.what()));
+							}
 						}
 						else if (cmd == "WHO") {
 								iss >> arg;
@@ -111,10 +129,15 @@ std::vector<ACommand *> CommandManager::parseCommand(std::string command)
 						}
 						else if (cmd == "KICK") {
 								iss >> arg;
+								iss >> arg2;
+								iss >> cmd;
+								if (!cmd.empty() && cmd[0] == ':')
+									cmd = cmd.substr(1);
+								commands.push_back(new CommandKick(arg, arg2, cmd));
 						}
 						else if (cmd == "PART") {
-								std::vector<std::string> channels;
-								std::string keys;
+								vector<string> channels;
+								string keys;
 								iss >> arg;
 								if (arg[0] == '#')
 										arg.erase(0, 1);
@@ -133,8 +156,8 @@ std::vector<ACommand *> CommandManager::parseCommand(std::string command)
 								iss >> arg;
 						}
 						else if (cmd == "LIST") {
-								std::set<std::string> channels;
-								std::string keys;
+								std::set<string> channels;
+								string keys;
 								iss >> arg;
 								if (arg[0] == '#')
 										arg.erase(0, 1);

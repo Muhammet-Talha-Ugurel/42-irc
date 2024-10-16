@@ -27,6 +27,8 @@ class ClientManager
     ClientManager &operator=(const ClientManager &);
     ~ClientManager();
 
+    std::set<Client>                 &getClients() { return _clients; };
+
     static ClientManager             &getInstance();
 
     const UserManager                *getUserManager();

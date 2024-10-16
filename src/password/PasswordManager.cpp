@@ -37,7 +37,7 @@ std::string PasswordManager::generateSalt() const
   return salt;
 }
 
-const Password PasswordManager::createPassword(const std::string input)
+Password PasswordManager::createPassword(std::string input)
 {
   std::string salt = generateSalt();
   std::string pass = input + salt;
