@@ -22,6 +22,7 @@ enum CommandType
   TOPIC, //
   NAMES,
   LIST,  //
+  INVITE,  //
   DCC,
   EXCEPTION
 };

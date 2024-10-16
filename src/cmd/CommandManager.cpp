@@ -54,14 +54,14 @@ vector<ACommand *> CommandManager::parseCommand(string command)
         if (pass != NULL)
           commands.push_back(pass);
       }
-      else if (cmd == "NICK")
+      else if (cmd == "NICK" || cmd == "nick")
       {
         iss >> arg;
         ACommand *nick = new CommandNick(arg);
         if (nick != NULL)
           commands.push_back(nick);
       }
-      else if (cmd == "USER")
+      else if (cmd == "USER" || cmd == "user")
       {
         iss >> arg;
         iss >> arg2;
@@ -106,7 +106,7 @@ vector<ACommand *> CommandManager::parseCommand(string command)
         if (ping != NULL)
           commands.push_back(ping);
       }
-      else if (cmd == "MODE")
+      else if (cmd == "MODE" || cmd == "mode")
       {
         try
         {
@@ -172,7 +172,7 @@ vector<ACommand *> CommandManager::parseCommand(string command)
         if (notice != NULL)
           commands.push_back(notice);
       }
-      else if (cmd == "KICK")
+      else if (cmd == "KICK" || cmd == "kick")
       {
         iss >> arg;
         iss >> arg2;
@@ -219,6 +219,14 @@ vector<ACommand *> CommandManager::parseCommand(string command)
         ACommand *list = new CommandList(channels);
         if (list != NULL)
           commands.push_back(list);
+      }
+      else if (cmd == "INVITE")
+      {
+        iss >> arg;
+				iss >> arg2;
+        ACommand *invite = new CommandInvite(arg, arg2);
+        if (invite != NULL)
+          commands.push_back(invite);
       }
     }
   }
