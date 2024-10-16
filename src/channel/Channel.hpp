@@ -70,7 +70,7 @@ class Channel
     bool                         hasOperator(const User *user) const { return _oprs.find(user) != _oprs.end(); }
     bool                         hasInvite(const User *user) const { return _users.find(user) != _users.end(); }
     bool                         isBanned(const User *user) const { return _banned.find(user) != _banned.end(); }
-    bool                         isFull() const { return _users.size() >= _userLimit; }
+    bool                         isFull() const { return _userLimit && _users.size() >= _userLimit; }
 
     void                         publishMessage(const std::string &, const Client &sender, const ClientManager &);
 
