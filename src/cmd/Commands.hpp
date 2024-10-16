@@ -1,13 +1,12 @@
+#ifndef COMMANDS_HPP
+
+#include "../Server.hpp"
+#include "ACommand.hpp"
+
 #include <set>
 #include <string>
 #include <utility>
 #include <vector>
-
-#ifndef COMMANDS_HPP
-#pragma once
-
-#include "../Server.hpp"
-#include "ACommand.hpp"
 
 using std::pair;
 using std::set;
@@ -218,7 +217,10 @@ class CommandKick : public ACommand
     string reason;
 
   public:
-    CommandKick(string c, string u, string r) : channel(c), nickname(u), reason(r) { _type = KICK; };
+    CommandKick(string c, string u, string r) : channel(c), nickname(u), reason(r)
+    {
+      _type = KICK;
+    };
     ~CommandKick() {};
     CommandKick(const CommandKick &o) : channel(o.channel), nickname(o.nickname), reason(o.reason)
     {
@@ -300,6 +302,7 @@ class CommandList : public ACommand
 class Exception : public ACommand
 {
   private:
+    string code;
     string message;
 
   public:

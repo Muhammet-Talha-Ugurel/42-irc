@@ -79,8 +79,10 @@ vector<ACommand *> CommandManager::parseCommand(string command)
 								vector<string> channels = splitByDelim(arg, ',');
 								vector<string> keys;
 								ACommand *join = new CommandJoin(channels, keys);
-								if (join != NULL)
+								if (join != NULL) {
 										commands.push_back(join);
+										commands.push_back(new CommandNames(channels));
+								}
 						}
 						else if (cmd == "CAP") {
 								ACommand *cap = new CommandCap();
@@ -175,6 +177,8 @@ vector<ACommand *> CommandManager::parseCommand(string command)
 						}
 						else if (cmd == "TOPIC") {
 								iss >> arg;
+								iss >> arg2;
+								
 						}
 						else if (cmd == "NAMES") {
 								iss >> arg;

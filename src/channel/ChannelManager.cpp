@@ -2,11 +2,10 @@
 
 #include <stdexcept>
 
-
-using std::pair;
-using std::string;
-using std::set;
 using std::map;
+using std::pair;
+using std::set;
+using std::string;
 
 ChannelManager::ChannelManager() {}
 
@@ -33,8 +32,8 @@ void ChannelManager::removeChannel(const Channel *channel)
 
 Channel *ChannelManager::findChannelByName(const string &name)
 {
-  string search = name[0] == '#' ? name.substr(1) : name;
-  map<string, Channel>::iterator it = this->_channels.find(search);
+  string                         search = name[0] == '#' ? name.substr(1) : name;
+  map<string, Channel>::iterator it     = this->_channels.find(search);
   if (it != this->_channels.end())
     return &it->second;
   return 0x00;
@@ -42,7 +41,7 @@ Channel *ChannelManager::findChannelByName(const string &name)
 
 set<Channel *> ChannelManager::findChannelsByIsPublic(bool isPublic)
 {
-  set<Channel *>                      channels;
+  set<Channel *>                 channels;
   map<string, Channel>::iterator it;
 
   for (it = this->_channels.begin(); it != this->_channels.end(); ++it) {
@@ -55,7 +54,7 @@ set<Channel *> ChannelManager::findChannelsByIsPublic(bool isPublic)
 
 set<Channel *> ChannelManager::findChannelsByClient(Client *client)
 {
-  set<Channel *>                      channels;
+  set<Channel *>                 channels;
   map<string, Channel>::iterator it;
 
   for (it = this->_channels.begin(); it != this->_channels.end(); ++it) {
@@ -72,7 +71,15 @@ void ChannelManager::removeUserFromChannels(const User *user)
 
   for (it = this->_channels.begin(); it != this->_channels.end(); ++it) {
       Channel *channel = &it->second;
-      if (channel->hasUser(user))
-        channel->removeUser(user);
+      channel->removeUser(user);
+    }
+}
+
+void ChannelManager::removeUserFromChannel(const User *user, const Channel *channel)
+{
+  Channel &ch = this->_channels.find(channel->getName())->second;
+  ch.removeUser(user);
+  if (ch.shouldDestroy()) {
+      this->_channels.erase(channel->getName());
     }
 }

@@ -6,7 +6,7 @@ void CommandKick::execute(Client *c, const Server &s)
   Channel    *ch         = s.getChannelManager()->findChannelByName(channel);
   const User *targetUser = s.getUserManager()->findUserByNickname(nickname);
 
-  ch->removeUser(targetUser);
+  s.getChannelManager()->removeUserFromChannel(targetUser, ch);
 }
 
 bool CommandKick::canExecute(Client *c, const Server &s)

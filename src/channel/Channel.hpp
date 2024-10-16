@@ -17,50 +17,52 @@ class Channel
     Channel(const Channel &channel);
     ~Channel() {}
 
-    std::string                  getTopic() const { return _topic; }
-    void                         setTopic(std::string topic) { _topic = topic; }
+    std::string     getTopic() const { return _topic; }
+    void            setTopic(std::string topic) { _topic = topic; }
 
-    std::string                  getName() const { return _name; }
-    void                         setName(std::string name) { _name = name; }
+    std::string     getName() const { return _name; }
+    void            setName(std::string name) { _name = name; }
 
-    bool                         isPrivate() const { return _isPrivate; }
-    void                         setPrivate(bool t) { _isPrivate = t; }
+    bool            isPrivate() const { return _isPrivate; }
+    void            setPrivate(bool t) { _isPrivate = t; }
 
-    bool                         isSecret() const { return _isSecret; }
-    void                         setSecret(bool t) { _isSecret = t; }
+    bool            isSecret() const { return _isSecret; }
+    void            setSecret(bool t) { _isSecret = t; }
 
-    bool                         isInviteOnly() const { return _isInviteOnly; }
-    void                         setInviteOnly(bool t) { _isInviteOnly = t; }
+    bool            isInviteOnly() const { return _isInviteOnly; }
+    void            setInviteOnly(bool t) { _isInviteOnly = t; }
 
-    bool                         isModerated() const { return _isModerated; }
-    void                         setModerated(bool t) { _isModerated = t; }
+    bool            isModerated() const { return _isModerated; }
+    void            setModerated(bool t) { _isModerated = t; }
 
-    bool                         isTopicProtected() const { return _isTopicProtected; }
-    void                         setTopicProtected(bool t) { _isTopicProtected = t; }
+    bool            isTopicProtected() const { return _isTopicProtected; }
+    void            setTopicProtected(bool t) { _isTopicProtected = t; }
 
-    bool                         isNoExternalMessages() const { return _isNoExternalMessages; }
-    void                         setNoExternalMessages(bool t) { _isNoExternalMessages = t; }
+    bool            isNoExternalMessages() const { return _isNoExternalMessages; }
+    void            setNoExternalMessages(bool t) { _isNoExternalMessages = t; }
 
-    int                          getUserLimit() const { return _userLimit; }
-    void                         setUserLimit(int limit) { _userLimit = limit; }
+    int             getUserLimit() const { return _userLimit; }
+    void            setUserLimit(int limit) { _userLimit = limit; }
 
-    const Password              &getPassword() const { return _password; }
-    void                         setPassword(const Password &password) { _password = Password(password); }
+    const Password &getPassword() const { return _password; }
+    void            setPassword(const Password &password) { _password = Password(password); }
 
+    void            banUser(const User *user);
+    void            unbanUser(const User *user) { _banned.erase(user); }
+
+    std::string     getUserListString();
+
+    bool            shouldDestroy() const { return _users.empty(); }
+
+    const std::set<const User *> getUsers() const { return _users; }
     void                         addUser(const User *user) { _users.insert(user); }
     void                         removeUser(const User *user);
-    const std::set<const User *> getUsers() const { return _users; }
     std::string                  getUserCountString() const;
 
-    void                         addOperator(const User *user) { _oprs.insert(user); }
     const std::set<const User *> getOperators() const { return _oprs; }
+    void                         addOperator(const User *user) { _oprs.insert(user); }
     void                         removeOperator(const User *user) { _oprs.erase(user); }
     std::string                  getOperatorCountString() const;
-
-    void                         banUser(const User *user);
-    void                         unbanUser(const User *user) { _banned.erase(user); }
-
-    std::string                  getUserListString();
 
     bool hasUser(const User *user) const { return _users.find(user) != _users.end(); }
     bool hasOperator(const User *user) const { return _oprs.find(user) != _oprs.end(); }
