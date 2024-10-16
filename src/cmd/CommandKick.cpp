@@ -11,6 +11,11 @@ void CommandKick::execute(Client *c, const Server &s)
 
 bool CommandKick::canExecute(Client *c, const Server &s)
 {
+  if (c->isAuthenticated() == false)
+  {
+    c->receiveMessage("451 " + c->getNickname() + " :You have not registered");
+    return false;
+  }
   Channel *ch = s.getChannelManager()->findChannelByName(channel);
   if (!ch || (!ch->hasUser(c->getUser()) && (ch->isPrivate() || ch->isSecret())))
   {

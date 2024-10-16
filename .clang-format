@@ -58,21 +58,16 @@ BinPackArguments: true
 BinPackParameters: true
 BitFieldColonSpacing: Both
 BraceWrapping:
-  AfterCaseLabel: false
   AfterClass: true
-  AfterControlStatement: MultiLine
+  AfterControlStatement: Always
   AfterEnum: true
   AfterFunction: true
   AfterNamespace: true
-  AfterObjCDeclaration: true
-  AfterStruct: true
-  AfterUnion: true
-  AfterExternBlock: true
   BeforeCatch: true
   BeforeElse: true
-  BeforeWhile: true
-  IndentBraces: true
   SplitEmptyFunction: true
+  SplitEmptyRecord: true
+  SplitEmptyNamespace: true
 BreakAdjacentStringLiterals: true
 BreakAfterAttributes: Leave
 BreakArrays: true
@@ -84,7 +79,7 @@ BreakBeforeTernaryOperators: true
 BreakConstructorInitializers: BeforeColon
 BreakInheritanceList: BeforeComma
 BreakStringLiterals: true
-ColumnLimit: 100
+ColumnLimit: 120
 CommentPragmas: ""
 CompactNamespaces: false
 ConstructorInitializerIndentWidth: 4

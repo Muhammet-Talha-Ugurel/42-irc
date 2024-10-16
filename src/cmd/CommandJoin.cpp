@@ -11,51 +11,62 @@ CommandJoin::CommandJoin(std::vector<std::string> channels, std::vector<std::str
 
 CommandJoin::~CommandJoin() {}
 
-void CommandJoin::execute(Client *client, const Server &server)
+void CommandJoin::execute(Client *c, const Server &server)
 {
-  std::vector<std::string>::iterator it = channels.begin();
-  while (it != channels.end()) {
-      string   name = (*it).substr(1);
-      Channel *ptr  = const_cast<Channel *>(server.getChannelManager()->findChannelByName(name));
-      if (ptr != 0x00) {
-          ptr->addUser((User *)client->getUser());
-          client->receiveMessage(
-              ":" + client->getNickname() + "!" + client->getUser()->getUsername() +
-              "@ JOIN :" + *it
-          );
-          ptr->publishMessage(
-              ":" + client->getNickname() + "!" + client->getUser()->getUsername() +
-                  "@ JOIN :" + *it,
-              *client, *server.getClientManager()
-          );
-        }
-      else {
-          Channel channel = Channel(name);
-          channel.addUser(client->getUser());
-          channel.addOperator(client->getUser());
-          server.getChannelManager()->addChannel(channel);
-          client->receiveMessage(
-              ":" + client->getNickname() + "!" + client->getUser()->getUsername() +
-              "@ JOIN :" + *it
-          );
-        }
-      it++;
+  for (std::vector<std::string>::iterator it = channels.begin(); it != channels.end(); ++it)
+  {
+    Channel *ch = const_cast<Channel *>(server.getChannelManager()->findChannelByName(*it));
+    if (ch != 0x00)
+    {
+      if (ch->hasUser(c->getUser()))
+      {
+        c->receiveMessage(":server 405 " + c->getNickname() + " " + *it + " :You're already in that channel");
+      }
+      else if (ch->isInviteOnly() && !ch->hasInvite(c->getUser()))
+      {
+        c->receiveMessage(":server 473 " + c->getNickname() + " " + *it + " :You're not invited to this channel");
+      }
+      else if (ch->isBanned(c->getUser()))
+      {
+        c->receiveMessage(":server 474 " + c->getNickname() + " " + *it + " :You're banned from this channel");
+      }
+      else if (ch->isFull())
+      {
+        c->receiveMessage(":server 471 " + c->getNickname() + " " + *it + " :Channel is full");
+      }
+      else
+      {
+        ch->addUser(c->getUser());
+        c->receiveMessage(":" + c->getNickname() + "!" + c->getUser()->getUsername() + "@ JOIN :" + *it);
+        ch->publishMessage(
+            ":" + c->getNickname() + "!" + c->getUser()->getUsername() + "@ JOIN :" + *it, *c,
+            *server.getClientManager()
+        );
+      }
     }
+    else
+    {
+      Channel channel = Channel(*it);
+      channel.addUser(c->getUser());
+      channel.addOperator(c->getUser());
+      server.getChannelManager()->addChannel(channel);
+      c->receiveMessage(":" + c->getNickname() + "!" + c->getUser()->getUsername() + "@ JOIN :" + *it);
+    }
+  }
 }
 
 bool CommandJoin::canExecute(Client *client, const Server &server)
 {
   (void)server;
-  if (client->isAuthenticated()) {
-      return true;
-    }
+if (client->isAuthenticated() == false)
+  {
+    client->receiveMessage("451 " + client->getNickname() + " :You have not registered");
+    return false;
+  }
   return false;
 }
 
-void CommandJoin::execute(const Client *client, const Server &server)
-{
-  execute(const_cast<Client *>(client), server);
-}
+void CommandJoin::execute(const Client *client, const Server &server) { execute(const_cast<Client *>(client), server); }
 
 bool CommandJoin::canExecute(const Client *client, const Server &server)
 {

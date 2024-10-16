@@ -13,14 +13,16 @@ CommandList::CommandList(const CommandList &commandList) { this->channels = comm
 void CommandList::execute(Client *client, const Server &server)
 {
   std::set<Channel *> publicChannels = server.getChannelManager()->findChannelsByIsPublic(true);
-  std::set<Channel *> userChannels = server.getChannelManager()->findChannelsByClient(client);
-  // publicChannels.insert();
+  std::set<Channel *> userChannels   = server.getChannelManager()->findChannelsByClient(client);
+
   userChannels.insert(publicChannels.begin(), publicChannels.end());
-  
 
   client->receiveMessage(server.respond(IRC_RPL_LISTSTART, client));
-  for (std::set<Channel *>::iterator it = userChannels.begin(); it != userChannels.end(); ++it) {
-    client->receiveMessage(server.respond(IRC_RPL_LIST, client, "#" + (*it)->getName() + " " + (*it)->getUserCountString() + " :" + (*it)->getTopic()));
+  for (std::set<Channel *>::iterator it = userChannels.begin(); it != userChannels.end(); ++it)
+  {
+    client->receiveMessage(server.respond(
+        IRC_RPL_LIST, client, "#" + (*it)->getName() + " " + (*it)->getUserCountString() + " :" + (*it)->getTopic()
+    ));
   }
 
   client->receiveMessage(server.respond(IRC_RPL_LISTEND, client));
@@ -29,15 +31,15 @@ void CommandList::execute(Client *client, const Server &server)
 bool CommandList::canExecute(Client *client, const Server &server)
 {
   (void)server;
-  if (client->isAuthenticated())
-    return true;
+  if (client->isAuthenticated() == false)
+  {
+    client->receiveMessage("451 " + client->getNickname() + " :You have not registered");
+    return false;
+  }
   return false;
 }
 
-void CommandList::execute(const Client *client, const Server &server)
-{
-  execute(const_cast<Client *>(client), server);
-}
+void CommandList::execute(const Client *client, const Server &server) { execute(const_cast<Client *>(client), server); }
 
 bool CommandList::canExecute(const Client *client, const Server &server)
 {
