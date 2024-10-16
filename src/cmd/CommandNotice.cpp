@@ -16,12 +16,12 @@ void CommandNotice::execute(Client *client, const Server &server)
 		if (channel == 0x00) {
 				if (server.getClientManager()->findClientByNickname(target)) {
 						server.getClientManager()->findClientByNickname(target)->receiveMessage(
-								":" + client->getNickname() + "!" + client->getUser()->getUsername() + "@ NOTICE #" + target + " :" + message
+								":" + client->getNickname() + "!" + client->getUser()->getUsername() + "@ NOTICE " + target + " :" + message
 						);
 				}
 		}
 		else {
-				channel->publishMessage(":" + client->getNickname() + "!" + client->getUser()->getUsername() + "@ NOTICE #" + target + " " + message
+				channel->publishMessage(":" + client->getNickname() + "!" + client->getUser()->getUsername() + "@ NOTICE " + target + " " + message
 , *client, *server.getClientManager());
 				DEBUG_LOG("NOTICE sended " << target);
 		}

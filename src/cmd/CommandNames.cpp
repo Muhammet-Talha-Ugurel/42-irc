@@ -29,18 +29,18 @@ void CommandNames::execute(Client *c, const Server &server)
     {
       if (ch->isPrivate())
       {
-        c->receiveMessage(": 353 " + c->getNickname() + " * #" + ch->getName() + " :" + ch->getUserListString());
+        c->receiveMessage(": 353 " + c->getNickname() + " * " + ch->getName() + " :" + ch->getUserListString());
       }
       else if (ch->isSecret())
       {
-        c->receiveMessage(": 353 " + c->getNickname() + " @ #" + ch->getName() + " :" + ch->getUserListString());
+        c->receiveMessage(": 353 " + c->getNickname() + " @ " + ch->getName() + " :" + ch->getUserListString());
       }
       else
       {
-        c->receiveMessage(": 353 " + c->getNickname() + " = #" + ch->getName() + " :" + ch->getUserListString());
+        c->receiveMessage(": 353 " + c->getNickname() + " = " + ch->getName() + " :" + ch->getUserListString());
       }
     }
-    c->receiveMessage(": 366 " + c->getNickname() + " #" + ch->getName() + " :End of /NAMES list.");
+    c->receiveMessage(": 366 " + c->getNickname() + " " + ch->getName() + " :End of /NAMES list.");
   }
 }
 

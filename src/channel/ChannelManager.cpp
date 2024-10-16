@@ -1,6 +1,7 @@
 #include "ChannelManager.hpp"
 
 #include <stdexcept>
+#include <string>
 
 using std::map;
 using std::pair;
@@ -29,7 +30,8 @@ void     ChannelManager::removeChannel(const Channel *channel) { this->_channels
 
 Channel *ChannelManager::findChannelByName(const string &name)
 {
-  map<string, Channel>::iterator it = this->_channels.find(name);
+  string search = name[0] != '#' ? "#" + name : name;
+  map<string, Channel>::iterator it = this->_channels.find(search);
   if (it != this->_channels.end())
     return &it->second;
   return 0x00;
