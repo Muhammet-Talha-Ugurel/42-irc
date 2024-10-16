@@ -84,7 +84,7 @@ class Channel
     bool                   _isModerated;
     bool                   _isTopicProtected;
     bool                   _isNoExternalMessages;
-    int                    _userLimit;
+    unsigned long          _userLimit;
 
     std::set<const User *> _users;
     std::set<const User *> _oprs;
