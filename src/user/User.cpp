@@ -6,6 +6,7 @@ User::User(const User &other)
 {
   _username  = other._username;
   _real_name = other._real_name;
+  _last_nickname = other._last_nickname;
   _password  = other._password;
 }
 
