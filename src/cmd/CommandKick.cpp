@@ -11,7 +11,7 @@ void CommandKick::execute(Client *c, const Server &s)
 		}
 
 		ch->publishMessage(":" + c->getNickname() + " KICK " + ch->getName() + " " + targetClient->getNickname() + " :" + reason, c, *s.getClientManager());
-		targetClient->receiveMessage(":" + c->getNickname() + " KICK " + ch->getName() + " " + targetClient->getNickname() + " :" + reason);
+		c->receiveMessage(":" + c->getNickname() + " KICK " + ch->getName() + " " + targetClient->getNickname() + " :" + reason);
 		s.getChannelManager()->removeUserFromChannel(targetClient->getUser(), ch);
 }
 
