@@ -21,15 +21,29 @@ void CommandPrivmsg::execute(Client *client, const Server &server)
     }
     else
     {
-      if ((channel->isPrivate() || channel->isSecret()) && channel->isNoExternalMessages())
+      if (channel->hasUser(client->getUser()))
       {
-        client->receiveMessage(":server 403 " + client->getNickname() + " " + target + " :No such channel");
+        channel->publishMessage(
+            ":" + client->getNickname() + "!" + client->getUser()->getUsername() + "@ PRIVMSG " + target + " " +
+                message,
+            client, *server.getClientManager()
+        );
       }
-      channel->publishMessage(
-          ":" + client->getNickname() + "!" + client->getUser()->getUsername() + "@ PRIVMSG " + channel->getName() +
-              " " + message,
-          client, *server.getClientManager()
-      );
+      else if (channel->isBanned(client->getUser()))
+      {
+        client->receiveMessage(":server 474 " + client->getNickname() + " " + target + " :Cannot send to channel");
+      }
+      else if (channel->isNoExternalMessages())
+      {
+        if (channel->isPrivate() || channel->isSecret())
+        {
+          client->receiveMessage(":server 403 " + client->getNickname() + " " + target + " :No such channel");
+        }
+        else
+        {
+          client->receiveMessage(":server 404 " + client->getNickname() + " " + target + " :Cannot send to channel");
+        }
+      }
     }
   }
   else
