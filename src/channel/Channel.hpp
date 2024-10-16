@@ -64,6 +64,8 @@ class Channel
     void                         removeOperator(const User *user) { _oprs.erase(user); }
     std::string                  getOperatorCountString() const;
 
+    void                         inviteUser(const User *user) { _invited.insert(user); }
+
     bool                         hasUser(const User *user) const { return _users.find(user) != _users.end(); }
     bool                         hasOperator(const User *user) const { return _oprs.find(user) != _oprs.end(); }
     bool                         hasInvite(const User *user) const { return _users.find(user) != _users.end(); }
