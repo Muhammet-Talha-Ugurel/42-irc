@@ -1,5 +1,5 @@
 #include "Client.hpp"
-
+#include <iostream>
 #include <cstdlib>
 #include <cstdio>
 #include <sys/poll.h>
@@ -52,6 +52,7 @@ bool Client::operator>(const Client &other) const
 int Client::receiveMessage(const std::string &message) const
 {
   int res = send(_poll_fd, (message + "\r\n").c_str(), message.length() + 2, 0);
+  std::cout << "Message sented: " << message << std::endl;
   if (res == -1) {
     perror("send");
     return res;

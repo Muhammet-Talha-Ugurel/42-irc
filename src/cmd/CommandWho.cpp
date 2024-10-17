@@ -47,7 +47,6 @@ void CommandWho::execute(Client *client, const Server &server)
       {
         continue;
       }
-      std::cout << client->getNickname() << " " << (*it)->getLastNickname() << std::endl;
       client->receiveMessage(
           ":mtu 352 " + client->getNickname() + " " + mask + " " + (*it)->getUsername() + " localhost localhost " +
           (*it)->getLastNickname() + " H :0 " + (*it)->getRealName()

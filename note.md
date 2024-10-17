@@ -10,7 +10,7 @@
 
 # parse
 - [x] pass
-- [ ] nick
+- [x] nick
 - [x] user
 - [x] quit
 - [x] join

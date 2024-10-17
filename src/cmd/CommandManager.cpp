@@ -39,6 +39,12 @@ vector<ACommand *> CommandManager::parseCommand(string command)
 		vector<ACommand *> commands;
 		std::istringstream stream(command);
 		string             line;
+		size_t end = line.find_last_not_of("\r\n");
+		if (end != std::string::npos) {
+				line.erase(end + 1);
+		} else {
+				line.clear();
+		}
 		while (std::getline(stream, line))
 		{
 				std::istringstream iss(line);
@@ -75,7 +81,8 @@ vector<ACommand *> CommandManager::parseCommand(string command)
 						{
 								int  i = countWords(iss);
 								iss >> arg;
-								if (!(iss >> arg))
+								iss >> arg;
+								if (arg.empty())
 								{
 										commands.push_back(new Exception("No nickname specified"));
 										continue;
@@ -96,7 +103,6 @@ vector<ACommand *> CommandManager::parseCommand(string command)
 										commands.push_back(new Exception("Invalid nickname"));
 										continue;
 								}
-										std::cout << "No nickname specified" << std::endl;
 								ACommand *nick = new CommandNick(arg);
 								if (nick != NULL)
 										commands.push_back(nick);
@@ -154,23 +160,11 @@ vector<ACommand *> CommandManager::parseCommand(string command)
 								std::istringstream channelStream(channelsPart);
 								std::string channel;
 								while (std::getline(channelStream, channel, ',')) {
-										size_t end = channel.find_last_not_of("\r\n");
-										if (end != std::string::npos) {
-												channel.erase(end + 1);
-										} else {
-												channel.clear();
-										}
 										channels.push_back(channel);
 								}
 								std::string password;
 								std::istringstream passwordStream(passwordsPart);
 								while (std::getline(passwordStream, password, ',')) {
-										size_t end = password.find_last_not_of("\r\n");
-										if (end != std::string::npos) {
-												password.erase(end + 1);
-										} else {
-												password.clear();
-										}
 										keys.push_back(password);
 								}
 								ACommand *join = new CommandJoin(channels, keys);
