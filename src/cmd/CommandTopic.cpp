@@ -14,10 +14,34 @@ void CommandTopic::execute(Client *client, const Server &server)
   if (ch == 0x00)
   {
     client->receiveMessage(":server 403 " + channel + " :No such channel");
-    return;
   }
-  ch->setTopic(topic);
-  server.respond("332", client, ch->getName() + " :" + topic);
+  else
+  {
+    if (topic.empty())
+    {
+      if (ch->hasUser(client->getUser()) || !(ch->isPrivate() || ch->isSecret()))
+      {
+        client->receiveMessage(":" + client->getNickname() + " TOPIC " + channel + " :" + ch->getTopic());
+      }
+      else
+      {
+        client->receiveMessage(":server 403 " + channel + " :No such channel");
+      }
+    }
+    else
+    {
+      if ((ch->isTopicProtected() && ch->hasOperator(client->getUser())) ||
+          (!ch->isTopicProtected() && ch->hasUser(client->getUser())))
+      {
+        ch->setTopic(topic);
+        client->receiveMessage(":" + client->getNickname() + " TOPIC " + channel + " :" + topic);
+      }
+      else
+      {
+        client->receiveMessage(":server 482 " + channel + " :You're not channel operator");
+      }
+    }
+  }
 }
 
 void CommandTopic::execute(const Client *client, const Server &server)
@@ -32,17 +56,7 @@ bool CommandTopic::canExecute(Client *client, const Server &server)
     client->receiveMessage(":server 451 TOPIC :You have not registered");
     return false;
   }
-
-  Channel *ch = server.getChannelManager()->findChannelByName(channel);
-  if (ch == 0x00)
-    client->receiveMessage(":server 403 " + channel + " :No such channel");
-  else if (ch->hasUser(client->getUser()) == false)
-    client->receiveMessage(":server 442 " + channel + " :You're not on that channel");
-  else if (ch->hasOperator(client->getUser()) == false)
-    client->receiveMessage(":server 482 " + channel + " :You're not a channel operator");
-  else
-    return true;
-  return false;
+  return true;
 }
 
 bool CommandTopic::canExecute(const Client *client, const Server &server)
