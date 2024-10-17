@@ -9,18 +9,37 @@ void CommandWho::execute(Client *client, const Server &server)
 {
 		if (mask == "0")
 		{
-				std::set<Client> clients = server.getClientManager()->get_clients();
-				for (std::set<Client>::iterator it = clients.begin(); it != clients.end(); ++it)
-				{
-						if (it->getUser()->isVisible() == true)
+				if (o == true) {
+						std::set<Channel *> publicChannels = server.getChannelManager()->findChannelsByIsPublic(true);
+						std::set<Channel *> userChannels   = server.getChannelManager()->findChannelsByClient(client);
+						userChannels.insert(publicChannels.begin(), publicChannels.end());
+						for (std::set<Channel *>::iterator it = userChannels.begin(); it != userChannels.end(); ++it)
 						{
-								continue;
+								const std::set<const User *> users = (*it)->getOperators();
+								for (std::set<const User *>::iterator it2 = users.begin(); it2 != users.end(); ++it2)
+								{
+										client->receiveMessage(
+												":mtu 352 " + client->getNickname() + " * " + (*it2)->getLastNickname() + " localhost localhost " +
+												(*it2)->getUsername() + " H :0 " + (*it2)->getRealName()
+										);
+										DEBUG_LOG("WHO " << (*it2)->getNickname());
+								}
 						}
-						client->receiveMessage(
-								":mtu 352 " + client->getNickname() + " * " + it->getNickname() + " localhost localhost " +
-								it->getUser()->getUsername() + " H :0 " + it->getUser()->getRealName()
-						);
-						DEBUG_LOG("WHO " << it->getNickname());
+				}
+				else {
+						std::set<Client> clients = server.getClientManager()->get_clients();
+						for (std::set<Client>::iterator it = clients.begin(); it != clients.end(); ++it)
+						{
+								if (it->getUser()->isVisible() == true)
+								{
+										continue;
+								}
+								client->receiveMessage(
+										":mtu 352 " + client->getNickname() + " * " + it->getNickname() + " localhost localhost " +
+										it->getUser()->getUsername() + " H :0 " + it->getUser()->getRealName()
+								);
+								DEBUG_LOG("WHO " << it->getNickname());
+						}
 				}
 		}
 		else if (mask[0] == '#')

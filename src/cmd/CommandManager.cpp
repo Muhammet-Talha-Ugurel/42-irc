@@ -97,8 +97,6 @@ vector<ACommand *> CommandManager::parseCommand(string command)
 										commands.push_back(new Exception("Nick name only accepts one argument"));
 										continue;
 								}
-								if (arg[0] == ':')
-										arg.erase(0, 1);
 								if (containsInvalidChars(arg)) {
 										commands.push_back(new Exception("Invalid nickname"));
 										continue;
@@ -160,6 +158,14 @@ vector<ACommand *> CommandManager::parseCommand(string command)
 								std::istringstream channelStream(channelsPart);
 								std::string channel;
 								while (std::getline(channelStream, channel, ',')) {
+										if (channel[0] != '#' && channel.length() < 2 && channel.length() > 50){
+												commands.push_back(new Exception("Invalid channel name"));
+												continue;
+										}
+										if (channel[1] == '-') {
+												commands.push_back(new Exception("Invalid channel name"));
+												continue;
+										}
 										channels.push_back(channel);
 								}
 								std::string password;
@@ -250,12 +256,34 @@ vector<ACommand *> CommandManager::parseCommand(string command)
 						}
 						else if (cmd == "KICK" || cmd == "kick")
 						{
+								vector<string> channels;
+								vector<string> nicknames;
+								std::string channelsPart, nicknamesPart;
+								iss >> std::ws;
+								std::getline(iss, channelsPart, ' ');
+								std::getline(iss, nicknamesPart, ' ');
+								std::istringstream channelStream(channelsPart);
+								std::string channel;
+								while (std::getline(channelStream, channel, ',')) {
+										if (channel[0] != '#' && channel.length() < 2 && channel.length() > 50){
+												commands.push_back(new Exception("Invalid channel name"));
+												continue;
+										}
+										if (channel[1] == '-') {
+												commands.push_back(new Exception("Invalid channel name"));
+												continue;
+										}
+										channels.push_back(channel);
+								}
+								std::string nickname;
+								std::istringstream passwordStream(nicknamesPart);
+								while (std::getline(passwordStream, nickname, ',')) {
+										nicknames.push_back(nickname);
+								}
 								iss >> arg;
-								iss >> arg2;
-								iss >> cmd;
-								if (!cmd.empty() && cmd[0] == ':')
-										cmd = cmd.substr(1);
-								commands.push_back(new CommandKick(arg, arg2, cmd));
+								ACommand *kick = new CommandKick(channels, nicknames, arg);
+								if (kick != NULL)
+										commands.push_back(kick);
 						}
 						else if (cmd == "PART")
 						{
@@ -275,6 +303,9 @@ vector<ACommand *> CommandManager::parseCommand(string command)
 						{
 								iss >> arg;
 								iss >> arg2;
+								ACommand      *topic    = new CommandTopic(arg, arg2);
+								if (topic)
+										commands.push_back(topic);
 						}
 						else if (cmd == "NAMES")
 						{

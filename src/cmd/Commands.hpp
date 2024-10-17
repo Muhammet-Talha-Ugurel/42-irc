@@ -213,17 +213,17 @@ class CommandNotice : public ACommand
 class CommandKick : public ACommand
 {
   private:
-    string channel;
-    string nickname;
+    vector<string> channels;
+    vector<string> nicknames;
     string reason;
 
   public:
-    CommandKick(string c, string u, string r) : channel(c), nickname(u), reason(r)
+    CommandKick(vector<string> c, vector<string> u, string r) : channels(c), nicknames(u), reason(r)
     {
       _type = KICK;
     };
     ~CommandKick() {};
-    CommandKick(const CommandKick &o) : channel(o.channel), nickname(o.nickname), reason(o.reason)
+    CommandKick(const CommandKick &o) : channels(o.channels), nicknames(o.nicknames), reason(o.reason)
     {
       _type = o._type;
     };
