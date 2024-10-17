@@ -24,8 +24,11 @@ class Client
     const User        *getUser() const { return _user; }
     void               setUser(const User *user) { _user = user; };
 
-    const char        *getBuffer() const { return _buffer; }
-    void               flushBuffer() const;
+    void               appendToBuffer(const char *data, size_t length) { _buffer.append(data, length); }
+
+    std::string       &getBuffer() { return _buffer; }
+
+    void               clearBufferUpTo(size_t pos) { _buffer.erase(0, pos); }
 
     int                getPollFd() const { return _poll_fd; }
     void               setPollFd(int p_fd) { _poll_fd = p_fd; }
@@ -42,14 +45,14 @@ class Client
     bool               isAllowed() const { return _allowed; }
 
     void               setAuthenticated(bool authenticated) { _allowed = authenticated; }
-    bool isAuthenticated() const { return isAllowed() && _nickname != "" && _user != 0x00; }
+    bool               isAuthenticated() const { return isAllowed() && _nickname != "" && _user != 0x00; }
 
   private:
     Client();
     unsigned long  _ipv4;
     unsigned short _port;
     int            _poll_fd;
-    char           _buffer[1024];
+    std::string    _buffer;
     bool           _allowed;
 
     std::string    _nickname;

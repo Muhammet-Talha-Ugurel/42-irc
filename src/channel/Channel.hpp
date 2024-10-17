@@ -5,6 +5,7 @@
 #include "../client/ClientManager.hpp"
 #include "../password/Password.hpp"
 #include "../user/User.hpp"
+#include "Ban.hpp"
 
 #include <set>
 #include <string>
@@ -47,17 +48,20 @@ class Channel
     const Password              &getPassword() const { return _password; }
     void                         setPassword(const Password &password) { _password = Password(password); }
 
-    void                         banUser(const User *user);
-    void                         unbanUser(const User *user) { _banned.erase(user); }
-
-    std::string                  getUserListString();
-
     bool                         shouldDestroy() const { return _users.empty(); }
+
+    std::set<Ban>                getBanMasks() { return _banned; }
+    void                         addBanMask(std::string banner, std::string mask);
+    void                         removeBanMask(std::string mask);
+    std::set<User *>             findUsersByMask(const std::string &mask) const;
+    Ban                          findBanMask(const std::string &mask) const;
+    bool                         evalMask(const std::string &mask, const User *user) const;
 
     const std::set<const User *> getUsers() const { return _users; }
     void                         addUser(const User *user);
     void                         removeUser(const User *user);
     std::string                  getUserCountString() const;
+    std::string                  getUserListString();
 
     const std::set<const User *> getOperators() const { return _oprs; }
     void                         addOperator(const User *user) { _oprs.insert(user); }
@@ -69,7 +73,7 @@ class Channel
     bool                         hasUser(const User *user) const { return _users.find(user) != _users.end(); }
     bool                         hasOperator(const User *user) const { return _oprs.find(user) != _oprs.end(); }
     bool                         hasInvite(const User *user) const { return _users.find(user) != _users.end(); }
-    bool                         isBanned(const User *user) const { return _banned.find(user) != _banned.end(); }
+    bool                         isBanned(const User *user) const;
     bool                         isFull() const { return _userLimit && _users.size() >= _userLimit; }
 
     void                         publishMessage(const std::string &, Client *sender, const ClientManager &);
@@ -88,8 +92,8 @@ class Channel
 
     std::set<const User *> _users;
     std::set<const User *> _oprs;
-    std::set<const User *> _banned;
     std::set<const User *> _invited;
+    std::set<Ban>        _banned;
 };
 
 #endif // !CHANNEL_HPP

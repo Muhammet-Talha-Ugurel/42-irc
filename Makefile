@@ -29,14 +29,14 @@ SRC			=  src/main.cpp \
 			   src/user/User.cpp \
 			   src/user/UserManager.cpp
 OBJ			= $(SRC:.cpp=.o)
-CXX			= clang++
+CXX			= c++
 RM			= rm -rf
 CXXFLAGS	= -Wall -Werror -Wextra -std=c++98 -g
 
 all: $(NAME)
 
 $(NAME): $(OBJ)
-	@$(CXX) $(CXXFLAGS) $(SRC) -o $(NAME)
+	@$(CXX) -fuse-ld=gold $(CXXFLAGS) $(SRC) -o $(NAME)
 
 clean:
 	@$(RM) $(OBJ)

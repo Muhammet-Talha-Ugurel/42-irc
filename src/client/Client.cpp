@@ -59,5 +59,3 @@ int Client::receiveMessage(const std::string &message) const
   }
   return res;
 }
-
-void Client::flushBuffer() const { memset((void *)_buffer, 0, sizeof(_buffer)); }

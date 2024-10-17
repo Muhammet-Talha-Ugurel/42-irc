@@ -40,7 +40,7 @@ bool CommandMode::canExecute(Client *c, const Server &server)
   const User *user = c->getUser();
   if (target[0] == '#')
   {
-    Channel *ch = server.getChannelManager()->findChannelByName((target.substr(1)));
+    Channel *ch = server.getChannelManager()->findChannelByName(target);
     if (!ch)
     {
       c->receiveMessage("403 " + c->getNickname() + " " + target + " :No such channel");
@@ -96,7 +96,7 @@ void CommandMode::execUserModes(Client *c, const Server &server)
   }
 }
 
-void CommandMode::execChannelModes(Client *client,const Server &server)
+void CommandMode::execChannelModes(Client *client, const Server &server)
 {
   Channel *ch = server.getChannelManager()->findChannelByName(target.substr(1));
   for (vector<pair<ModeOperation, string> >::iterator it = modes.begin(); it != modes.end(); ++it)
@@ -110,14 +110,40 @@ void CommandMode::execChannelModes(Client *client,const Server &server)
           ch->removeOperator(server.getClientManager()->findClientByNickname((*it).second)->getUser());
         break;
       case B:
-								if (add) {
-										const User *banedUser = server.getClientManager()->findClientByNickname((*it).second)->getUser();
-										ch->publishMessage(":" + client->getNickname() + " MODE " + ch->getName() + " +b " + banedUser->getLastNickname() + "!" + banedUser->getUsername() + "@" , client, *server.getClientManager());
-										client->receiveMessage(":" + client->getNickname() + " MODE " + ch->getName() + " +b " + banedUser->getLastNickname() + "!" + banedUser->getUsername() + "@" );
-										ch->banUser(banedUser);
-								}
+        if (add)
+        {
+          if ((*it).second.empty())
+          {
+            set<Ban> bannedList = ch->getBanMasks();
+            for (set<Ban>::iterator it = bannedList.begin(); it != bannedList.end(); ++it)
+              client->receiveMessage(": 367 " + client->getNickname() + " " + ch->getName() + " " + (*it).toString());
+            client->receiveMessage(
+                ": 368 " + client->getNickname() + " " + ch->getName() + " :End of Channel Ban List"
+            );
+          }
+          else
+          {
+            string mask = (*it).second;
+            if ((*it).second.find("!") == string::npos || (*it).second.find("@") == string::npos)
+            {
+              client->receiveMessage("404 " + client->getNickname() + " " + ch->getName() + " :Cannot ban that mask");
+            }
+            else if (!ch->findBanMask(mask).getBanner().empty())
+            {
+              client->receiveMessage("405 " + client->getNickname() + " " + ch->getName() + " :Ban already set");
+            }
+            else
+            {
+              ch->publishMessage(
+                  ":" + client->getNickname() + " MODE " + ch->getName() + " +b " + mask, client,
+                  *server.getClientManager()
+              );
+              ch->addBanMask(client->getNickname(), mask);
+            }
+          }
+        }
         else
-          ch->unbanUser(server.getClientManager()->findClientByNickname((*it).second)->getUser());
+          ch->removeBanMask((*it).second);
         break;
       case I:
         if (add)

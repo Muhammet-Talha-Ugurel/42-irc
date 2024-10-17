@@ -1,5 +1,6 @@
 #include "Channel.hpp"
 
+#include <ctime>
 #include <sstream>
 #include <vector>
 
@@ -62,10 +63,48 @@ void Channel::removeUser(const User *user)
   _oprs.erase(user);
 }
 
-void Channel::banUser(const User *user)
+void Channel::addBanMask(std::string banner, std::string mask)
 {
-  _banned.insert(user);
-  removeUser(user);
+  Ban ban(banner, mask, time(NULL));
+  _banned.insert(ban);
+}
+
+void Channel::removeBanMask(std::string mask)
+{
+  for (std::set<Ban>::iterator it = _banned.begin(); it != _banned.end(); ++it)
+  {
+    if ((*it).getMask() == mask)
+    {
+      _banned.erase(it);
+      return;
+    }
+  }
+}
+
+std::set<User *> Channel::findUsersByMask(const std::string &mask) const
+{
+  std::set<User *> users;
+  for (std::set<const User *>::iterator it = _users.begin(); it != _users.end(); ++it)
+  {
+    if ((*it)->getLastNickname() == mask.substr(0, mask.find("!")) &&
+        (*it)->getUsername() == mask.substr(mask.find("!") + 1, mask.find("@") - mask.find("!") - 1))
+    {
+      users.insert(const_cast<User *>(*it));
+    }
+  }
+  return users;
+}
+
+Ban Channel::findBanMask(const std::string &mask) const
+{
+  for (std::set<Ban>::iterator it = _banned.begin(); it != _banned.end(); ++it)
+  {
+    if ((*it).getMask() == mask)
+    {
+      return *it;
+    }
+  }
+  return Ban();
 }
 
 std::string Channel::getUserCountString() const
@@ -90,4 +129,30 @@ std::string Channel::getUserListString()
     ss << (hasOperator(*it) ? "@" : "") << (*it)->getLastNickname() << " ";
   }
   return ss.str();
+}
+
+bool Channel::isBanned(const User *user) const
+{
+  for (std::set<Ban>::iterator it = _banned.begin(); it != _banned.end(); ++it)
+  {
+    if (evalMask((*it).getMask(), user))
+    {
+      return true;
+    }
+  }
+  return false;
+}
+
+bool Channel::evalMask(const std::string &mask, const User *user) const
+{
+  if (mask.find("!") == std::string::npos || mask.find("@") == std::string::npos)
+  {
+    return false;
+  }
+
+  std::string nick     = mask.substr(0, mask.find("!"));
+  std::string username = mask.substr(mask.find("!") + 1, mask.find("@") - mask.find("!") - 1);
+
+  return (user->getUsername() == username && (user->getLastNickname() == nick || nick == "*")) ||
+         (user->getLastNickname() == nick && (user->getUsername() == username || username == "*")) || mask == "*!*@*";
 }

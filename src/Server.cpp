@@ -5,7 +5,9 @@
 #include "password/DJB2HashAlgorithm.hpp"
 #include "password/PasswordManager.hpp"
 
+#include <algorithm>
 #include <arpa/inet.h>
+#include <cerrno>
 #include <cstdio>
 #include <cstdlib>
 #include <fcntl.h>
@@ -99,27 +101,42 @@ void Server::start()
         }
         else
         {
-          const Client *client = _client_manager->findClientByPollfd(poll_fds[i]);
+          Client *client = const_cast<Client *>(_client_manager->findClientByPollfd(poll_fds[i]));
           if (client == 0x00)
             continue;
-          const char *buffer         = client->getBuffer();
-          int         bytes_received = recv(poll_fds[i].fd, (void *)buffer, 1024 * sizeof(char), 0);
-          std::string buffer_str(buffer);
-          std::cout << "Received: " << buffer_str;
-          client->flushBuffer();
 
-          if (bytes_received > 0 && buffer_str.length() > 0)
+          char buffer[1024];
+          int  bytes_received = recv(poll_fds[i].fd, buffer, sizeof(buffer), 0);
+
+          if (bytes_received > 0)
           {
-            std::vector<ACommand *> commands = _command_handler->parseCommand(buffer_str);
+            client->appendToBuffer(buffer, bytes_received);
 
-            for (std::vector<ACommand *>::iterator it = commands.begin(); it != commands.end(); ++it)
+            std::string &clientBuffer = client->getBuffer();
+            size_t       newlinePos;
+
+            while ((newlinePos = clientBuffer.find('\n')) != std::string::npos)
             {
-              if ((*it)->canExecute(client, *this))
+              std::string commandLine = clientBuffer.substr(0, newlinePos + 1);
+
+              client->clearBufferUpTo(newlinePos + 1);
+
+              commandLine.erase(std::remove(commandLine.begin(), commandLine.end(), '\r'), commandLine.end());
+              commandLine.erase(std::remove(commandLine.begin(), commandLine.end(), '\n'), commandLine.end());
+
+              std::cout << "Received command: " << commandLine << std::endl;
+
+              std::vector<ACommand *> commands = _command_handler->parseCommand(commandLine);
+
+              for (std::vector<ACommand *>::iterator it = commands.begin(); it != commands.end(); ++it)
               {
-                (*it)->execute(client, *this);
+                if ((*it)->canExecute(client, *this))
+                {
+                  (*it)->execute(client, *this);
+                }
+                delete *it;
               }
-              delete *it;
-            };
+            }
           }
           else if (bytes_received == 0)
           {
@@ -131,11 +148,14 @@ void Server::start()
           }
           else if (bytes_received == -1)
           {
-            continue;
-          }
-          else
-          {
-            perror("recv");
+            if (errno != EWOULDBLOCK && errno != EAGAIN)
+            {
+              perror("recv");
+              _client_manager->deleteClientByPollfd(poll_fds[i]);
+              poll_fds[i] = poll_fds[nfds - 1];
+              nfds--;
+              i--;
+            }
           }
         }
       }
