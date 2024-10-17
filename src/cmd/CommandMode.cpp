@@ -1,4 +1,5 @@
 #include "ACommand.hpp"
+#include "CommandUtils.hpp"
 #include "Commands.hpp"
 
 #include <sstream>
@@ -98,7 +99,24 @@ void CommandMode::execUserModes(Client *c, const Server &server)
 
 void CommandMode::execChannelModes(Client *client, const Server &server)
 {
-  Channel *ch = server.getChannelManager()->findChannelByName(target.substr(1));
+  Channel *ch = server.getChannelManager()->findChannelByName(target);
+  if (modes.empty()) {
+    string modeStr = "+";
+    if (ch->isPrivate())
+      modeStr += "p";
+    if (ch->isSecret())
+      modeStr += "s";
+    if (ch->isInviteOnly())
+      modeStr += "i";
+    if (ch->isTopicProtected())
+      modeStr += "t";
+    if (ch->isNoExternalMessages())
+      modeStr += "n";
+    if (ch->getUserLimit() > 0)
+      modeStr += "l" + intToString(ch->getUserLimit());
+    client->receiveMessage("324 " + client->getNickname() + " " + ch->getName() + " " + modeStr);
+    return;
+  }
   for (vector<pair<ModeOperation, string> >::iterator it = modes.begin(); it != modes.end(); ++it)
   {
     switch ((*it).first)

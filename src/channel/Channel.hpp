@@ -93,7 +93,7 @@ class Channel
     std::set<const User *> _users;
     std::set<const User *> _oprs;
     std::set<const User *> _invited;
-    std::set<Ban>        _banned;
+    std::set<Ban>          _banned;
 };
 
 #endif // !CHANNEL_HPP
