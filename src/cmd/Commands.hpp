@@ -145,7 +145,7 @@ class CommandMode : public ACommand
     vector<pair<ModeOperation, string> > modes;
 
     void                                 execUserModes(Client *, const Server &);
-    void                                 execChannelModes(const Server &);
+    void                                 execChannelModes(Client *client, const Server &);
 
   public:
     CommandMode(string, bool, vector<pair<ModeOperation, string> >);
