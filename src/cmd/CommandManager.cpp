@@ -39,14 +39,14 @@ vector<ACommand *> CommandManager::parseCommand(string command)
 		vector<ACommand *> commands;
 		std::istringstream stream(command);
 		string             line;
-		size_t end = line.find_last_not_of("\r\n");
-		if (end != std::string::npos) {
-				line.erase(end + 1);
-		} else {
-				line.clear();
-		}
 		while (std::getline(stream, line))
 		{
+				size_t end = line.find_last_not_of("\r\n");
+				if (end != std::string::npos) {
+						line.erase(end + 1);
+				} else {
+						line.clear();
+				}
 				std::istringstream iss(line);
 				string             cmd, arg, arg2;
 				while (iss >> cmd)

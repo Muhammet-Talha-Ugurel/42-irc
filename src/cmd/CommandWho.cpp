@@ -12,11 +12,7 @@ void CommandWho::execute(Client *client, const Server &server)
     std::set<Client> clients = server.getClientManager()->get_clients();
     for (std::set<Client>::iterator it = clients.begin(); it != clients.end(); ++it)
     {
-      if (it->getNickname() == client->getNickname())
-      {
-        continue;
-      }
-      else if (it->getUser()->isVisible() == true)
+      if (it->getUser()->isVisible() == true)
       {
         continue;
       }
@@ -29,8 +25,7 @@ void CommandWho::execute(Client *client, const Server &server)
   }
   else if (mask[0] == '#')
   {
-    DEBUG_LOG("WHO # ");
-    Channel *channel = server.getChannelManager()->findChannelByName(mask.substr(1));
+    Channel *channel = server.getChannelManager()->findChannelByName(mask);
     if (channel == 0x00)
     {
       client->receiveMessage(":mtu 403 " + client->getNickname() + " " + mask + " :No such channel");
@@ -48,13 +43,9 @@ void CommandWho::execute(Client *client, const Server &server)
         continue;
       }
       client->receiveMessage(
-          ":mtu 352 " + client->getNickname() + " " + mask + " " + (*it)->getUsername() + " localhost localhost " +
-          (*it)->getLastNickname() + " H :0 " + (*it)->getRealName()
-      );
+          ":mtu 352 " + client->getNickname() + " " + mask + " " + (*it)->getUsername() + " localhost localhost " + (*it)->getLastNickname() + " H :0 " + (*it)->getRealName());
       DEBUG_LOG(
-          ":mtu 352 " + client->getNickname() + " " + mask + " " + (*it)->getUsername() + " localhost localhost " +
-          (*it)->getLastNickname() + " H :0 " + (*it)->getRealName()
-      );
+          ":mtu 352 " + client->getNickname() + " " + mask + " " + (*it)->getUsername() + " localhost localhost " + (*it)->getLastNickname() + " H :0 " + (*it)->getRealName());
     }
   }
   else
@@ -74,7 +65,7 @@ void CommandWho::execute(Client *client, const Server &server)
         result->getUser()->getUsername() + " H :0 " + result->getUser()->getRealName()
     );
   }
-  client->receiveMessage(":mtu 315 " + client->getNickname() + " " + mask + ":End of WHO list");
+  client->receiveMessage(":mtu 315 " + client->getNickname() + " " + mask + " :End of WHO list");
 }
 
 bool CommandWho::canExecute(Client *client, const Server &server)
