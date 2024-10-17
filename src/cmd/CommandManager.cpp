@@ -149,15 +149,17 @@ vector<ACommand *> CommandManager::parseCommand(string command)
 						}
 						else if (cmd == "JOIN")
 						{
+								vector<std::pair<std::string, std::string> > channelsPasswords;
 								vector<string> channels;
-								vector<string> keys;
 								std::string channelsPart, passwordsPart;
 								iss >> std::ws;
 								std::getline(iss, channelsPart, ' ');
 								std::getline(iss, passwordsPart, ' ');
 								std::istringstream channelStream(channelsPart);
 								std::string channel;
-								while (std::getline(channelStream, channel, ',')) {
+								std::string password;
+								std::istringstream passwordStream(passwordsPart);
+								while (std::getline(channelStream, channel, ',') || std::getline(passwordStream, password, ',')) {
 										if (channel[0] != '#' && channel.length() < 2 && channel.length() > 50){
 												commands.push_back(new Exception("Invalid channel name"));
 												continue;
@@ -166,14 +168,14 @@ vector<ACommand *> CommandManager::parseCommand(string command)
 												commands.push_back(new Exception("Invalid channel name"));
 												continue;
 										}
-										channels.push_back(channel);
+										if (password.empty()) {
+												channelsPasswords.push_back(std::make_pair(channel, ""));
+												channels.push_back(channel);
+										}
+										else
+												channelsPasswords.push_back(std::make_pair(channel, password));
 								}
-								std::string password;
-								std::istringstream passwordStream(passwordsPart);
-								while (std::getline(passwordStream, password, ',')) {
-										keys.push_back(password);
-								}
-								ACommand *join = new CommandJoin(channels, keys);
+								ACommand *join = new CommandJoin(channelsPasswords);
 								if (join != NULL)
 								{
 										commands.push_back(join);

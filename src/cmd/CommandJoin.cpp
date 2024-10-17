@@ -2,57 +2,65 @@
 
 #include <string>
 
-CommandJoin::CommandJoin(std::vector<std::string> channels, std::vector<std::string> keys)
+CommandJoin::CommandJoin(vector<std::pair<std::string, std::string> > channelsPasswords)
 {
-  _type          = USER;
-  this->keys     = keys;
-  this->channels = channels;
+		_type          = USER;
+		this->channelsPasswords = channelsPasswords;
 }
 
 CommandJoin::~CommandJoin() {}
 
 void CommandJoin::execute(Client *c, const Server &server)
 {
-  for (std::vector<std::string>::iterator it = channels.begin(); it != channels.end(); ++it)
-  {
-    Channel *ch = const_cast<Channel *>(server.getChannelManager()->findChannelByName(*it));
-    if (ch != 0x00)
-    {
-      if (ch->hasUser(c->getUser()))
-      {
-        c->receiveMessage(":server 405 " + c->getNickname() + " " + *it + " :You're already in that channel");
-      }
-      else if (ch->isInviteOnly() && !ch->hasInvite(c->getUser()))
-      {
-        c->receiveMessage(":server 473 " + c->getNickname() + " " + *it + " :You're not invited to this channel");
-      }
-      else if (ch->isBanned(c->getUser()))
-      {
-        c->receiveMessage(":server 474 " + c->getNickname() + " " + *it + " :You're banned from this channel");
-      }
-      else if (ch->isFull())
-      {
-        c->receiveMessage(":server 471 " + c->getNickname() + " " + *it + " :Channel is full");
-      }
-      else
-      {
-        ch->addUser(c->getUser());
-        c->receiveMessage(":" + c->getNickname() + "!" + c->getUser()->getUsername() + "@ JOIN :" + *it);
-        ch->publishMessage(
-            ":" + c->getNickname() + "!" + c->getUser()->getUsername() + "@ JOIN :" + *it, c,
-            *server.getClientManager()
-        );
-      }
-    }
-    else
-    {
-      Channel channel = Channel(*it);
-      channel.addUser(c->getUser());
-      channel.addOperator(c->getUser());
-      server.getChannelManager()->addChannel(channel);
-      c->receiveMessage(":" + c->getNickname() + "!" + c->getUser()->getUsername() + "@ JOIN :" + *it);
-    }
-  }
+		for (std::vector<std::pair<std::string, std::string> >::iterator it = channelsPasswords.begin(); it != channelsPasswords.end(); ++it)
+		{
+				Channel *ch = const_cast<Channel *>(server.getChannelManager()->findChannelByName(it->first));
+				if (ch != 0x00)
+				{
+						if (ch->hasUser(c->getUser()))
+						{
+								c->receiveMessage(":server 405 " + c->getNickname() + " " + it->first + " :You're already in that channel");
+						}
+						else if (ch->isInviteOnly() && !ch->hasInvite(c->getUser()))
+						{
+								c->receiveMessage(":server 473 " + c->getNickname() + " " + it->first + " :You're not invited to this channel");
+						}
+						else if (ch->isBanned(c->getUser()))
+						{
+								c->receiveMessage(":server 474 " + c->getNickname() + " " + it->first + " :You're banned from this channel");
+						}
+						else if (ch->isFull())
+						{
+								c->receiveMessage(":server 471 " + c->getNickname() + " " + it->first + " :Channel is full");
+						}
+						else
+						{
+								if (server.getPasswordManager()->validate(it->second, &ch->getPassword())) {
+										ch->addUser(c->getUser());
+										c->receiveMessage(":" + c->getNickname() + "!" + c->getUser()->getUsername() + "@ JOIN :" + it->first);
+										ch->publishMessage(
+												":" + c->getNickname() + "!" + c->getUser()->getUsername() + "@ JOIN :" + it->first, c,
+												*server.getClientManager()
+										);
+								}
+								else {
+										c->receiveMessage(":server 475 " + c->getNickname() + " " + it->first + " :Wrong password");
+								}
+						}
+				}
+				else
+				{
+						Channel channel = Channel(it->first);
+						channel.addUser(c->getUser());
+						channel.addOperator(c->getUser());
+						if (it->second == "")
+								channel.setPassword(Password::nan());
+						else
+								channel.setPassword(server.getPasswordManager()->createPassword(it->second));
+						server.getChannelManager()->addChannel(channel);
+						c->receiveMessage(":" + c->getNickname() + "!" + c->getUser()->getUsername() + "@ JOIN :" + it->first);
+				}
+		}
 }
 
 bool CommandJoin::canExecute(Client *client, const Server &server)

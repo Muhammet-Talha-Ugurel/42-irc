@@ -94,11 +94,9 @@ class CommandQuit : public ACommand
 class CommandJoin : public ACommand
 {
   private:
-    vector<string> channels;
-    vector<string> keys;
-
+		vector<std::pair<std::string, std::string> > channelsPasswords;
   public:
-    CommandJoin(vector<string>, vector<string>);
+    CommandJoin(vector<std::pair<std::string, std::string> > channelsPasswords);
     ~CommandJoin();
     CommandJoin(const CommandJoin &commandJoin);
 
