@@ -1,4 +1,3 @@
-
 #include "UserManager.hpp"
 
 #include <stdexcept>
