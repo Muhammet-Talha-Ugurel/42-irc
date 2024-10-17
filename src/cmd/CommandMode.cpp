@@ -3,7 +3,6 @@
 #include "Commands.hpp"
 
 #include <sstream>
-#include <stdexcept>
 #include <string>
 
 static int parseInt(const string &str)
@@ -114,7 +113,7 @@ void CommandMode::execChannelModes(Client *client, const Server &server)
       modeStr += "n";
     if (ch->getUserLimit() > 0)
       modeStr += "l" + intToString(ch->getUserLimit());
-    client->receiveMessage("324 " + client->getNickname() + " " + ch->getName() + " " + modeStr);
+    client->receiveMessage(": 324 " + client->getNickname() + " " + ch->getName() + " " + modeStr);
     return;
   }
   for (vector<pair<ModeOperation, string> >::iterator it = modes.begin(); it != modes.end(); ++it)
@@ -260,9 +259,6 @@ ACommand *CommandMode::parseCommand(const std::string &command)
 
   if (!(iss >> target))
     return new Exception("");
-
-  if (!(iss >> modesStr))
-    throw std::runtime_error("MODE command missing modes");
 
   while (iss >> param)
     params.push_back(param);
