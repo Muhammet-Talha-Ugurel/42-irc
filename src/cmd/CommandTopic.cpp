@@ -51,6 +51,7 @@ void CommandTopic::execute(const Client *client, const Server &server)
 
 bool CommandTopic::canExecute(Client *client, const Server &server)
 {
+  (void)server;
   if (client->isAuthenticated() == false)
   {
     client->receiveMessage(":server 451 TOPIC :You have not registered");
