@@ -16,12 +16,9 @@ void CommandPing::execute(Client *client, const Server &server)
 
 bool CommandPing::canExecute(Client *client, const Server &server)
 {
-  (void)server;
-  if (client->isAuthenticated()) {
-      return true;
-    }
-  client->receiveMessage("451 You have not registered");
-  return false;
+		(void)server;
+		(void)client;
+		return true;
 }
 
 void CommandPing::execute(const Client *client, const Server &server)
