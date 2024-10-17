@@ -2,4 +2,27 @@
 - They MUST NOT start with any of the following characters: dollar ('$', 0x24), colon (':', 0x3A).
 - They MUST NOT start with a character listed as a channel type, channel membership prefix, or prefix listed in the IRCv3 multi-prefix Extension.
 - They SHOULD NOT contain any dot character ('.', 0x2E).
+- List e gelen chennel lar private mi kontrol ett
+- mode priveate ve screat pars yok bun ekle 
+- pareser duzelt
 
+
+
+# parse
+- [x] pass
+- [ ] nick
+- [x] user
+- [x] quit
+- [x] join
+- [x] cap
+- [x] ping
+- [x] mode
+- [x] who
+- [ ] privmsg
+- [ ] notice
+- [ ] part
+- [ ] topic
+- [ ] kick
+- [ ] invite
+- [ ] names
+- [ ] list
