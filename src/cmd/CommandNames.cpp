@@ -12,9 +12,8 @@ void CommandNames::execute(Client *c, const Server &server)
     if (ch == 0x00)
     {
       c->receiveMessage(": 403 " + c->getNickname() + " " + *it + " :No such channel");
-      continue;
     }
-    if (false == ch->hasUser(c->getUser()))
+    else if (false == ch->hasUser(c->getUser()))
     {
       if ((ch->isSecret() || ch->isPrivate()))
       {

@@ -14,10 +14,9 @@ void CommandPart::execute(Client *client, const Server &server)
     Channel *ch = server.getChannelManager()->findChannelByName(*it);
     if (ch == 0x00)
     {
-      client->receiveMessage(": 403 " + client->getNickname() + " " + ch->getName() + " :No such channel");
-      continue;
+      client->receiveMessage(": 403 " + client->getNickname() + " " + *it + " :No such channel");
     }
-    if (false == ch->hasUser(client->getUser()))
+    else if (false == ch->hasUser(client->getUser()))
     {
       if ((ch->isSecret() || ch->isPrivate()))
       {
@@ -48,7 +47,12 @@ void CommandPart::execute(Client *client, const Server &server)
 bool CommandPart::canExecute(Client *client, const Server &server)
 {
   (void)server;
-  return client->isAuthenticated();
+  if (client->isAuthenticated() == false)
+  {
+    client->receiveMessage("451 " + client->getNickname() + " :You have not registered");
+    return false;
+  }
+  return true;
 }
 
 CommandPart::~CommandPart() {}

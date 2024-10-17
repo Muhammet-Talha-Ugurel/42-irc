@@ -1,4 +1,3 @@
-#include "../Debug.hpp"
 #include "Commands.hpp"
 
 CommandPrivmsg::CommandPrivmsg(std::string target, std::string message)
@@ -21,17 +20,17 @@ void CommandPrivmsg::execute(Client *client, const Server &server)
     }
     else
     {
-      if (channel->hasUser(client->getUser()))
+      if (channel->isBanned(client->getUser()))
+      {
+        client->receiveMessage(":server 474 " + client->getNickname() + " " + target + " :Cannot send to channel");
+      }
+      else if (channel->hasUser(client->getUser()))
       {
         channel->publishMessage(
             ":" + client->getNickname() + "!" + client->getUser()->getUsername() + "@ PRIVMSG " + target + " " +
                 message,
             client, *server.getClientManager()
         );
-      }
-      else if (channel->isBanned(client->getUser()))
-      {
-        client->receiveMessage(":server 474 " + client->getNickname() + " " + target + " :Cannot send to channel");
       }
       else if (channel->isNoExternalMessages())
       {
@@ -65,9 +64,7 @@ bool CommandPrivmsg::canExecute(Client *client, const Server &server)
 {
   (void)server;
   if (client->isAuthenticated())
-  {
     return true;
-  }
   client->receiveMessage(":server 451* :You have not registered");
   return false;
 }

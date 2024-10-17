@@ -22,7 +22,8 @@ enum ModeOperation
   N,
   K,
   L,
-  S
+  S,
+  P
 };
 
 class CommandPass : public ACommand

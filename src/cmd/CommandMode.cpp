@@ -145,6 +145,18 @@ void CommandMode::execChannelModes(const Server &server)
         else
           ch->setUserLimit(0);
         break;
+      case S:
+        if (add)
+          ch->setSecret(true);
+        else
+          ch->setSecret(false);
+        break;
+      case P:
+        if (add)
+          ch->setPrivate(true);
+        else
+          ch->setPrivate(false);
+        break;
       default:
         break;
     }

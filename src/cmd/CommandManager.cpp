@@ -151,8 +151,6 @@ vector<ACommand *> CommandManager::parseCommand(string command)
       else if (cmd == "PRIVMSG")
       {
         iss >> arg;
-        if (arg[0] == '#')
-          arg.erase(0, 1);
         arg2 = iss.str();
         if (arg2[0] == ':')
           arg2.erase(0, 1);
@@ -163,8 +161,6 @@ vector<ACommand *> CommandManager::parseCommand(string command)
       else if (cmd == "NOTICE")
       {
         iss >> arg;
-        if (arg[0] == '#')
-          arg.erase(0, 1);
         arg2 = iss.str();
         if (arg2[0] == ':')
           arg2.erase(0, 1);
@@ -185,9 +181,6 @@ vector<ACommand *> CommandManager::parseCommand(string command)
       {
         iss >> arg;
         vector<string> channels = splitByDelim(arg, ',');
-        iss >> arg;
-        vector<string> keys = splitByDelim(arg, ',');
-        channels.push_back(arg);
         arg2 = iss.str();
         if (arg2[0] == ':')
           arg2.erase(0, 1);
@@ -213,8 +206,6 @@ vector<ACommand *> CommandManager::parseCommand(string command)
         std::set<string> channels;
         string           keys;
         iss >> arg;
-        if (arg[0] == '#')
-          arg.erase(0, 1);
         channels.insert(arg);
         ACommand *list = new CommandList(channels);
         if (list != NULL)
