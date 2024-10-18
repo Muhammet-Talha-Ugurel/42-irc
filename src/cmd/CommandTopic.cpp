@@ -21,7 +21,10 @@ void CommandTopic::execute(Client *client, const Server &server)
     {
       if (ch->hasUser(client->getUser()) || !(ch->isPrivate() || ch->isSecret()))
       {
-        client->receiveMessage(":" + client->getNickname() + " TOPIC " + channel + " :" + ch->getTopic());
+        if (ch->getTopic().empty())
+          client->receiveMessage(":" + client->getNickname() + " TOPIC " + ch->getName() + " :No topic is set");
+        else
+          client->receiveMessage(":" + client->getNickname() + " TOPIC " + ch->getName() + " :" + ch->getTopic());
       }
       else
       {

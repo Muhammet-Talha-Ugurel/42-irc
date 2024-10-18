@@ -255,8 +255,8 @@ vector<ACommand *> CommandManager::parseCommand(string command)
       {
         iss >> arg;
         getline(iss, arg2);
-        if (arg2[0] == ':')
-          arg2.erase(0, 1);
+        if (arg2.find(":"))
+          arg2 = arg2.substr(arg2.find(":") + 1);
         ACommand *msg = new CommandPrivmsg(arg, arg2);
         if (msg != NULL)
           commands.push_back(msg);
@@ -265,8 +265,10 @@ vector<ACommand *> CommandManager::parseCommand(string command)
       {
         iss >> arg;
         getline(iss, arg2);
-        if (arg2[0] == ':')
-          arg2.erase(0, 1);
+        if (arg2.empty())
+          continue;
+        if (arg2.find(":"))
+          arg2 = arg2.substr(arg2.find(":") + 1);
         ACommand *notice = new CommandNotice(arg, arg2);
         if (notice != NULL)
           commands.push_back(notice);
