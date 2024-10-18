@@ -323,8 +323,7 @@ vector<ACommand *> CommandManager::parseCommand(string command)
       else if (cmd == "TOPIC")
       {
         iss >> arg;
-        iss >> arg2;
-        ACommand *topic = new CommandTopic(arg, arg2);
+        ACommand *topic = new CommandTopic(arg, iss.str());
         if (topic)
           commands.push_back(topic);
       }
