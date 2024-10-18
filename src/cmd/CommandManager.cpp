@@ -254,7 +254,7 @@ vector<ACommand *> CommandManager::parseCommand(string command)
       else if (cmd == "PRIVMSG")
       {
         iss >> arg;
-        arg2 = iss.str();
+        getline(iss, arg2);
         if (arg2[0] == ':')
           arg2.erase(0, 1);
         ACommand *msg = new CommandPrivmsg(arg, arg2);
@@ -264,7 +264,7 @@ vector<ACommand *> CommandManager::parseCommand(string command)
       else if (cmd == "NOTICE")
       {
         iss >> arg;
-        arg2 = iss.str();
+        getline(iss, arg2);
         if (arg2[0] == ':')
           arg2.erase(0, 1);
         ACommand *notice = new CommandNotice(arg, arg2);
